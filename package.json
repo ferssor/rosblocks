@@ -5,8 +5,8 @@
   "type": "module",
   "main": "./dist-electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "dev:electron": "electron .",
+    "dev:react": "vite",
+    "dev:electron": "cross-env NODE_ENV=development electron .",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -30,6 +30,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "cross-env": "^7.0.3",
     "electron": "^35.0.0",
     "eslint": "^9.21.0",
     "eslint-plugin-react-hooks": "^5.1.0",
