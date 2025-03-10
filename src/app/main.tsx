@@ -1,21 +1,14 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
-import { App, ConfigProvider, Layout } from "antd";
-import Logo from "./components/Logo";
+import { App, ConfigProvider } from "antd";
+import EditorHeader from "./components/EditorHeader";
 
-const { Header, Sider, Content } = Layout;
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ConfigProvider>
       <App>
-        <Header>
-          <Logo />
-        </Header>
-        <Layout>
-          <Sider />
-          <Content />
-        </Layout>
+        <EditorHeader />
       </App>
     </ConfigProvider>
   </StrictMode>
