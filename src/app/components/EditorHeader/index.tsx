@@ -4,6 +4,7 @@ import { Layout } from "antd";
 
 const LOGO_NAME = "RoBlocks";
 const ICON_COLOR = "#FFF";
+
 const { Header } = Layout;
 
 function EditorHeader() {

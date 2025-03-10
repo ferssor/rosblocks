@@ -6,4 +6,9 @@
   .title {
     color: #fff;
   }
+  
+  svg {
+    width: 2em;
+    height: 2em;
+  }
 }
