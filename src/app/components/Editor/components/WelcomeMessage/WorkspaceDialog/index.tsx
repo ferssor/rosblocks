@@ -14,11 +14,6 @@ function WorkspaceDialog(props: Props) {
     setIsModalOpen(false);
   };
 
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-
   return (
     <>
       <Modal
@@ -31,7 +26,7 @@ function WorkspaceDialog(props: Props) {
         maskClosable={false}
         centered
       >
-        <Form {...layout}>
+        <Form layout="vertical">
           <Form.Item
             label="Localização da pasta"
             name="location"
