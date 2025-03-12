@@ -3,3 +3,11 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+#root, body {
+  height: 100vh;
+
+  .ant-app {
+    height: 100%;
+  }
+}
