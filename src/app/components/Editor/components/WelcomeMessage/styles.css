@@ -1,4 +1,5 @@
 .welcome-container {
-  height: 100%;
-  padding: 22em;
+  height: fit-content;
+  width: fit-content;
+  margin: auto;
 }
