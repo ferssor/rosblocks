@@ -10,8 +10,18 @@ interface Props {
 
 function WorkspaceDialog(props: Props) {
   const { isModalOpen, setIsModalOpen } = props;
+  const [form] = Form.useForm();
+
   const closeDialog = () => {
     setIsModalOpen(false);
+    form.setFieldsValue({ location: "" });
+  };
+
+  const handleOpenDialog = async () => {
+    const selectedPath = await window.electronAPI.openWorkspaceLocation();
+    if (selectedPath) {
+      form.setFieldsValue({ location: selectedPath });
+    }
   };
 
   return (
@@ -26,23 +36,26 @@ function WorkspaceDialog(props: Props) {
         maskClosable={false}
         centered
       >
-        <Form layout="vertical">
+        <Form layout="vertical" form={form}>
           <Form.Item
             label="Localização da pasta"
             name="location"
             required
             rules={[{ message: "Escolha o local da pasta" }]}
           >
-            <Input title="Nome" />
+            <Input
+              readOnly
+              onClick={handleOpenDialog}
+              placeholder="Escolha o local do Workspace"
+            />
           </Form.Item>
-
           <Form.Item
             label="Nome do workspace"
             name="name"
             required
             rules={[{ message: "Escolha o nome da pasta" }]}
           >
-            <Input title="Nome" addonAfter="_ws" />
+            <Input addonAfter="_ws" placeholder="Defina o nome do Workspace" />
           </Form.Item>
         </Form>
       </Modal>

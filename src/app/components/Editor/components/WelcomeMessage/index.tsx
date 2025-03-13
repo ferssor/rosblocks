@@ -1,6 +1,6 @@
 import { Button, Result } from "antd";
 import "./styles.css";
-import WorkspaceDialog from "./WorkspaceDialog";
+import WorkspaceDialog from "./components/WorkspaceDialog";
 import { useState } from "react";
 
 const TITLE =
