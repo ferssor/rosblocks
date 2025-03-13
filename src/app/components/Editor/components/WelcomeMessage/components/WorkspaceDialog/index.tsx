@@ -1,4 +1,4 @@
-import { Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { ReactNode } from "react";
 import "./styles.css";
 
@@ -14,7 +14,7 @@ function WorkspaceDialog(props: Props) {
 
   const closeDialog = () => {
     setIsModalOpen(false);
-    form.setFieldsValue({ location: "" });
+    form.setFieldsValue({ location: "", name: "" });
   };
 
   const handleOpenDialog = async () => {
@@ -24,19 +24,47 @@ function WorkspaceDialog(props: Props) {
     }
   };
 
+  const handleCreateWorkspace = async () => {
+    try {
+      await form.validateFields();
+
+      const values = form.getFieldsValue();
+      const workspacePath = `${values.location}/${values.name}_ws`; //TODO add a rule to agnostic OS
+
+      const result = await window.electronAPI.createWorkspace(workspacePath);
+      message.success("Workspace criado e build concluído!");
+      closeDialog();
+      console.log(result);
+    } catch (error) {
+      message.error("Erro ao criar workspace!");
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Modal
         title="Criar um novo workspace"
         open={isModalOpen}
-        cancelText="Cancelar"
-        okText="Criar"
-        onClose={() => closeDialog()}
-        onCancel={() => closeDialog()}
-        maskClosable={false}
         centered
+        maskClosable={false}
+        onCancel={closeDialog}
+        footer={[
+          <Button
+            key="save"
+            type="primary"
+            htmlType="submit"
+            form="workspace"
+            onClick={handleCreateWorkspace}
+          >
+            Criar
+          </Button>,
+          <Button key="cancel" type="default" onClick={closeDialog}>
+            Cancelar
+          </Button>,
+        ]}
       >
-        <Form layout="vertical" form={form}>
+        <Form layout="vertical" form={form} id="workspace">
           <Form.Item
             label="Localização da pasta"
             name="location"
@@ -55,7 +83,11 @@ function WorkspaceDialog(props: Props) {
             required
             rules={[{ message: "Escolha o nome da pasta" }]}
           >
-            <Input addonAfter="_ws" placeholder="Defina o nome do Workspace" />
+            <Input
+              required
+              addonAfter="_ws"
+              placeholder="Defina o nome do Workspace"
+            />
           </Form.Item>
         </Form>
       </Modal>
