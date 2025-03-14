@@ -46,7 +46,7 @@ ipcMain.handle('create-workspace', async (_, workspacePath) => {
           reject({ created: false, error: stderr });
         } else {
           console.log(`Build concluído: ${stdout}`);
-          resolve({ created: true});
+          resolve({ created: true, workspacePath: workspacePath});
         }
       });
     });

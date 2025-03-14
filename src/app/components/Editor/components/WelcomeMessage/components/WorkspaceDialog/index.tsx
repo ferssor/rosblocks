@@ -7,10 +7,17 @@ interface Props {
   children?: ReactNode;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setWorkspaceLocationFromCreationDialog: React.Dispatch<
+    React.SetStateAction<string>
+  >;
 }
 
 function WorkspaceDialog(props: Props) {
-  const { isModalOpen, setIsModalOpen } = props;
+  const {
+    isModalOpen,
+    setIsModalOpen,
+    setWorkspaceLocationFromCreationDialog,
+  } = props;
   const [form] = Form.useForm();
   const [isInputChanged, setIsInputChanged] = useState(false);
   const [initialValues, setInitialValues] = useState({
@@ -42,6 +49,7 @@ function WorkspaceDialog(props: Props) {
 
       if (result.created) {
         message.success("Workspace criado e build concluído!");
+        setWorkspaceLocationFromCreationDialog(result.workspacePath);
         closeDialog();
       }
     } catch (error) {

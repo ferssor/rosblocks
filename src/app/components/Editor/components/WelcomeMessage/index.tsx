@@ -1,7 +1,7 @@
 import { Button, Result } from "antd";
 import "./styles.css";
 import WorkspaceDialog from "./components/WorkspaceDialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TITLE =
   "É necessário criar ou abrir um workspace para prosseguir com a programação!";
@@ -12,6 +12,16 @@ const SECONDARY_BUTTON_TITLE = "Abrir um workspace existente";
 
 function WelcomeMessage() {
   const [openModal, setOpenModal] = useState(false);
+  const [workspaceLocation, setWorkspaceLocation] = useState("");
+
+  const handleOpenDialog = async () => {
+    const result = await window.electronAPI.openWorkspaceLocation();
+    setWorkspaceLocation(result);
+  };
+
+  useEffect(() => {
+    console.log(workspaceLocation);
+  }, [workspaceLocation]);
 
   return (
     <>
@@ -30,10 +40,11 @@ function WelcomeMessage() {
             >
               {PRIMARY_BUTTON_TITLE}
             </Button>
-            <Button>{SECONDARY_BUTTON_TITLE}</Button>
+            <Button onClick={handleOpenDialog}>{SECONDARY_BUTTON_TITLE}</Button>
             <WorkspaceDialog
               isModalOpen={openModal}
               setIsModalOpen={setOpenModal}
+              setWorkspaceLocationFromCreationDialog={setWorkspaceLocation}
             />
           </>,
         ]}

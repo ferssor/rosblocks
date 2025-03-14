@@ -1,6 +1,6 @@
 interface Window {
   electronAPI: {
     openWorkspaceLocation: () => Promise<string>,
-    createWorkspace: (path: string) => Promise<{created: boolean}>
+    createWorkspace: (path: string) => Promise<{created: boolean, workspacePath: string}>
   }
 }
