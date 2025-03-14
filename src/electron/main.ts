@@ -43,7 +43,7 @@ ipcMain.handle('create-workspace', async (_, workspacePath) => {
       exec(`cd ${workspacePath} && colcon build`, (error, stdout, stderr) => {
         if (error) {
           console.error(`Erro ao rodar colcon build: ${stderr}`);
-          reject(stderr);
+          reject({ created: false, error: stderr });
         } else {
           console.log(`Build concluído: ${stdout}`);
           resolve({ created: true});
@@ -51,8 +51,9 @@ ipcMain.handle('create-workspace', async (_, workspacePath) => {
       });
     });
   } catch (error) {
-    if (error) {
+    if (error instanceof Error) {
       console.error('Erro ao criar pasta:', error);
+      return { created: false, error: error.message };
     }
   }
 });

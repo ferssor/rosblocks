@@ -1,6 +1,7 @@
 import { Button, Form, Input, message, Modal } from "antd";
 import { ReactNode } from "react";
 import "./styles.css";
+import path from "path-browserify";
 
 interface Props {
   children?: ReactNode;
@@ -30,7 +31,7 @@ function WorkspaceDialog(props: Props) {
       await form.validateFields();
 
       const values = form.getFieldsValue();
-      const workspacePath = `${values.location}/${values.name}_ws`; //TODO add a rule to agnostic OS
+      const workspacePath = path.join(values.location, `${values.name}_ws`);
       const result = await window.electronAPI.createWorkspace(workspacePath);
 
       if (result.created) {
@@ -39,7 +40,7 @@ function WorkspaceDialog(props: Props) {
       }
     } catch (error) {
       if (error) {
-        message.error("Erro ao criar workspace!");
+        message.error(`Ocorreu um erro ao criar o workspace! ${error}`);
       }
     }
   };
