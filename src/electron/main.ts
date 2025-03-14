@@ -44,12 +44,13 @@ ipcMain.handle('create-workspace', async (_, workspacePath) => {
           reject(stderr);
         } else {
           console.log(`Build concluído: ${stdout}`);
-          resolve(stdout);
+          resolve({ created: true});
         }
       });
     });
   } catch (error) {
-    console.error('Erro ao criar pasta:', error);
-    return 'Erro ao criar workspace';
+    if (error) {
+      console.error('Erro ao criar pasta:', error);
+    }
   }
 });

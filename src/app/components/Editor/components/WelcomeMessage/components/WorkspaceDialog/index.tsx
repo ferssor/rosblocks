@@ -15,6 +15,7 @@ function WorkspaceDialog(props: Props) {
   const closeDialog = () => {
     setIsModalOpen(false);
     form.setFieldsValue({ location: "", name: "" });
+    form.resetFields();
   };
 
   const handleOpenDialog = async () => {
@@ -30,14 +31,16 @@ function WorkspaceDialog(props: Props) {
 
       const values = form.getFieldsValue();
       const workspacePath = `${values.location}/${values.name}_ws`; //TODO add a rule to agnostic OS
-
       const result = await window.electronAPI.createWorkspace(workspacePath);
-      message.success("Workspace criado e build concluído!");
-      closeDialog();
-      console.log(result);
+
+      if (result.created) {
+        message.success("Workspace criado e build concluído!");
+        closeDialog();
+      }
     } catch (error) {
-      message.error("Erro ao criar workspace!");
-      console.log(error);
+      if (error) {
+        message.error("Erro ao criar workspace!");
+      }
     }
   };
 
@@ -68,8 +71,7 @@ function WorkspaceDialog(props: Props) {
           <Form.Item
             label="Localização da pasta"
             name="location"
-            required
-            rules={[{ message: "Escolha o local da pasta" }]}
+            rules={[{ required: true, message: "Escolha o local da pasta" }]}
           >
             <Input
               readOnly
@@ -80,14 +82,9 @@ function WorkspaceDialog(props: Props) {
           <Form.Item
             label="Nome do workspace"
             name="name"
-            required
-            rules={[{ message: "Escolha o nome da pasta" }]}
+            rules={[{ required: true, message: "Escolha o nome da pasta" }]}
           >
-            <Input
-              required
-              addonAfter="_ws"
-              placeholder="Defina o nome do Workspace"
-            />
+            <Input addonAfter="_ws" placeholder="Defina o nome do Workspace" />
           </Form.Item>
         </Form>
       </Modal>
