@@ -34,7 +34,9 @@ ipcMain.handle('open-dialog', async () => {
 ipcMain.handle('create-workspace', async (_, workspacePath) => {
   try {
     if (!fs.existsSync(workspacePath)) {
+      const srcPath = path.join(workspacePath, 'src');
       fs.mkdirSync(workspacePath, { recursive: true });
+      fs.mkdirSync(srcPath, { recursive: true });
     }
 
     return new Promise((resolve, reject) => {
