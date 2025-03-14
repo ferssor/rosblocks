@@ -1,5 +1,5 @@
 import { Button, Form, Input, message, Modal } from "antd";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import "./styles.css";
 import path from "path-browserify";
 
@@ -12,11 +12,17 @@ interface Props {
 function WorkspaceDialog(props: Props) {
   const { isModalOpen, setIsModalOpen } = props;
   const [form] = Form.useForm();
+  const [isInputChanged, setIsInputChanged] = useState(false);
+  const [initialValues, setInitialValues] = useState({
+    location: undefined,
+    name: undefined,
+  });
 
   const closeDialog = () => {
     setIsModalOpen(false);
-    form.setFieldsValue({ location: "", name: "" });
+    form.setFieldsValue({ location: undefined, name: undefined });
     form.resetFields();
+    setIsInputChanged(false);
   };
 
   const handleOpenDialog = async () => {
@@ -39,11 +45,26 @@ function WorkspaceDialog(props: Props) {
         closeDialog();
       }
     } catch (error) {
-      if (error) {
-        message.error(`Ocorreu um erro ao criar o workspace! ${error}`);
+      if (error instanceof Error) {
+        message.error(`Ocorreu um erro ao criar o workspace! ${error.message}`);
       }
     }
   };
+
+  const handleFieldsChange = () => {
+    const currentValues = form.getFieldsValue();
+    const nameValue = String(form.getFieldValue("name"));
+    const isChanged =
+      JSON.stringify(currentValues) !== JSON.stringify(initialValues);
+    setIsInputChanged(isChanged && nameValue.length > 0);
+  };
+
+  useEffect(() => {
+    if (isModalOpen) {
+      const currentValues = form.getFieldsValue();
+      setInitialValues(currentValues);
+    }
+  }, [isModalOpen, form]);
 
   return (
     <>
@@ -59,6 +80,7 @@ function WorkspaceDialog(props: Props) {
             type="primary"
             htmlType="submit"
             form="workspace"
+            disabled={!isInputChanged}
             onClick={handleCreateWorkspace}
           >
             Criar
@@ -68,7 +90,12 @@ function WorkspaceDialog(props: Props) {
           </Button>,
         ]}
       >
-        <Form layout="vertical" form={form} id="workspace">
+        <Form
+          layout="vertical"
+          form={form}
+          id="workspace"
+          onFieldsChange={handleFieldsChange}
+        >
           <Form.Item
             label="Localização da pasta"
             name="location"
