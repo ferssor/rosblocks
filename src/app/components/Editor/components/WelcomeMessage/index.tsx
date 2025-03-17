@@ -13,15 +13,21 @@ const SECONDARY_BUTTON_TITLE = "Abrir um workspace existente";
 function WelcomeMessage() {
   const [openModal, setOpenModal] = useState(false);
   const [workspaceLocation, setWorkspaceLocation] = useState("");
+  const [isValidWorkspace, setIsValidWorkspace] = useState(false);
 
-  const handleOpenDialog = async () => {
+  const handleOpenWorkspace = async () => {
     const result = await window.electronAPI.openWorkspaceLocation();
+    const validateWorkspace = await window.electronAPI.validateWorkspace(
+      result
+    );
     setWorkspaceLocation(result);
+    setIsValidWorkspace(validateWorkspace.valid);
   };
 
   useEffect(() => {
     console.log(workspaceLocation);
-  }, [workspaceLocation]);
+    console.log(isValidWorkspace);
+  }, [isValidWorkspace, workspaceLocation]);
 
   return (
     <>
@@ -40,7 +46,9 @@ function WelcomeMessage() {
             >
               {PRIMARY_BUTTON_TITLE}
             </Button>
-            <Button onClick={handleOpenDialog}>{SECONDARY_BUTTON_TITLE}</Button>
+            <Button onClick={handleOpenWorkspace}>
+              {SECONDARY_BUTTON_TITLE}
+            </Button>
             <WorkspaceDialog
               isModalOpen={openModal}
               setIsModalOpen={setOpenModal}

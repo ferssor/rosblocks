@@ -57,3 +57,17 @@ ipcMain.handle('create-workspace', async (_, workspacePath) => {
     }
   }
 });
+
+ipcMain.handle('validate-workspace', (_, workspacePath) => {
+  try {
+    const requiredDirs = ['src', 'install', 'log', 'build']
+    const missingDirs = requiredDirs.filter(dir => !fs.existsSync(path.join(workspacePath, dir)));
+    const result = missingDirs.length > 0 ? false : true
+
+    return {valid: result}
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error('Erro ao validar o workspace', error)
+    }
+  }
+});
