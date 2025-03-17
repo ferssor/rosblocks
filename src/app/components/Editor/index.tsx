@@ -13,10 +13,14 @@ export function Editor() {
   return (
     <>
       <div className="editor-container">
-        <SelectWorkspace
-          setValidWorkspace={setValidWorkspace}
-          setWorkspacePath={setWorkspacePath}
-        />
+        {workspacePath.includes("_ws") && validWorkspace ? (
+          <p>{workspacePath}</p>
+        ) : (
+          <SelectWorkspace
+            setValidWorkspace={setValidWorkspace}
+            setWorkspacePath={setWorkspacePath}
+          />
+        )}
       </div>
     </>
   );

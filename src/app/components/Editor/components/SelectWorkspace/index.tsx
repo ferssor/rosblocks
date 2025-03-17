@@ -1,4 +1,4 @@
-import { Button, Result } from "antd";
+import { Button, message, Result } from "antd";
 import "./styles.css";
 import WorkspaceDialog from "./components/WorkspaceDialog";
 import { useState } from "react";
@@ -24,6 +24,12 @@ function SelectWorkspace(props: Props) {
     const validateWorkspace = await window.electronAPI.validateWorkspace(
       result
     );
+
+    if (!validateWorkspace.valid) {
+      message.error(
+        "Ocorreu um erro ao selecionar o workspace, a pasta não é compatível!"
+      );
+    }
     setWorkspacePath(result);
     setValidWorkspace(validateWorkspace.valid);
   };
