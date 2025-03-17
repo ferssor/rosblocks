@@ -52,6 +52,7 @@ function SelectWorkspace(props: Props) {
               isModalOpen={openModal}
               setIsModalOpen={setOpenModal}
               setWorkspaceLocationFromCreationDialog={setWorkspacePath}
+              setValidWorkspace={setValidWorkspace}
             />
           </>,
         ]}

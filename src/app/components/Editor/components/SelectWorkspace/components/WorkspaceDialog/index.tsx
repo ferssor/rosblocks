@@ -10,6 +10,7 @@ interface Props {
   setWorkspaceLocationFromCreationDialog: React.Dispatch<
     React.SetStateAction<string>
   >;
+  setValidWorkspace: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function WorkspaceDialog(props: Props) {
@@ -17,6 +18,7 @@ function WorkspaceDialog(props: Props) {
     isModalOpen,
     setIsModalOpen,
     setWorkspaceLocationFromCreationDialog,
+    setValidWorkspace,
   } = props;
   const [form] = Form.useForm();
   const [isInputChanged, setIsInputChanged] = useState(false);
@@ -48,8 +50,13 @@ function WorkspaceDialog(props: Props) {
       const result = await window.electronAPI.createWorkspace(workspacePath);
 
       if (result.created) {
-        message.success("Workspace criado e build concluído!");
+        const validateWorkspace = await window.electronAPI.validateWorkspace(
+          result.workspacePath
+        );
         setWorkspaceLocationFromCreationDialog(result.workspacePath);
+        setValidWorkspace(validateWorkspace.valid);
+
+        message.success("Workspace criado e build concluído!");
         closeDialog();
       }
     } catch (error) {
