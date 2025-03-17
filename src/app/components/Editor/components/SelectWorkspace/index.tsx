@@ -10,7 +10,7 @@ const SUBTITLE =
 const PRIMARY_BUTTON_TITLE = "Criar um novo workspace";
 const SECONDARY_BUTTON_TITLE = "Abrir um workspace existente";
 
-function WelcomeMessage() {
+function SelectWorkspace() {
   const [openModal, setOpenModal] = useState(false);
   const [workspaceLocation, setWorkspaceLocation] = useState("");
   const [isValidWorkspace, setIsValidWorkspace] = useState(false);
@@ -61,4 +61,4 @@ function WelcomeMessage() {
   );
 }
 
-export default WelcomeMessage;
+export default SelectWorkspace;

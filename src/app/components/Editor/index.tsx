@@ -1,11 +1,11 @@
-import WelcomeMessage from "./components/WelcomeMessage";
+import SelectWorkspace from "./components/SelectWorkspace";
 import "./styles.css";
 
 export function Editor() {
   return (
     <>
       <div className="editor-container">
-        <WelcomeMessage />
+        <SelectWorkspace />
       </div>
     </>
   );
