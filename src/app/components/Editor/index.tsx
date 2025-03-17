@@ -1,11 +1,22 @@
+import { useEffect, useState } from "react";
 import SelectWorkspace from "./components/SelectWorkspace";
 import "./styles.css";
 
 export function Editor() {
+  const [workspacePath, setWorkspacePath] = useState("");
+  const [validWorkspace, setValidWorkspace] = useState(false);
+
+  useEffect(() => {
+    console.log({ workspacePath, validWorkspace });
+  }, [validWorkspace, workspacePath]);
+
   return (
     <>
       <div className="editor-container">
-        <SelectWorkspace />
+        <SelectWorkspace
+          setValidWorkspace={setValidWorkspace}
+          setWorkspacePath={setWorkspacePath}
+        />
       </div>
     </>
   );

@@ -1,7 +1,12 @@
 import { Button, Result } from "antd";
 import "./styles.css";
 import WorkspaceDialog from "./components/WorkspaceDialog";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+interface Props {
+  setValidWorkspace: React.Dispatch<React.SetStateAction<boolean>>;
+  setWorkspacePath: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const TITLE =
   "É necessário criar ou abrir um workspace para prosseguir com a programação!";
@@ -10,24 +15,18 @@ const SUBTITLE =
 const PRIMARY_BUTTON_TITLE = "Criar um novo workspace";
 const SECONDARY_BUTTON_TITLE = "Abrir um workspace existente";
 
-function SelectWorkspace() {
+function SelectWorkspace(props: Props) {
+  const { setValidWorkspace, setWorkspacePath } = props;
   const [openModal, setOpenModal] = useState(false);
-  const [workspaceLocation, setWorkspaceLocation] = useState("");
-  const [isValidWorkspace, setIsValidWorkspace] = useState(false);
 
   const handleOpenWorkspace = async () => {
     const result = await window.electronAPI.openWorkspaceLocation();
     const validateWorkspace = await window.electronAPI.validateWorkspace(
       result
     );
-    setWorkspaceLocation(result);
-    setIsValidWorkspace(validateWorkspace.valid);
+    setWorkspacePath(result);
+    setValidWorkspace(validateWorkspace.valid);
   };
-
-  useEffect(() => {
-    console.log(workspaceLocation);
-    console.log(isValidWorkspace);
-  }, [isValidWorkspace, workspaceLocation]);
 
   return (
     <>
@@ -52,7 +51,7 @@ function SelectWorkspace() {
             <WorkspaceDialog
               isModalOpen={openModal}
               setIsModalOpen={setOpenModal}
-              setWorkspaceLocationFromCreationDialog={setWorkspaceLocation}
+              setWorkspaceLocationFromCreationDialog={setWorkspacePath}
             />
           </>,
         ]}
