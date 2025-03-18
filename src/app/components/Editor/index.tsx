@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SelectWorkspace from "./components/SelectWorkspace";
 import "./styles.css";
 
@@ -6,9 +6,17 @@ export function Editor() {
   const [workspacePath, setWorkspacePath] = useState("");
   const [validWorkspace, setValidWorkspace] = useState(false);
 
+  const getPackages = useCallback(async () => {
+    if (workspacePath.includes("_ws")) {
+      const result = await window.electronAPI.getPackages(workspacePath);
+      console.log("🚀 ~ getPackages ~ result:", result);
+    }
+  }, [workspacePath]);
+
   useEffect(() => {
     console.log({ workspacePath, validWorkspace });
-  }, [validWorkspace, workspacePath]);
+    getPackages();
+  }, [getPackages, validWorkspace, workspacePath]);
 
   return (
     <>
