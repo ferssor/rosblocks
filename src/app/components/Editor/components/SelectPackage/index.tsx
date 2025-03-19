@@ -1,5 +1,7 @@
+import { useState } from "react";
 import PackageDialog from "./Components/PackageDialog";
 import "./styles.css";
+import { Button, Result } from "antd";
 
 interface Props {
   workspaceName: string;
@@ -13,7 +15,14 @@ function getWorkspaceName(fullPath: string) {
 
 function SelectPackage(props: Props) {
   const { packages, workspaceName } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedWorkspaceName = getWorkspaceName(workspaceName);
+  const TITLE = `Parece que o workspace ${getWorkspaceName(
+    workspaceName
+  )} não possui package, para prosseguir é necessário criar um!`;
+  const SUBTITLE =
+    "Packages são um conjunto de programas ROS ou Nodes, que juntos exercem função específica.";
+  const PRIMARY_BUTTON_TITLE = "Criar um novo package";
 
   return (
     <>
@@ -29,7 +38,31 @@ function SelectPackage(props: Props) {
           </div>
         </>
       ) : (
-        <PackageDialog packageLocation={workspaceName} />
+        <>
+          <Result
+            className="package-container"
+            status="info"
+            title={TITLE}
+            subTitle={SUBTITLE}
+            extra={[
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setIsModalOpen(true);
+                  }}
+                >
+                  {PRIMARY_BUTTON_TITLE}
+                </Button>
+                <PackageDialog
+                  packageLocation={workspaceName}
+                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen}
+                />
+              </>,
+            ]}
+          />
+        </>
       )}
     </>
   );
