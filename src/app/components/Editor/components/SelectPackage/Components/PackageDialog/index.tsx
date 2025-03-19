@@ -1,21 +1,30 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal, Radio } from "antd";
 import "./styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CheckboxGroupProps } from "antd/es/checkbox";
 
 interface Props {
   packageLocation: string;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
+const options: CheckboxGroupProps<string>["options"] = [
+  { label: "Python", value: "rclpy" },
+  { label: "C++", value: "rclcpp" },
+];
 
 function PackageDialog(props: Props) {
   const [form] = Form.useForm();
   const { packageLocation, isModalOpen, setIsModalOpen } = props;
   const [isInputChanged, setIsInputChanged] = useState(false);
+  const [packageDependency, setPackageDependency] = useState("rclpy");
   const [initialValues, setInitialValues] = useState({
-    location: undefined,
+    location: packageLocation,
     name: undefined,
+    type: packageDependency,
+    dependency: packageDependency,
   });
+
   const closeDialog = () => {
     setIsModalOpen(false);
     form.setFieldsValue({ location: undefined, name: undefined });
@@ -26,6 +35,17 @@ function PackageDialog(props: Props) {
   const handleCreatePackage = () => {};
 
   const handleFieldsChange = () => {};
+
+  useEffect(() => {
+    form.setFieldsValue({
+      dependency: packageDependency,
+    });
+
+    if (isModalOpen) {
+      const currentValues = form.getFieldsValue();
+      setInitialValues(currentValues);
+    }
+  }, [form, isModalOpen, packageDependency, packageLocation]);
 
   return (
     <>
@@ -56,20 +76,55 @@ function PackageDialog(props: Props) {
           form={form}
           id="package"
           onFieldsChange={handleFieldsChange}
+          initialValues={initialValues}
         >
           <Form.Item
-            label="Localização da pasta"
+            label="Localizaçao do pacote"
             name="location"
-            rules={[{ required: true, message: "Escolha o local da pasta" }]}
+            rules={[
+              {
+                required: true,
+                message: "É obrigatório escolher a localização do pacote",
+              },
+            ]}
           >
-            <Input readOnly placeholder="Escolha o local do Workspace" />
+            <Input
+              readOnly
+              placeholder="Escolha o nome do pacote"
+              value={packageLocation}
+            />
           </Form.Item>
           <Form.Item
-            label="Nome do workspace"
+            label="Nome do pacote"
             name="name"
-            rules={[{ required: true, message: "Escolha o nome da pasta" }]}
+            rules={[
+              {
+                required: true,
+                message: "É obrigatório escolher o nome do pacote",
+              },
+            ]}
           >
-            <Input addonAfter="_ws" placeholder="Defina o nome do Workspace" />
+            <Input placeholder="Escolha o nome do pacote" />
+          </Form.Item>
+          <Form.Item
+            label="Tipo do pacote"
+            name="type"
+            rules={[{ required: true, message: "Escolha o tipo do pacote" }]}
+          >
+            <Radio.Group
+              block
+              options={options}
+              optionType="button"
+              buttonStyle="solid"
+              onChange={(e) => setPackageDependency(e.target.value)}
+            />
+          </Form.Item>
+          <Form.Item label="Dependência do pacote" name="dependency">
+            <Input
+              readOnly
+              placeholder="Escolha a dependência do pacote"
+              value={packageDependency}
+            />
           </Form.Item>
         </Form>
       </Modal>

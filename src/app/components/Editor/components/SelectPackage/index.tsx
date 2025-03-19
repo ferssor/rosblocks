@@ -41,7 +41,7 @@ function SelectPackage(props: Props) {
         <>
           <Result
             className="package-container"
-            status="info"
+            status="404"
             title={TITLE}
             subTitle={SUBTITLE}
             extra={[
