@@ -88,7 +88,7 @@ ipcMain.handle("get-packages", async (_, workspacePath) => {
         name: folder.name,
         fullPath: path.join(srcPath, folder.name),
       }));
-    return packages;
+    return packages ?? [];
   } catch (error) {
     if (error instanceof Error) {
       console.error("Erro ao obter pacotes:", error);
