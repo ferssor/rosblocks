@@ -1,3 +1,4 @@
+import PackageDialog from "./Components/PackageDialog";
 import "./styles.css";
 
 interface Props {
@@ -16,14 +17,20 @@ function SelectPackage(props: Props) {
 
   return (
     <>
-      <h1>{selectedWorkspaceName}</h1>
-      <div>
-        {packages.map((pkg) => (
-          <ul>
-            <li>{pkg.name}</li>
-          </ul>
-        ))}
-      </div>
+      {packages.length > 0 ? (
+        <>
+          <h1>{selectedWorkspaceName}</h1>
+          <div>
+            {packages.map((pkg) => (
+              <ul>
+                <li key={pkg.fullPath}>{pkg.name}</li>
+              </ul>
+            ))}
+          </div>
+        </>
+      ) : (
+        <PackageDialog packageLocation={workspaceName} />
+      )}
     </>
   );
 }
