@@ -27,24 +27,36 @@ function PackageDialog(props: Props) {
 
   const closeDialog = () => {
     setIsModalOpen(false);
-    form.setFieldsValue({ location: undefined, name: undefined });
     form.resetFields();
+    form.setFieldsValue({
+      location: packageLocation,
+      name: undefined,
+      type: "rclpy",
+      dependency: "rclpy",
+    });
+    setPackageDependency("rclpy");
     setIsInputChanged(false);
   };
 
   const handleCreatePackage = () => {};
 
-  const handleFieldsChange = () => {};
+  const handleFieldsChange = () => {
+    const currentValues = form.getFieldsValue();
+    const nameValue = String(form.getFieldValue("name"));
+    const isChanged =
+      JSON.stringify(currentValues) !== JSON.stringify(initialValues);
+    setIsInputChanged(isChanged && nameValue.length > 0);
+  };
 
   useEffect(() => {
-    form.setFieldsValue({
-      dependency: packageDependency,
-    });
-
     if (isModalOpen) {
       const currentValues = form.getFieldsValue();
       setInitialValues(currentValues);
     }
+
+    form.setFieldsValue({
+      dependency: packageDependency,
+    });
   }, [form, isModalOpen, packageDependency, packageLocation]);
 
   return (
