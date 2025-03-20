@@ -8,18 +8,3 @@
   flex-direction: column;
   margin: auto;
 }
-
-.package-list-container {
-  padding: 48px;
-  display: flex;
-  flex-direction: column;
-
-  .package-name {
-    margin-bottom: 16px;
-  }
-
-  .package-list {
-    display: flex;
-    gap: 8px;
-  }
-}

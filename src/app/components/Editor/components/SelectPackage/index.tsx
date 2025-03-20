@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import PackageDialog from "./Components/PackageDialog";
 import "./styles.css";
-import { Button, Card, Result } from "antd";
+import { Button, Result } from "antd";
+import PackageList from "./Components/PackageList";
 
 interface Props {
   workspaceLocation: string;
@@ -39,22 +40,10 @@ function SelectPackage(props: Props) {
   return (
     <>
       {packages.length > 0 ? (
-        <>
-          <div className="package-list-container">
-            <h1 className="package-name">{selectedWorkspaceName}</h1>
-            <div className="package-list">
-              {packages.map((pkg) => (
-                <Card key={pkg.fullPath} title={pkg.name} variant="borderless">
-                  <p>{pkg.created.toISOString()}</p>
-                  <p>{pkg.modified.toISOString()}</p>
-                  <p>{pkg.numberOfItems}</p>
-                  <p>{pkg.packageType}</p>
-                  <p>{pkg.totalSize}</p>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </>
+        <PackageList
+          packages={packages}
+          selectedWorkspaceName={selectedWorkspaceName}
+        />
       ) : (
         <>
           <Result
