@@ -1,8 +1,8 @@
 type Package = {
   name: string;
   fullPath: string;
-  modified: Date;
-  created: Date;
+  modifiedAt: string;
+  createdAt: string;
   numberOfItems: number;
   totalSize: number;
   packageType: string;

@@ -111,8 +111,8 @@ ipcMain.handle("get-packages", async (_, workspacePath) => {
         return {
           name: folder.name,
           fullPath: folderPath,
-          modified: stats.mtime,
-          created: stats.birthtime,
+          modifiedAt: stats.mtime.toISOString(),
+          createdAt: stats.birthtime.toISOString(),
           numberOfItems,
           totalSize,
           packageType,
