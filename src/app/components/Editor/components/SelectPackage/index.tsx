@@ -45,7 +45,11 @@ function SelectPackage(props: Props) {
             <div className="package-list">
               {packages.map((pkg) => (
                 <Card key={pkg.fullPath} title={pkg.name} variant="borderless">
-                  {pkg.fullPath}
+                  <p>{pkg.created.toISOString()}</p>
+                  <p>{pkg.modified.toISOString()}</p>
+                  <p>{pkg.numberOfItems}</p>
+                  <p>{pkg.packageType}</p>
+                  <p>{pkg.totalSize}</p>
                 </Card>
               ))}
             </div>

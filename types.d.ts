@@ -1,6 +1,11 @@
 type Package = {
   name: string;
   fullPath: string;
+  modified: Date;
+  created: Date;
+  numberOfItems: number;
+  totalSize: number;
+  packageType: string;
 };
 interface Window {
   electronAPI: {

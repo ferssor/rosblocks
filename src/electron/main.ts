@@ -84,10 +84,40 @@ ipcMain.handle("get-packages", async (_, workspacePath) => {
     const entries = fs.readdirSync(srcPath, { withFileTypes: true });
     const packages = entries
       .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
-      .map((folder) => ({
-        name: folder.name,
-        fullPath: path.join(srcPath, folder.name),
-      }));
+      .map((folder) => {
+        const folderPath = path.join(srcPath, folder.name);
+        const stats = fs.statSync(folderPath);
+        const numberOfItems = fs.readdirSync(folderPath).length;
+        const totalSize = fs.readdirSync(folderPath).reduce((size, file) => {
+          const filePath = path.join(folderPath, file);
+          return (
+            size +
+            (fs.statSync(filePath).isFile() ? fs.statSync(filePath).size : 0)
+          );
+        }, 0);
+
+        let packageType: string = "unknown";
+        switch (true) {
+          case fs.existsSync(path.join(folderPath, "setup.py")):
+            packageType = "python";
+            break;
+          case fs.existsSync(path.join(folderPath, "CMakeLists.txt")):
+            packageType = "cpp";
+            break;
+          default:
+            packageType = "unknown";
+        }
+
+        return {
+          name: folder.name,
+          fullPath: folderPath,
+          modified: stats.mtime,
+          created: stats.birthtime,
+          numberOfItems,
+          totalSize,
+          packageType,
+        };
+      });
     return packages ?? [];
   } catch (error) {
     if (error instanceof Error) {
