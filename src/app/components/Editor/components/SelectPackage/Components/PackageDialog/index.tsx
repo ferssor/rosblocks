@@ -62,12 +62,7 @@ function PackageDialog(props: Props) {
       }
     } catch (error) {
       if (error instanceof Error) {
-        const errorMessage =
-          typeof error === "string" ? error : JSON.stringify(error);
-        message.error(`Ocorreu um erro ao criar o pacote! ${errorMessage}`);
-      } else {
-        console.error("Unexpected error:", error);
-        message.error("Ocorreu um erro inesperado ao criar o pacote.");
+        message.error(`Ocorreu um erro ao criar o pacote!`);
       }
     }
   };
