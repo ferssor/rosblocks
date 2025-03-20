@@ -10,5 +10,10 @@ interface Window {
     ) => Promise<{ created: boolean; workspacePath: string }>;
     validateWorkspace: (path: string) => Promise<{ valid: boolean }>;
     getPackages: (path: string) => Promise<Array<Package>>;
+    createPackage: (
+      path: string,
+      name: string,
+      dependency: string
+    ) => Promise<{ created: boolean; packagePath: string; error?: string }>;
   };
 }

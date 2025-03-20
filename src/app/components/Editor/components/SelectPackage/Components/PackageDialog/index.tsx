@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Radio } from "antd";
+import { Button, Form, Input, message, Modal, Radio } from "antd";
 import "./styles.css";
 import { useEffect, useState } from "react";
 import { CheckboxGroupProps } from "antd/es/checkbox";
@@ -38,7 +38,39 @@ function PackageDialog(props: Props) {
     setIsInputChanged(false);
   };
 
-  const handleCreatePackage = () => {};
+  const handleCreatePackage = async () => {
+    try {
+      await form.validateFields();
+
+      const packageName = form.getFieldValue("name");
+      const packageDeps = form.getFieldValue("dependency");
+      const result = await window.electronAPI.createPackage(
+        packageLocation,
+        packageName,
+        packageDeps
+      );
+
+      if (result.created) {
+        message.success("Package criado com sucesso!");
+        closeDialog();
+      } else if (result.error) {
+        const errorMessage =
+          typeof result.error === "string"
+            ? result.error
+            : JSON.stringify(result.error);
+        message.error(`Erro ao criar o pacote: ${errorMessage}`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        const errorMessage =
+          typeof error === "string" ? error : JSON.stringify(error);
+        message.error(`Ocorreu um erro ao criar o pacote! ${errorMessage}`);
+      } else {
+        console.error("Unexpected error:", error);
+        message.error("Ocorreu um erro inesperado ao criar o pacote.");
+      }
+    }
+  };
 
   const handleFieldsChange = () => {
     const currentValues = form.getFieldsValue();

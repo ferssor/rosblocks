@@ -96,3 +96,45 @@ ipcMain.handle("get-packages", async (_, workspacePath) => {
     }
   }
 });
+
+ipcMain.handle(
+  "create-package",
+  async (_, workspacePath: string, packageName: string, dependency: string) => {
+    if (!fs.existsSync(workspacePath)) {
+      return { created: false, error: "Workspace path does not exist." };
+    }
+    if (!/^[a-zA-Z0-9_-]+$/.test(packageName)) {
+      return { created: false, error: "Invalid package name." };
+    }
+
+    const typeOfPackage = dependency.includes("py")
+      ? "ament_python"
+      : "ament_cmake";
+
+    try {
+      const command = `cd ${path.join(
+        workspacePath,
+        "src"
+      )} && ros2 pkg create ${packageName} --build-type ${typeOfPackage} --dependencies ${dependency}`;
+
+      return new Promise((resolve, reject) => {
+        exec(command, { cwd: workspacePath }, (error, stdout, stderr) => {
+          if (error) {
+            console.log(`Failed to create package, ${stderr.trim()}`);
+            reject({ created: false, error: stderr.trim() });
+          } else {
+            const packagePath = path.join(workspacePath, "src", packageName);
+            console.log(`Package created successfully:  ${stdout}`);
+            resolve({ created: true, packagePath: packagePath });
+          }
+        });
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error while creating the package:", error);
+        return { created: false, error: error.message };
+      }
+      return { created: false, error: "An unknown error occurred." };
+    }
+  }
+);
