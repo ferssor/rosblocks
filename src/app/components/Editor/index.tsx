@@ -23,7 +23,11 @@ export function Editor() {
     <>
       <div className="editor-container">
         {workspacePath.includes("_ws") && validWorkspace ? (
-          <SelectPackage packages={packages} workspaceName={workspacePath} />
+          <SelectPackage
+            packages={packages}
+            workspaceLocation={workspacePath}
+            setPackages={setPackages}
+          />
         ) : (
           <SelectWorkspace
             setValidWorkspace={setValidWorkspace}

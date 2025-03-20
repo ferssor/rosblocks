@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PackageDialog from "./Components/PackageDialog";
 import "./styles.css";
 import { Button, Result } from "antd";
 
 interface Props {
-  workspaceName: string;
+  workspaceLocation: string;
   packages: Package[];
+  setPackages: React.Dispatch<React.SetStateAction<Package[]>>;
 }
 
 function getWorkspaceName(fullPath: string) {
@@ -14,15 +15,26 @@ function getWorkspaceName(fullPath: string) {
 }
 
 function SelectPackage(props: Props) {
-  const { packages, workspaceName } = props;
+  const { packages, workspaceLocation, setPackages } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const selectedWorkspaceName = getWorkspaceName(workspaceName);
+  const selectedWorkspaceName = getWorkspaceName(workspaceLocation);
   const TITLE = `Parece que o workspace ${getWorkspaceName(
-    workspaceName
+    workspaceLocation
   )} não possui package, para prosseguir é necessário criar um!`;
   const SUBTITLE =
     "Packages são um conjunto de programas ROS ou Nodes, que juntos exercem função específica.";
   const PRIMARY_BUTTON_TITLE = "Criar um novo package";
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      if (workspaceLocation && !isModalOpen) {
+        const result = await window.electronAPI.getPackages(workspaceLocation);
+        setPackages(result);
+      }
+    };
+
+    fetchPackages();
+  }, [isModalOpen, workspaceLocation, setPackages]);
 
   return (
     <>
@@ -55,7 +67,7 @@ function SelectPackage(props: Props) {
                   {PRIMARY_BUTTON_TITLE}
                 </Button>
                 <PackageDialog
-                  packageLocation={workspaceName}
+                  packageLocation={workspaceLocation}
                   isModalOpen={isModalOpen}
                   setIsModalOpen={setIsModalOpen}
                 />
