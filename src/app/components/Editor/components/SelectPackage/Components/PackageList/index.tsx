@@ -1,4 +1,4 @@
-import { Table, Tag } from "antd";
+import { Button, Table, Tag } from "antd";
 import "./style.css";
 import {
   differenceInDays,
@@ -81,6 +81,21 @@ function PackageList(props: Props) {
           return format(modifiedAtDate, "dd/MM/yyyy", { locale: ptBR });
         }
       },
+    },
+    {
+      title: "",
+      dataIndex: "actionButtons",
+      key: "actionButtons",
+      width: 150,
+      render: () => (
+        <div className="action-buttons">
+          <Button type="primary">Editar</Button>
+          <Button type="default">Buildar</Button>
+          <Button type="default" danger>
+            Deletar
+          </Button>
+        </div>
+      ),
     },
   ];
 
