@@ -1,5 +1,6 @@
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import "./style.css";
+import { format } from "date-fns";
 
 interface Props {
   packages: Package[];
@@ -28,16 +29,31 @@ function PackageList(props: Props) {
       title: "Tipo do pacote",
       dataIndex: "packageType",
       key: "packageType",
+      render: (packageType: string) => (
+        <Tag
+          color={
+            packageType === "cpp"
+              ? "blue"
+              : packageType === "python"
+              ? "green"
+              : "default"
+          }
+        >
+          {packageType}
+        </Tag>
+      ),
     },
     {
       title: "Criado em",
       dataIndex: "createdAt",
       key: "createdAt",
+      render: (createdAt: string) => format(new Date(createdAt), "dd/MM/yyyy"),
     },
     {
       title: "Modificado em",
       dataIndex: "modifiedAt",
       key: "modifiedAt",
+      render: (createdAt: string) => format(new Date(createdAt), "dd/MM/yyyy"),
     },
   ];
 
