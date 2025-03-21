@@ -7,6 +7,8 @@ import {
   format,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useState } from "react";
+import NodeManager from "../NodeManager";
 
 interface Props {
   packages: Package[];
@@ -15,6 +17,9 @@ interface Props {
 
 function PackageList(props: Props) {
   const { packages, selectedWorkspaceName } = props;
+  const [packageName, setPackageName] = useState("");
+  const [packageLocation, setPackageLocation] = useState("");
+
   const columns = [
     {
       title: "Nome do pacote",
@@ -87,9 +92,17 @@ function PackageList(props: Props) {
       dataIndex: "actionButtons",
       key: "actionButtons",
       width: 150,
-      render: () => (
+      render: (_: unknown, pkg: Package) => (
         <div className="action-buttons">
-          <Button type="primary">Editar</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              setPackageLocation(pkg.fullPath);
+              setPackageName(pkg.name);
+            }}
+          >
+            Editar
+          </Button>
           <Button type="default">Buildar</Button>
           <Button type="default" danger>
             Deletar
@@ -101,10 +114,17 @@ function PackageList(props: Props) {
 
   return (
     <>
-      <div className="package-list-container">
-        <h1 className="package-name">{selectedWorkspaceName}</h1>
-        <Table dataSource={packages} columns={columns} />
-      </div>
+      {packageName && packageLocation ? (
+        <NodeManager
+          packageLocation={packageLocation}
+          packageName={packageName}
+        />
+      ) : (
+        <div className="package-list-container">
+          <h1 className="package-name">{selectedWorkspaceName}</h1>
+          <Table dataSource={packages} columns={columns} />
+        </div>
+      )}
     </>
   );
 }
