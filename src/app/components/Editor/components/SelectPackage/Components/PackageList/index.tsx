@@ -1,6 +1,12 @@
 import { Table, Tag } from "antd";
 import "./style.css";
-import { format } from "date-fns";
+import {
+  differenceInDays,
+  differenceInMonths,
+  differenceInYears,
+  format,
+} from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface Props {
   packages: Package[];
@@ -11,7 +17,7 @@ function PackageList(props: Props) {
   const { packages, selectedWorkspaceName } = props;
   const columns = [
     {
-      title: "Nome",
+      title: "Nome do pacote",
       dataIndex: "name",
       key: "name",
     },
@@ -50,10 +56,31 @@ function PackageList(props: Props) {
       render: (createdAt: string) => format(new Date(createdAt), "dd/MM/yyyy"),
     },
     {
-      title: "Modificado em",
+      title: "Última modificação",
       dataIndex: "modifiedAt",
       key: "modifiedAt",
-      render: (createdAt: string) => format(new Date(createdAt), "dd/MM/yyyy"),
+      render: (modifiedAt: string) => {
+        const modifiedAtDate = new Date(modifiedAt);
+        const now = new Date();
+        const diffInDays = differenceInDays(now, modifiedAtDate);
+        const diffInWeeks = Math.floor(diffInDays / 7);
+        const diffInMonths = differenceInMonths(now, modifiedAtDate);
+        const diffInYears = differenceInYears(now, modifiedAtDate);
+
+        if (diffInDays < 7) {
+          return format(modifiedAtDate, "EEEE, HH:mm", { locale: ptBR });
+        } else if (diffInDays < 30) {
+          return `${diffInWeeks} semanas atrás, ${format(
+            modifiedAtDate,
+            "HH:mm",
+            { locale: ptBR }
+          )}`;
+        } else if (diffInYears === 0) {
+          return `${diffInMonths} meses atrás, `;
+        } else {
+          return format(modifiedAtDate, "dd/MM/yyyy", { locale: ptBR });
+        }
+      },
     },
   ];
 
