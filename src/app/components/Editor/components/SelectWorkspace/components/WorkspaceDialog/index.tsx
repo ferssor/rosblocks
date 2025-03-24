@@ -36,8 +36,8 @@ function WorkspaceDialog(props: Props) {
 
   const handleOpenDialog = async () => {
     const selectedPath = await window.electronAPI.openWorkspaceLocation();
-    if (selectedPath) {
-      form.setFieldsValue({ location: selectedPath });
+    if (selectedPath.workspaceLocation) {
+      form.setFieldsValue({ location: selectedPath.workspaceLocation });
     }
   };
 
