@@ -28,7 +28,10 @@ ipcMain.handle("open-dialog", async () => {
   const result = await dialog.showOpenDialog({
     properties: ["openDirectory"],
   });
-  return result.filePaths[0] || "";
+  return {
+    workspaceLocation: result.filePaths[0] || "",
+    canceled: result.canceled,
+  };
 });
 
 ipcMain.handle("create-workspace", async (_, workspacePath) => {

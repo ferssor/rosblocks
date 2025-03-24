@@ -22,15 +22,15 @@ function SelectWorkspace(props: Props) {
   const handleOpenWorkspace = async () => {
     const result = await window.electronAPI.openWorkspaceLocation();
     const validateWorkspace = await window.electronAPI.validateWorkspace(
-      result
+      result.workspaceLocation
     );
 
-    if (!validateWorkspace.valid) {
+    if (!validateWorkspace.valid && !result.canceled) {
       message.error(
         "Ocorreu um erro ao selecionar o workspace, a pasta não é compatível!"
       );
     }
-    setWorkspacePath(result);
+    setWorkspacePath(result.workspaceLocation);
     setValidWorkspace(validateWorkspace.valid);
   };
 

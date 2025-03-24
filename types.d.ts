@@ -9,7 +9,10 @@ type Package = {
 };
 interface Window {
   electronAPI: {
-    openWorkspaceLocation: () => Promise<string>;
+    openWorkspaceLocation: () => Promise<{
+      workspaceLocation: string;
+      canceled: boolean;
+    }>;
     createWorkspace: (
       path: string
     ) => Promise<{ created: boolean; workspacePath: string }>;
