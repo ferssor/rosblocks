@@ -7,6 +7,13 @@ type Package = {
   totalSize: number;
   packageType: string;
 };
+
+type ROSNode = {
+  name: string;
+  fullPath: string;
+  relativePath: string;
+  content: string;
+};
 interface Window {
   electronAPI: {
     openWorkspaceLocation: () => Promise<{
@@ -23,5 +30,9 @@ interface Window {
       name: string,
       dependency: string
     ) => Promise<{ created: boolean; packagePath: string; error?: string }>;
+    getNodes: (
+      packagePath: string,
+      packageName: string
+    ) => Promise<Array<ROSNode>>;
   };
 }

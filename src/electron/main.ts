@@ -171,3 +171,27 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle("get-nodes", async (_, packagePath, packageName) => {
+  const pkgPath = path.join(packagePath, packageName);
+  if (!pkgPath) {
+    console.error("Package path does not exist!");
+    return [];
+  }
+
+  const nodes = fs
+    .readdirSync(pkgPath)
+    .filter((node) => node.endsWith(".py") && node !== "__init__.py");
+
+  return nodes.map((node) => {
+    const fullPath = path.join(pkgPath, node);
+    const relativePath = path.relative(packagePath, fullPath);
+
+    return {
+      name: path.basename(node, ".py"),
+      fullPath,
+      relativePath,
+      content: fs.readFileSync(fullPath, "utf-8"),
+    };
+  });
+});

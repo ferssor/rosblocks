@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./styles.css";
 
 interface Props {
@@ -7,6 +8,23 @@ interface Props {
 
 function NodeManager(props: Props) {
   const { packageLocation, packageName } = props;
+  const [nodes, setNodes] = useState(Array<ROSNode>);
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      const result = await window.electronAPI.getNodes(
+        packageLocation,
+        packageName
+      );
+      setNodes(result);
+    };
+
+    fetchPackages();
+  }, [packageLocation, packageName, setNodes]);
+
+  useEffect(() => {
+    console.log(nodes);
+  }, [nodes]);
 
   return (
     <>
