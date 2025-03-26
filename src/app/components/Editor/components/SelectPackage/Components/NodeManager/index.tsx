@@ -92,6 +92,7 @@ function NodeManager(props: Props) {
                   packageLocation={packageLocation}
                   packageName={packageName}
                   isModalOpen={isModalOpen}
+                  packageType={packageType}
                   setIsModalOpen={setIsModalOpen}
                 />
               </>,
