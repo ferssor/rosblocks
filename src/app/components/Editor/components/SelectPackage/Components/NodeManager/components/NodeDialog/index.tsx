@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, message, Modal } from "antd";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -36,8 +36,25 @@ function NodeDialog(props: Props) {
     setIsInputChanged(false);
   };
 
-  const handleCreateNode = () => {
-    console.log(packageName);
+  const handleCreateNode = async () => {
+    try {
+      await form.validateFields();
+      const nodeName = form.getFieldValue("name");
+      const result = await window.electronAPI.createNode(
+        nodeName,
+        packageType,
+        packageLocation,
+        packageName
+      );
+      console.log(result);
+      if (result.created) {
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Ocorreu um erro ao criar o nó!`);
+      }
+    }
   };
 
   const handleFieldsChange = () => {

@@ -4,6 +4,7 @@ import { isDev } from "./util.js";
 import { getPreloadPath } from "./pathResolve.js";
 import { exec } from "child_process";
 import fs from "fs";
+import prettier from "prettier";
 
 const URL = "http://localhost:1337";
 
@@ -172,26 +173,121 @@ ipcMain.handle(
   }
 );
 
-ipcMain.handle("get-nodes", async (_, packagePath, packageName) => {
-  const pkgPath = path.join(packagePath, packageName);
-  if (!pkgPath) {
-    console.error("Package path does not exist!");
-    return [];
+ipcMain.handle(
+  "get-nodes",
+  async (_, packagePath: string, packageName: string) => {
+    const pkgPath = path.join(packagePath, packageName);
+    if (!pkgPath) {
+      console.error("Package path does not exist!");
+      return [];
+    }
+
+    const nodes = fs
+      .readdirSync(pkgPath)
+      .filter((node) => node.endsWith(".py") && node !== "__init__.py");
+
+    return nodes.map((node) => {
+      const fullPath = path.join(pkgPath, node);
+      const relativePath = path.relative(packagePath, fullPath);
+
+      return {
+        name: path.basename(node, ".py"),
+        fullPath,
+        relativePath,
+        content: fs.readFileSync(fullPath, "utf-8"),
+      };
+    });
   }
+);
 
-  const nodes = fs
-    .readdirSync(pkgPath)
-    .filter((node) => node.endsWith(".py") && node !== "__init__.py");
+ipcMain.handle(
+  "create-node",
+  async (
+    _,
+    nodeName: string,
+    nodeType: string,
+    packagePath: string,
+    packageName: string
+  ) => {
+    const pkgPath = path.join(packagePath, packageName);
+    const extension = nodeType === "python" ? ".py" : ".cpp";
+    console.log(extension);
 
-  return nodes.map((node) => {
-    const fullPath = path.join(pkgPath, node);
-    const relativePath = path.relative(packagePath, fullPath);
+    if (!pkgPath) {
+      console.error("Package path does not exist!");
+      return [];
+    }
 
-    return {
-      name: path.basename(node, ".py"),
-      fullPath,
-      relativePath,
-      content: fs.readFileSync(fullPath, "utf-8"),
-    };
-  });
-});
+    if (!/^[a-zA-Z0-9_-]+$/.test(nodeName)) {
+      return { created: false, error: "Invalid node name." };
+    }
+
+    const filePath = path.join(pkgPath, `${nodeName}${extension}`);
+    console.log("🚀 ~ filePath:", filePath);
+
+    try {
+      const content =
+        nodeType === "python"
+          ? `#!/usr/bin/env python3
+            import rclpy
+            from rclpy.node import Node
+
+
+          class ${nodeName.charAt(0).toUpperCase() + nodeName.slice(1)}(Node):
+            def __init__(self):
+                super().__init__("${nodeName}")
+
+
+          def main(args=None):
+            rclpy.init(args=args)
+            node = ${nodeName.charAt(0).toUpperCase() + nodeName.slice(1)}()
+            rclpy.spin(node)
+            rclpy.shutdown()
+
+
+          if __name__ == "__main__":
+            main()
+          `
+          : `#include "rclcpp/rclcpp.hpp"
+
+          class ${
+            nodeName.charAt(0).toUpperCase() + nodeName.slice(1)
+          } : public rclcpp::Node
+          {
+          public:
+            ${
+              nodeName.charAt(0).toUpperCase() + nodeName.slice(1)
+            }() : Node("${nodeName}")
+            {
+            }
+
+          private:
+          };
+
+          int main(int argc, char **argv)
+          {
+            rclcpp::init(argc, argv);
+            auto node = std::make_shared<${
+              nodeName.charAt(0).toUpperCase() + nodeName.slice(1)
+            }>();
+              rclcpp::spin(node);
+              rclcpp::shutdown();
+              return 0;
+          }
+          `;
+
+      console.log(content);
+      const formattedContent = await prettier.format(content, {
+        parser: nodeType === "python" ? "python" : "cpp",
+      });
+
+      fs.writeFileSync(filePath, formattedContent, { mode: 0o755 });
+      console.log(`Node created successfully at: ${filePath}`);
+      return { created: true, pkgPath };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { created: false, error: "An unknown error occurred." };
+      }
+    }
+  }
+);

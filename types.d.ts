@@ -34,5 +34,11 @@ interface Window {
       packagePath: string,
       packageName: string
     ) => Promise<Array<ROSNode>>;
+    createNode: (
+      nodeName: string,
+      nodeType: string,
+      packagePath: string,
+      packageName: string
+    ) => Promise<{ created: boolean; nodePath?: string; error?: string }>;
   };
 }

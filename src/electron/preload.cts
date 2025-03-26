@@ -11,4 +11,17 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("create-package", path, name, dependency),
   getNodes: (packagePath: string, packageName: string) =>
     ipcRenderer.invoke("get-nodes", packagePath, packageName),
+  createNode: (
+    nodeName: string,
+    nodeType: string,
+    packagePath: string,
+    packageName: string
+  ) =>
+    ipcRenderer.invoke(
+      "create-node",
+      nodeName,
+      nodeType,
+      packagePath,
+      packageName
+    ),
 });
