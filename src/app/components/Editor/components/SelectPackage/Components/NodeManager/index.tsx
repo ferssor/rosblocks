@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { Layout, Menu, Tag } from "antd";
+import { Button, Layout, Menu, Result, Tag } from "antd";
 import { ApartmentOutlined } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ItemType } from "antd/es/menu/interface";
+import NodeDialog from "./components/NodeDialog";
 
 interface Props {
   packageName: string;
@@ -16,6 +17,12 @@ function NodeManager(props: Props) {
   const { packageLocation, packageName, packageType } = props;
   const [nodes, setNodes] = useState(Array<ROSNode>);
   const [menuItems, setMenuItems] = useState<ItemType[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const TITLE = `Parece que o package ${packageName} não possui nós ROS`;
+  const SUBTITLE =
+    "Nós são programas executáveis que permitem que o robô posso atuar.";
+  const PRIMARY_BUTTON_TITLE = "Criar um novo nó";
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -43,26 +50,55 @@ function NodeManager(props: Props) {
 
   return (
     <>
-      <Layout className="node-management-container">
-        <Sider theme="light" className="sider-container">
-          <div className="package-list-header">
-            <h3>{packageName}</h3>
-            <Tag
-              color={
-                packageType === "cpp"
-                  ? "blue"
-                  : packageType === "python"
-                  ? "green"
-                  : "default"
-              }
-            >
-              {packageType}
-            </Tag>
-          </div>
-          <Menu mode="inline" items={menuItems} />
-        </Sider>
-        <Content style={{ background: "#fff" }}>Content</Content>
-      </Layout>
+      {nodes.length > 0 ? (
+        <Layout className="node-management-container">
+          <Sider theme="light" className="sider-container">
+            <div className="package-list-header">
+              <h3>{packageName}</h3>
+              <Tag
+                color={
+                  packageType === "cpp"
+                    ? "blue"
+                    : packageType === "python"
+                    ? "green"
+                    : "default"
+                }
+              >
+                {packageType}
+              </Tag>
+            </div>
+            <Menu mode="inline" items={menuItems} />
+          </Sider>
+          <Content style={{ background: "#fff" }}>Content</Content>
+        </Layout>
+      ) : (
+        <>
+          <Result
+            className="new-node-container"
+            status="404"
+            title={TITLE}
+            subTitle={SUBTITLE}
+            extra={[
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setIsModalOpen(true);
+                  }}
+                >
+                  {PRIMARY_BUTTON_TITLE}
+                </Button>
+                <NodeDialog
+                  packageLocation={packageLocation}
+                  packageName={packageName}
+                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen}
+                />
+              </>,
+            ]}
+          />
+        </>
+      )}
     </>
   );
 }

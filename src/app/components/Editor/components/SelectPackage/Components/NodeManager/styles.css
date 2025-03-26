@@ -11,3 +11,9 @@
   }
 }
 
+.new-node-container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
