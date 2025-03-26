@@ -19,6 +19,7 @@ function PackageList(props: Props) {
   const { packages, selectedWorkspaceName } = props;
   const [packageName, setPackageName] = useState("");
   const [packageLocation, setPackageLocation] = useState("");
+  const [packageType, setPackageType] = useState("");
 
   const columns = [
     {
@@ -99,6 +100,7 @@ function PackageList(props: Props) {
             onClick={() => {
               setPackageLocation(pkg.fullPath);
               setPackageName(pkg.name);
+              setPackageType(pkg.packageType);
             }}
           >
             Editar
@@ -114,10 +116,11 @@ function PackageList(props: Props) {
 
   return (
     <>
-      {packageName && packageLocation ? (
+      {packageName && packageLocation && packageType ? (
         <NodeManager
           packageLocation={packageLocation}
           packageName={packageName}
+          packageType={packageType}
         />
       ) : (
         <div className="package-list-container">
