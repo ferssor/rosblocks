@@ -1,6 +1,6 @@
 .package-list-container {
   width: 100%;
-  padding: 48px;
+  padding: 48px 16px;
   display: flex;
   flex-direction: column;
 

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
+import { Layout, Menu } from "antd";
+import { ApartmentOutlined } from "@ant-design/icons";
+import Sider from "antd/es/layout/Sider";
+import { Content } from "antd/es/layout/layout";
+import { ItemType } from "antd/es/menu/interface";
 
 interface Props {
   packageName: string;
@@ -9,6 +14,7 @@ interface Props {
 function NodeManager(props: Props) {
   const { packageLocation, packageName } = props;
   const [nodes, setNodes] = useState(Array<ROSNode>);
+  const [menuItems, setMenuItems] = useState<ItemType[]>([]);
 
   useEffect(() => {
     const fetchPackages = async () => {
@@ -23,14 +29,28 @@ function NodeManager(props: Props) {
   }, [packageLocation, packageName, setNodes]);
 
   useEffect(() => {
-    console.log(nodes);
+    const mapNodesToMenuItems = (nodes: ROSNode[]): ItemType[] => {
+      return nodes.map((node) => ({
+        key: node.fullPath,
+        icon: <ApartmentOutlined />,
+        label: node.name,
+      }));
+    };
+
+    setMenuItems(mapNodesToMenuItems(nodes));
   }, [nodes]);
 
   return (
     <>
-      <h1>NodeManager Page</h1>
-      <p>{packageLocation}</p>
-      <p>{packageName}</p>
+      <Layout className="node-management-container">
+        <Sider theme="light" className="sider-container">
+          <div className="package-list-header">
+            <h3>{packageName}</h3>
+          </div>
+          <Menu mode="inline" items={menuItems} />
+        </Sider>
+        <Content style={{ background: "#fff" }}>Content</Content>
+      </Layout>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { Button, Table, Tag } from "antd";
-import "./style.css";
+import "./styles.css";
 import {
   differenceInDays,
   differenceInMonths,

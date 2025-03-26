@@ -10,5 +10,9 @@
 
   .ant-app {
     height: 100%;
+
+    .ant-layout-header {
+      padding: 0px 16px;
+    }
   }
 }
