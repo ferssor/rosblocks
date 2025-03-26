@@ -4,7 +4,6 @@ import { isDev } from "./util.js";
 import { getPreloadPath } from "./pathResolve.js";
 import { exec } from "child_process";
 import fs from "fs";
-import prettier from "prettier";
 
 const URL = "http://localhost:1337";
 
@@ -276,12 +275,7 @@ ipcMain.handle(
           }
           `;
 
-      console.log(content);
-      const formattedContent = await prettier.format(content, {
-        parser: nodeType === "python" ? "python" : "cpp",
-      });
-
-      fs.writeFileSync(filePath, formattedContent, { mode: 0o755 });
+      fs.writeFileSync(filePath, content, { mode: 0o755 });
       console.log(`Node created successfully at: ${filePath}`);
       return { created: true, pkgPath };
     } catch (error) {
