@@ -67,6 +67,11 @@ function NodeManager(props: Props) {
                 {packageType}
               </Tag>
             </div>
+            <div className="action-buttons-header">
+              <Button type="primary" onClick={() => setIsModalOpen(true)}>
+                Criar novo nó
+              </Button>
+            </div>
             <Menu mode="inline" items={menuItems} />
           </Sider>
           <Content style={{ background: "#fff" }}>Content</Content>
@@ -88,19 +93,19 @@ function NodeManager(props: Props) {
                 >
                   {PRIMARY_BUTTON_TITLE}
                 </Button>
-                <NodeDialog
-                  packageLocation={packageLocation}
-                  packageName={packageName}
-                  isModalOpen={isModalOpen}
-                  packageType={packageType}
-                  setIsModalOpen={setIsModalOpen}
-                  setNodes={setNodes}
-                />
               </>,
             ]}
           />
         </>
       )}
+      <NodeDialog
+        packageLocation={packageLocation}
+        packageName={packageName}
+        isModalOpen={isModalOpen}
+        packageType={packageType}
+        setIsModalOpen={setIsModalOpen}
+        setNodes={setNodes}
+      />
     </>
   );
 }

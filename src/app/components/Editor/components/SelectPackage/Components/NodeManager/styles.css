@@ -4,10 +4,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06)
+  }
+
+  .ant-menu {
+    border-top: 1px solid rgba(5, 5, 5, 0.06)
   }
 
   .sider-container {
     border-right: 1px solid rgba(5, 5, 5, 0.06)
+  }
+
+  .action-buttons-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 24px;
+
+    button {
+      width: 100%;
+    }
   }
 }
 

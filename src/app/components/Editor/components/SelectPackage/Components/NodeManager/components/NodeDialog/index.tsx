@@ -48,9 +48,9 @@ function NodeDialog(props: Props) {
         packageLocation,
         packageName
       );
-      console.log(result);
+
       if (result.created) {
-        setIsModalOpen(false);
+        closeDialog();
         fetchNodes();
       }
     } catch (error) {
