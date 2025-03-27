@@ -41,9 +41,9 @@ function NodeDialog(props: Props) {
   const handleCreateNode = async () => {
     try {
       await form.validateFields();
-      const nodeName = form.getFieldValue("name");
+      const nodeName: string = form.getFieldValue("name");
       const result = await window.electronAPI.createNode(
-        nodeName,
+        nodeName.toLowerCase(),
         packageType,
         packageLocation,
         packageName

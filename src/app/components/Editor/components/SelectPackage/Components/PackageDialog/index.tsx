@@ -42,12 +42,12 @@ function PackageDialog(props: Props) {
     try {
       await form.validateFields();
 
-      const packageName = form.getFieldValue("name");
-      const packageDeps = form.getFieldValue("dependency");
+      const packageName: string = form.getFieldValue("name");
+      const packageDeps: string = form.getFieldValue("dependency");
       const result = await window.electronAPI.createPackage(
         packageLocation,
-        packageName,
-        packageDeps
+        packageName.toLowerCase(),
+        packageDeps.toLowerCase()
       );
 
       if (result.created) {
