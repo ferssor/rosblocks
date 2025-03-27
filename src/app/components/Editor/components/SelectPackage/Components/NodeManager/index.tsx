@@ -25,7 +25,7 @@ function NodeManager(props: Props) {
   const PRIMARY_BUTTON_TITLE = "Criar um novo nó";
 
   useEffect(() => {
-    const fetchPackages = async () => {
+    const fetchNodes = async () => {
       const result = await window.electronAPI.getNodes(
         packageLocation,
         packageName
@@ -33,7 +33,7 @@ function NodeManager(props: Props) {
       setNodes(result);
     };
 
-    fetchPackages();
+    fetchNodes();
   }, [packageLocation, packageName, setNodes]);
 
   useEffect(() => {
@@ -60,8 +60,8 @@ function NodeManager(props: Props) {
                   packageType === "cpp"
                     ? "blue"
                     : packageType === "python"
-                    ? "green"
-                    : "default"
+                      ? "green"
+                      : "default"
                 }
               >
                 {packageType}
@@ -94,6 +94,7 @@ function NodeManager(props: Props) {
                   isModalOpen={isModalOpen}
                   packageType={packageType}
                   setIsModalOpen={setIsModalOpen}
+                  setNodes={setNodes}
                 />
               </>,
             ]}

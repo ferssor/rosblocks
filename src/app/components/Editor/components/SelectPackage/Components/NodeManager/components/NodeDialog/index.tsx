@@ -7,6 +7,7 @@ interface Props {
   packageType: string;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setNodes: React.Dispatch<React.SetStateAction<ROSNode[]>>;
 }
 
 function NodeDialog(props: Props) {
@@ -17,6 +18,7 @@ function NodeDialog(props: Props) {
     packageName,
     packageType,
     setIsModalOpen,
+    setNodes,
   } = props;
   const [isInputChanged, setIsInputChanged] = useState(false);
   const [initialValues, setInitialValues] = useState({
@@ -49,6 +51,7 @@ function NodeDialog(props: Props) {
       console.log(result);
       if (result.created) {
         setIsModalOpen(false);
+        fetchNodes();
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -71,6 +74,14 @@ function NodeDialog(props: Props) {
       setInitialValues(currentValues);
     }
   }, [form, isModalOpen, packageLocation]);
+
+  const fetchNodes = async () => {
+    const result = await window.electronAPI.getNodes(
+      packageLocation,
+      packageName
+    );
+    setNodes(result);
+  };
 
   return (
     <>
