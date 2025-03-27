@@ -144,15 +144,23 @@ ipcMain.handle(
       return { created: false, error: "Invalid package name." };
     }
 
+    const srcPath = path.join(workspacePath, "src");
+    const packagePath = path.join(srcPath, packageName);
+
+    if (fs.existsSync(packagePath)) {
+      console.error(`Package already exists: ${packagePath}`);
+      return {
+        created: false,
+        error: "Package name already exists in the workspace.",
+      };
+    }
+
     const typeOfPackage = dependency.includes("py")
       ? "ament_python"
       : "ament_cmake";
 
     try {
-      const command = `cd ${path.join(
-        workspacePath,
-        "src"
-      )} && ros2 pkg create ${packageName} --build-type ${typeOfPackage} --dependencies ${dependency}`;
+      const command = `cd ${srcPath} && ros2 pkg create ${packageName} --build-type ${typeOfPackage} --dependencies ${dependency}`;
 
       return new Promise((resolve, reject) => {
         exec(command, { cwd: workspacePath }, (error, stdout, stderr) => {
@@ -160,7 +168,6 @@ ipcMain.handle(
             console.log(`Failed to create package, ${stderr.trim()}`);
             reject({ created: false, error: stderr.trim() });
           } else {
-            const packagePath = path.join(workspacePath, "src", packageName);
             console.log(`Package created successfully:  ${stdout}`);
             resolve({ created: true, packagePath: packagePath });
           }
