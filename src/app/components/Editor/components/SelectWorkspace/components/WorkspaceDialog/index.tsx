@@ -60,6 +60,8 @@ function WorkspaceDialog(props: Props) {
 
         message.success("Workspace criado e build concluído!");
         closeDialog();
+      } else {
+        message.error(result.error);
       }
     } catch (error) {
       if (error instanceof Error) {

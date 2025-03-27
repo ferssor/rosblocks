@@ -22,7 +22,7 @@ interface Window {
     }>;
     createWorkspace: (
       path: string
-    ) => Promise<{ created: boolean; workspacePath: string }>;
+    ) => Promise<{ created: boolean; workspacePath: string; error?: boolean }>;
     validateWorkspace: (path: string) => Promise<{ valid: boolean }>;
     getPackages: (path: string) => Promise<Array<Package>>;
     createPackage: (

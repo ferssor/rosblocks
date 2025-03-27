@@ -36,11 +36,14 @@ ipcMain.handle("open-dialog", async () => {
 
 ipcMain.handle("create-workspace", async (_, workspacePath) => {
   try {
-    if (!fs.existsSync(workspacePath)) {
-      const srcPath = path.join(workspacePath, "src");
-      fs.mkdirSync(workspacePath, { recursive: true });
-      fs.mkdirSync(srcPath, { recursive: true });
+    if (fs.existsSync(workspacePath)) {
+      console.error(`Workspace already exists: ${workspacePath}`);
+      return { created: false, error: "Workspace name already exists." };
     }
+
+    const srcPath = path.join(workspacePath, "src");
+    fs.mkdirSync(workspacePath, { recursive: true });
+    fs.mkdirSync(srcPath, { recursive: true });
 
     return new Promise((resolve, reject) => {
       exec(`cd ${workspacePath} && colcon build`, (error, stdout, stderr) => {
@@ -59,6 +62,7 @@ ipcMain.handle("create-workspace", async (_, workspacePath) => {
       return { created: false, error: error.message };
     }
   }
+  return { created: false, error: "An unknown error occurred." };
 });
 
 ipcMain.handle("validate-workspace", (_, workspacePath) => {
