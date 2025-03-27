@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { Button, Layout, Menu, Result, Tag } from "antd";
+import { Button, Empty, Layout, Menu, Result, Tag } from "antd";
 import { ApartmentOutlined } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
@@ -18,6 +18,7 @@ function NodeManager(props: Props) {
   const [nodes, setNodes] = useState(Array<ROSNode>);
   const [menuItems, setMenuItems] = useState<ItemType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedNode, setSelectedNode] = useState("");
 
   const TITLE = `Parece que o package ${packageName} não possui nós ROS`;
   const SUBTITLE =
@@ -42,6 +43,7 @@ function NodeManager(props: Props) {
         key: node.fullPath,
         icon: <ApartmentOutlined />,
         label: node.name,
+        onClick: (e) => setSelectedNode(e.key),
       }));
     };
 
@@ -74,7 +76,18 @@ function NodeManager(props: Props) {
             </div>
             <Menu mode="inline" items={menuItems} />
           </Sider>
-          <Content style={{ background: "#fff" }}>Content</Content>
+          <Content
+            className={selectedNode ? "content-container" : "empty-container"}
+          >
+            {selectedNode !== "" ? (
+              <p>Selected</p>
+            ) : (
+              <Empty
+                className="empty-message"
+                description="Nenhum nó foi selecionado, para abrir o editor é necessário selecionar um!"
+              />
+            )}
+          </Content>
         </Layout>
       ) : (
         <>

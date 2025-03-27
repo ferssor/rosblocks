@@ -25,6 +25,18 @@
       width: 100%;
     }
   }
+
+  .empty-container {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .empty-message {
+      width: fit-content;
+      height: fit-content;
+    }
+  }
 }
 
 .new-node-container {
