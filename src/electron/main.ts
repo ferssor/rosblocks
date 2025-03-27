@@ -214,7 +214,7 @@ ipcMain.handle(
 
     if (!pkgPath) {
       console.error("Package path does not exist!");
-      return [];
+      return { created: false, error: "Package path does not exist." };
     }
 
     if (!/^[a-zA-Z0-9_-]+$/.test(nodeName)) {
@@ -222,6 +222,14 @@ ipcMain.handle(
     }
 
     const filePath = path.join(pkgPath, `${nodeName}${extension}`);
+
+    if (fs.existsSync(filePath)) {
+      console.error(`Node file already exists: ${filePath}`);
+      return {
+        created: false,
+        error: "Node name already exists in the package.",
+      };
+    }
 
     try {
       fs.writeFileSync(filePath, "", { mode: 0o755 });

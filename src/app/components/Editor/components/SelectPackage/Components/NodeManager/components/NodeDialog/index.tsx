@@ -52,6 +52,8 @@ function NodeDialog(props: Props) {
       if (result.created) {
         closeDialog();
         fetchNodes();
+      } else {
+        message.error(result.error);
       }
     } catch (error) {
       if (error instanceof Error) {
