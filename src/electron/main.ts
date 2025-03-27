@@ -222,19 +222,9 @@ ipcMain.handle(
     }
 
     const filePath = path.join(pkgPath, `${nodeName}${extension}`);
-    const templatePath = path.join(
-      __dirname,
-      `assets/${nodeType === "python" ? "python_node.template" : "cpp_node.template"}`
-    );
 
     try {
-      let content = fs.readFileSync(templatePath, "utf-8");
-      content = content.replace(
-        /{{NODE_NAME}}/g,
-        nodeName.charAt(0).toUpperCase() + nodeName.slice(1)
-      );
-
-      fs.writeFileSync(filePath, content, { mode: 0o755 });
+      fs.writeFileSync(filePath, "", { mode: 0o755 });
       console.log(`Node created successfully at: ${filePath}`);
       return { created: true, pkgPath };
     } catch (error) {
