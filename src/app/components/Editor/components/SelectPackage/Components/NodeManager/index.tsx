@@ -6,6 +6,7 @@ import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
 import { ItemType } from "antd/es/menu/interface";
 import NodeDialog from "./components/NodeDialog";
+import NodeEditor from "./components/NodeEditor";
 
 interface Props {
   packageName: string;
@@ -18,7 +19,7 @@ function NodeManager(props: Props) {
   const [nodes, setNodes] = useState(Array<ROSNode>);
   const [menuItems, setMenuItems] = useState<ItemType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedNode, setSelectedNode] = useState("");
+  const [selectedNode, setSelectedNode] = useState<ROSNode>();
 
   const TITLE = `Parece que o package ${packageName} não possui nós ROS`;
   const SUBTITLE =
@@ -43,7 +44,9 @@ function NodeManager(props: Props) {
         key: node.fullPath,
         icon: <ApartmentOutlined />,
         label: node.name,
-        onClick: (e) => setSelectedNode(e.key),
+        onClick: () => {
+          setSelectedNode(node);
+        },
       }));
     };
 
@@ -79,8 +82,8 @@ function NodeManager(props: Props) {
           <Content
             className={selectedNode ? "content-container" : "empty-container"}
           >
-            {selectedNode !== "" ? (
-              <p>Selected</p>
+            {selectedNode ? (
+              <NodeEditor selectedNode={selectedNode} />
             ) : (
               <Empty
                 className="empty-message"
