@@ -7,6 +7,7 @@ import {
   CodeOutlined,
   FileTextOutlined,
 } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 
 interface Props {
   selectedNode: ROSNode;
@@ -14,7 +15,13 @@ interface Props {
 
 function NodeEditor(props: Props) {
   const { selectedNode } = props;
-  console.log("🚀 ~ NodeEditor ~ selectedNode:", selectedNode);
+  const [showBlockEditor, setShowBlockEditor] = useState(false);
+  const [showTextEditor, setShowTextEditor] = useState(false);
+  const [showTerminal, setShowTerminal] = useState(false);
+
+  useEffect(() => {
+    console.log({ showBlockEditor });
+  }, [showBlockEditor]);
 
   return (
     <>
@@ -22,13 +29,37 @@ function NodeEditor(props: Props) {
         <Header className="header-container">
           <div className="editor-actions">
             <Tooltip title="Mostrar editor de blocos">
-              <Button type="default" icon={<ApartmentOutlined />} />
+              <Button
+                className={showBlockEditor ? "active-button" : ""}
+                type="default"
+                icon={<ApartmentOutlined />}
+                onClick={() => {
+                  setShowBlockEditor(!showBlockEditor);
+                }}
+                aria-checked={showBlockEditor}
+              />
             </Tooltip>
             <Tooltip title="Mostrar terminal">
-              <Button type="default" icon={<CodeOutlined />} />
+              <Button
+                className={showTerminal ? "active-button" : ""}
+                type="default"
+                icon={<CodeOutlined />}
+                onClick={() => {
+                  setShowTerminal(!showTerminal);
+                }}
+                aria-checked={showTerminal}
+              />
             </Tooltip>
-            <Tooltip>
-              <Button type="default" icon={<FileTextOutlined />} />
+            <Tooltip title="Mostrar editor de texto">
+              <Button
+                type="default"
+                icon={<FileTextOutlined />}
+                className={showTextEditor ? "active-button" : ""}
+                onClick={() => {
+                  setShowTextEditor(!showTextEditor);
+                }}
+                aria-checked={showTextEditor}
+              />
             </Tooltip>
           </div>
           <h3>{selectedNode.name}</h3>
