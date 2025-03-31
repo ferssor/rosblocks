@@ -35,8 +35,9 @@
     width: 50%;
     background-color: #fff;
     border-right: 1px solid rgba(5, 5, 5, 0.06);
-  }
 
+  }
+  
   .sider-container {
     width: 50%;
     background-color: #fff;
@@ -47,5 +48,17 @@
     border-top: 1px solid rgba(5, 5, 5, 0.06);
     padding: 0;
     height: 128px;
+  }
+
+  .empty-container {
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .empty-node-editor {
+      width: fit-content;
+      height: fit-content;
+    }
   }
 }

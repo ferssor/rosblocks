@@ -1,4 +1,4 @@
-import { Button, Layout, Tooltip } from "antd";
+import { Button, Empty, Layout, Tooltip } from "antd";
 import "./styles.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
@@ -7,7 +7,7 @@ import {
   CodeOutlined,
   FileTextOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   selectedNode: ROSNode;
@@ -15,13 +15,9 @@ interface Props {
 
 function NodeEditor(props: Props) {
   const { selectedNode } = props;
-  const [showBlockEditor, setShowBlockEditor] = useState(false);
+  const [showBlockEditor, setShowBlockEditor] = useState(true);
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
-
-  useEffect(() => {
-    console.log({ showBlockEditor });
-  }, [showBlockEditor]);
 
   return (
     <>
@@ -73,13 +69,36 @@ function NodeEditor(props: Props) {
             Salvar
           </Button>
         </Header>
-        <Layout>
-          <Content className="content-container">Blockly</Content>
-          <Sider className="sider-container" width="50%">
-            {selectedNode.content}
-          </Sider>
+        <Layout
+          className={
+            !showBlockEditor && !showTextEditor
+              ? "empty-container"
+              : "editor-container"
+          }
+        >
+          {!showBlockEditor && !showTextEditor ? (
+            <Empty
+              className="empty-node-editor"
+              description="Não há editor de código selecionado"
+            />
+          ) : (
+            <>
+              <Content className="content-container" hidden={!showBlockEditor}>
+                Blockly
+              </Content>
+              <Sider
+                className="sider-container"
+                hidden={!showTextEditor}
+                width={!showBlockEditor ? "100%" : "50%"}
+              >
+                {selectedNode.content}
+              </Sider>
+            </>
+          )}
         </Layout>
-        <Footer className="footer-container">Terminal</Footer>
+        <Footer className="footer-container" hidden={!showTerminal}>
+          Terminal
+        </Footer>
       </Layout>
     </>
   );
