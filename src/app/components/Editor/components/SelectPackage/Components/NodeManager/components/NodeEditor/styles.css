@@ -18,15 +18,15 @@
       gap: 8px;
 
       .active-button {
-        color: #1890ff;
-        background-color: #e6f7ff;
+        color: #1677ff;
+        background-color: #e6f4ff;
         border-color: #91d5ff;
         transition: all 0.3s ease;
       }
       
       .active-button:hover {
-        color: #40a9ff;
-        background-color: #bae7ff;
+        background-color: #1677ff;
+        color: #e6f4ff;
       }
     }
   }

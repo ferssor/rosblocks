@@ -28,7 +28,9 @@ function NodeEditor(props: Props) {
       <Layout className="layout-container">
         <Header className="header-container">
           <div className="editor-actions">
-            <Tooltip title="Mostrar editor de blocos">
+            <Tooltip
+              title={`${!showBlockEditor ? "Mostrar" : "Ocultar"} editor de blocos`}
+            >
               <Button
                 className={showBlockEditor ? "active-button" : ""}
                 type="default"
@@ -39,7 +41,9 @@ function NodeEditor(props: Props) {
                 aria-checked={showBlockEditor}
               />
             </Tooltip>
-            <Tooltip title="Mostrar terminal">
+            <Tooltip
+              title={`${!showTerminal ? "Mostrar" : "Ocultar"} terminal`}
+            >
               <Button
                 className={showTerminal ? "active-button" : ""}
                 type="default"
@@ -50,7 +54,9 @@ function NodeEditor(props: Props) {
                 aria-checked={showTerminal}
               />
             </Tooltip>
-            <Tooltip title="Mostrar editor de texto">
+            <Tooltip
+              title={`${!showTextEditor ? "Mostrar" : "Ocultar"} editor de texto`}
+            >
               <Button
                 type="default"
                 icon={<FileTextOutlined />}
