@@ -1,6 +1,7 @@
 .node-management-container {
   .package-list-header {
     padding: 8px 24px;
+    height: 48px;
     display: flex;
     justify-content: space-between;
     align-items: center;
