@@ -22,16 +22,19 @@ function NodeEditor(props: Props) {
         <Header className="header-container">
           <div className="editor-actions">
             <Tooltip title="Mostrar editor de blocos">
-              <ApartmentOutlined />
+              <Button type="default" icon={<ApartmentOutlined />} />
             </Tooltip>
             <Tooltip title="Mostrar terminal">
-              <CodeOutlined />
+              <Button type="default" icon={<CodeOutlined />} />
             </Tooltip>
             <Tooltip>
-              <FileTextOutlined title="Mostrar editor de texto" />
+              <Button type="default" icon={<FileTextOutlined />} />
             </Tooltip>
           </div>
-          <Button type="primary">Salvar</Button>
+          <h3>{selectedNode.name}</h3>
+          <Button type="primary" color="green" variant="solid">
+            Salvar
+          </Button>
         </Header>
         <Layout>
           <Content className="content-container">Blockly</Content>

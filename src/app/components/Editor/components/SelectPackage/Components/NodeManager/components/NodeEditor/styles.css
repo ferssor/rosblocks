@@ -5,9 +5,18 @@
 
   .header-container {
     height: 48px;
-    padding: 0 !important;
     background-color: #fff;
-    border-bottom: 1px solid rgba(5, 5, 5, 0.06)
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .editor-actions {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   }
 
   .content-container {
