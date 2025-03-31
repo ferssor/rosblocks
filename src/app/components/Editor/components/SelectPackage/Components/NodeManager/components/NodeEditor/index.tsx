@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { Button, Empty, Layout, Tooltip } from "antd";
 import "./styles.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
+import { BlocklyWorkspace, ToolboxDefinition } from "react-blockly";
+import Blockly from "blockly";
+import Editor from "@monaco-editor/react";
 import {
   ApartmentOutlined,
   CodeOutlined,
   FileTextOutlined,
 } from "@ant-design/icons";
-import { useState } from "react";
 
 interface Props {
   selectedNode: ROSNode;
@@ -18,6 +21,40 @@ function NodeEditor(props: Props) {
   const [showBlockEditor, setShowBlockEditor] = useState(true);
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
+  const [xml, setXml] = useState("");
+
+  const MY_TOOLBOX: ToolboxDefinition = {
+    kind: "flyoutToolbox",
+    contents: [
+      { kind: "block", type: "controls_if" },
+      { kind: "block", type: "logic_compare" },
+      { kind: "block", type: "math_number" },
+      { kind: "block", type: "text" },
+    ],
+  };
+
+  const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
+    grid: {
+      spacing: 20,
+      length: 3,
+      colour: "#ccc",
+      snap: true,
+    },
+    zoom: {
+      controls: true,
+      wheel: true,
+      startScale: 1.0,
+      maxScale: 2.0,
+      minScale: 0.5,
+      scaleSpeed: 1.0,
+    },
+    trashcan: true,
+    move: {
+      scrollbars: true,
+      drag: true,
+      wheel: true,
+    },
+  };
 
   return (
     <>
@@ -25,7 +62,9 @@ function NodeEditor(props: Props) {
         <Header className="header-container">
           <div className="editor-actions">
             <Tooltip
-              title={`${!showBlockEditor ? "Mostrar" : "Ocultar"} editor de blocos`}
+              title={`${
+                !showBlockEditor ? "Mostrar" : "Ocultar"
+              } editor de blocos`}
             >
               <Button
                 className={showBlockEditor ? "active-button" : ""}
@@ -51,7 +90,9 @@ function NodeEditor(props: Props) {
               />
             </Tooltip>
             <Tooltip
-              title={`${!showTextEditor ? "Mostrar" : "Ocultar"} editor de texto`}
+              title={`${
+                !showTextEditor ? "Mostrar" : "Ocultar"
+              } editor de texto`}
             >
               <Button
                 type="default"
@@ -84,14 +125,25 @@ function NodeEditor(props: Props) {
           ) : (
             <>
               <Content className="content-container" hidden={!showBlockEditor}>
-                Blockly
+                <BlocklyWorkspace
+                  className="width-100"
+                  toolboxConfiguration={MY_TOOLBOX}
+                  initialXml={xml}
+                  onXmlChange={(e) => setXml(e)}
+                  workspaceConfiguration={WORKSPACE_CONFIG}
+                />
               </Content>
               <Sider
                 className="sider-container"
                 hidden={!showTextEditor}
                 width={!showBlockEditor ? "100%" : "50%"}
               >
-                {selectedNode.content}
+                <Editor
+                  height="100%"
+                  defaultLanguage="python"
+                  value={selectedNode.content}
+                  options={{ readOnly: false }}
+                />
               </Sider>
             </>
           )}
