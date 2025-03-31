@@ -4,7 +4,6 @@ import "./index.css";
 import { App, ConfigProvider } from "antd";
 import EditorHeader from "./components/EditorHeader";
 import Editor from "./components/Editor";
-import "@ant-design/v5-patch-for-react-19";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
