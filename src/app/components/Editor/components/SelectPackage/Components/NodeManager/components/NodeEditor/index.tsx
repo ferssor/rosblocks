@@ -31,33 +31,8 @@ function NodeEditor(props: Props) {
     contents: [
       {
         kind: "category",
-        name: "ROS2",
-        colour: "#5C81A6",
-        contents: [
-          { kind: "block", type: "ros_connect" },
-          { kind: "block", type: "ros_disconnect" },
-          { kind: "block", type: "ros_log_info" },
-          { kind: "block", type: "ros_log_warn" },
-          { kind: "block", type: "ros_log_error" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Functions",
-        colour: "#A65C81",
-        contents: [
-          { kind: "block", type: "controls_for" },
-          { kind: "block", type: "controls_whileUntil" },
-          { kind: "block", type: "lists_create_with" },
-          { kind: "block", type: "lists_getIndex" },
-          { kind: "block", type: "procedures_defnoreturn" },
-          { kind: "block", type: "procedures_defreturn" },
-        ],
-      },
-      {
-        kind: "category",
         name: "Logic",
-        colour: "#5CA65C",
+        colour: "#A8D5BA",
         contents: [
           { kind: "block", type: "controls_if" },
           { kind: "block", type: "logic_compare" },
@@ -69,7 +44,7 @@ function NodeEditor(props: Props) {
       {
         kind: "category",
         name: "Math",
-        colour: "#5C68A6",
+        colour: "#A8C5D5",
         contents: [
           { kind: "block", type: "math_number" },
           { kind: "block", type: "math_arithmetic" },
@@ -81,11 +56,62 @@ function NodeEditor(props: Props) {
       {
         kind: "category",
         name: "Text",
-        colour: "#A65C5C",
+        colour: "#F9E79F",
         contents: [
           { kind: "block", type: "text" },
           { kind: "block", type: "text_print" },
           { kind: "block", type: "text_join" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Variables",
+        colour: "#F7A8A8",
+        contents: [
+          { kind: "block", type: "variables_get" },
+          { kind: "block", type: "variables_set" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Lists",
+        colour: "#A8D5E2",
+        contents: [
+          { kind: "block", type: "lists_create_with" },
+          { kind: "block", type: "lists_getIndex" },
+          { kind: "block", type: "lists_setIndex" },
+          { kind: "block", type: "lists_length" },
+          { kind: "block", type: "lists_isEmpty" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Dictionaries",
+        colour: "#D5E8A8",
+        contents: [
+          { kind: "block", type: "dicts_create_with" },
+          { kind: "block", type: "dicts_get" },
+          { kind: "block", type: "dicts_set" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Functions",
+        colour: "#F9C5D5",
+        contents: [
+          { kind: "block", type: "procedures_defnoreturn" },
+          { kind: "block", type: "procedures_defreturn" },
+          { kind: "block", type: "procedures_callnoreturn" },
+          { kind: "block", type: "procedures_callreturn" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Exceptions",
+        colour: "#F9A8A8",
+        contents: [
+          { kind: "block", type: "controls_try" },
+          { kind: "block", type: "controls_catch" },
         ],
       },
     ],
