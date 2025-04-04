@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { Button, Empty, Layout, Tooltip } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { Button, Empty, Layout, message, Tooltip } from "antd";
 import "./styles.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { BlocklyWorkspace, ToolboxDefinition } from "react-blockly";
+import { pythonGenerator } from "blockly/python";
 import Blockly from "blockly";
 import Editor from "@monaco-editor/react";
 import {
@@ -22,14 +23,71 @@ function NodeEditor(props: Props) {
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
   const [xml, setXml] = useState("");
+  const [generatedCode, setGeneratedCode] = useState("");
+  const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
   const MY_TOOLBOX: ToolboxDefinition = {
-    kind: "flyoutToolbox",
+    kind: "categoryToolbox",
     contents: [
-      { kind: "block", type: "controls_if" },
-      { kind: "block", type: "logic_compare" },
-      { kind: "block", type: "math_number" },
-      { kind: "block", type: "text" },
+      {
+        kind: "category",
+        name: "ROS2",
+        colour: "#5C81A6",
+        contents: [
+          { kind: "block", type: "ros_connect" },
+          { kind: "block", type: "ros_disconnect" },
+          { kind: "block", type: "ros_log_info" },
+          { kind: "block", type: "ros_log_warn" },
+          { kind: "block", type: "ros_log_error" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Functions",
+        colour: "#A65C81",
+        contents: [
+          { kind: "block", type: "controls_for" },
+          { kind: "block", type: "controls_whileUntil" },
+          { kind: "block", type: "lists_create_with" },
+          { kind: "block", type: "lists_getIndex" },
+          { kind: "block", type: "procedures_defnoreturn" },
+          { kind: "block", type: "procedures_defreturn" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Logic",
+        colour: "#5CA65C",
+        contents: [
+          { kind: "block", type: "controls_if" },
+          { kind: "block", type: "logic_compare" },
+          { kind: "block", type: "logic_operation" },
+          { kind: "block", type: "logic_negate" },
+          { kind: "block", type: "logic_boolean" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Math",
+        colour: "#5C68A6",
+        contents: [
+          { kind: "block", type: "math_number" },
+          { kind: "block", type: "math_arithmetic" },
+          { kind: "block", type: "math_single" },
+          { kind: "block", type: "math_trig" },
+          { kind: "block", type: "math_constant" },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Text",
+        colour: "#A65C5C",
+        contents: [
+          { kind: "block", type: "text" },
+          { kind: "block", type: "text_print" },
+          { kind: "block", type: "text_join" },
+        ],
+      },
     ],
   };
 
@@ -55,6 +113,25 @@ function NodeEditor(props: Props) {
       wheel: true,
     },
   };
+
+  const handleGenerateCode = () => {
+    if (workspaceRef.current) {
+      const code = pythonGenerator.workspaceToCode(workspaceRef.current);
+      setGeneratedCode(code);
+    } else {
+      message.error("Workspace is not available!");
+    }
+  };
+
+  const handleWorkspaceChange = (workspace: Blockly.WorkspaceSvg) => {
+    workspaceRef.current = workspace;
+  };
+
+  useEffect(() => {
+    if (xml) {
+      handleGenerateCode();
+    }
+  }, [xml]);
 
   return (
     <>
@@ -131,6 +208,7 @@ function NodeEditor(props: Props) {
                   initialXml={xml}
                   onXmlChange={(e) => setXml(e)}
                   workspaceConfiguration={WORKSPACE_CONFIG}
+                  onWorkspaceChange={handleWorkspaceChange}
                 />
               </Content>
               <Sider
@@ -141,8 +219,8 @@ function NodeEditor(props: Props) {
                 <Editor
                   height="100%"
                   defaultLanguage="python"
-                  value={selectedNode.content}
-                  options={{ readOnly: false }}
+                  value={generatedCode ?? selectedNode.content}
+                  options={{ readOnly: false, minimap: { enabled: false } }}
                 />
               </Sider>
             </>
