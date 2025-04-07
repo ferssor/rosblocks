@@ -23,6 +23,7 @@ function NodeEditor(props: Props) {
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
   const [xml, setXml] = useState("");
+  const [json, setJson] = useState({});
   const [generatedCode, setGeneratedCode] = useState("");
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
@@ -230,9 +231,11 @@ function NodeEditor(props: Props) {
               <Content className="content-container" hidden={!showBlockEditor}>
                 <BlocklyWorkspace
                   className="width-100"
-                  toolboxConfiguration={MY_TOOLBOX}
+                  initialJson={json}
                   initialXml={xml}
                   onXmlChange={(e) => setXml(e)}
+                  onJsonChange={(e) => setJson(e)}
+                  toolboxConfiguration={MY_TOOLBOX}
                   workspaceConfiguration={WORKSPACE_CONFIG}
                   onWorkspaceChange={handleWorkspaceChange}
                 />
