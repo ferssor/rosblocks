@@ -9,18 +9,28 @@ import {
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import NodeManager from "../NodeManager";
+import PackageDialog from "../PackageDialog";
 
 interface Props {
   packages: Package[];
   selectedWorkspaceName: string;
+  selectedWorkspaceLocation: string;
+  setPackages: React.Dispatch<React.SetStateAction<Package[]>>;
 }
 
 function PackageList(props: Props) {
-  const { packages, selectedWorkspaceName } = props;
+  const {
+    packages,
+    selectedWorkspaceName,
+    selectedWorkspaceLocation,
+    setPackages,
+  } = props;
   const [packageName, setPackageName] = useState("");
   const [packageLocation, setPackageLocation] = useState("");
   const [packageType, setPackageType] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const ADD_PKG_TITLE = "Adicionar um novo pacote";
   const columns = [
     {
       title: "Nome do pacote",
@@ -96,7 +106,9 @@ function PackageList(props: Props) {
       render: (_: unknown, pkg: Package) => (
         <div className="action-buttons">
           <Button
-            type="primary"
+            type="default"
+            color="blue"
+            variant="outlined"
             onClick={() => {
               setPackageLocation(pkg.fullPath);
               setPackageName(pkg.name);
@@ -105,8 +117,10 @@ function PackageList(props: Props) {
           >
             Editar
           </Button>
-          <Button type="default">Buildar</Button>
-          <Button type="default" danger>
+          <Button type="default" color="green" variant="outlined">
+            Buildar
+          </Button>
+          <Button type="default" color="danger" variant="outlined">
             Deletar
           </Button>
         </div>
@@ -124,8 +138,26 @@ function PackageList(props: Props) {
         />
       ) : (
         <div className="package-list-container">
-          <h1 className="package-name">{selectedWorkspaceName}</h1>
+          <div className="package-list-header">
+            <h1 className="package-name">{selectedWorkspaceName}</h1>
+            <Button
+              type="primary"
+              color="geekblue"
+              variant="solid"
+              onClick={() => {
+                setIsModalOpen(true);
+              }}
+            >
+              {ADD_PKG_TITLE}
+            </Button>
+          </div>
           <Table dataSource={packages} columns={columns} />
+          <PackageDialog
+            packageLocation={selectedWorkspaceLocation}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            setPackages={setPackages}
+          />
         </div>
       )}
     </>

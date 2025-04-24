@@ -22,4 +22,10 @@
   .ant-table-wrapper {
     width: 100%
   }
+
+  .package-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

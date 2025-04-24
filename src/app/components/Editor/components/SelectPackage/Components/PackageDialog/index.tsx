@@ -7,15 +7,16 @@ interface Props {
   packageLocation: string;
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setPackages: React.Dispatch<React.SetStateAction<Package[]>>;
 }
 const options: CheckboxGroupProps<string>["options"] = [
   { label: "Python", value: "rclpy" },
-  { label: "C++", value: "rclcpp" },
+  { label: "C++", value: "rclcpp", disabled: true },
 ];
 
 function PackageDialog(props: Props) {
   const [form] = Form.useForm();
-  const { packageLocation, isModalOpen, setIsModalOpen } = props;
+  const { packageLocation, isModalOpen, setIsModalOpen, setPackages } = props;
   const [isInputChanged, setIsInputChanged] = useState(false);
   const [packageDependency, setPackageDependency] = useState("rclpy");
   const [initialValues, setInitialValues] = useState({
@@ -38,6 +39,11 @@ function PackageDialog(props: Props) {
     setIsInputChanged(false);
   };
 
+  const fetchPackages = async () => {
+    const result = await window.electronAPI.getPackages(packageLocation);
+    setPackages(result);
+  };
+
   const handleCreatePackage = async () => {
     try {
       await form.validateFields();
@@ -53,6 +59,7 @@ function PackageDialog(props: Props) {
       if (result.created) {
         message.success("Package criado com sucesso!");
         closeDialog();
+        fetchPackages();
       } else if (result.error) {
         const errorMessage =
           typeof result.error === "string"

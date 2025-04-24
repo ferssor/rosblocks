@@ -43,6 +43,8 @@ function SelectPackage(props: Props) {
         <PackageList
           packages={packages}
           selectedWorkspaceName={selectedWorkspaceName}
+          selectedWorkspaceLocation={workspaceLocation}
+          setPackages={setPackages}
         />
       ) : (
         <>
@@ -65,6 +67,7 @@ function SelectPackage(props: Props) {
                   packageLocation={workspaceLocation}
                   isModalOpen={isModalOpen}
                   setIsModalOpen={setIsModalOpen}
+                  setPackages={setPackages}
                 />
               </>,
             ]}
