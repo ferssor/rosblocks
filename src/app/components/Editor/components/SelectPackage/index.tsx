@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import PackageDialog from "./Components/PackageDialog";
+import PackageDialog from "./components/PackageDialog";
 import "./styles.css";
 import { Button, Result } from "antd";
-import PackageList from "./Components/PackageList";
+import PackageList from "./components/PackageList";
 
 interface Props {
   workspaceLocation: string;
