@@ -253,3 +253,42 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle(
+  "import-package",
+  async (_, url: string, workspacePath: string) => {
+    if (!url || !workspacePath) {
+      return { imported: false, error: "URL or workspace path is missing." };
+    }
+
+    const srcPath = path.join(workspacePath, "src");
+
+    if (!fs.existsSync(srcPath)) {
+      return {
+        imported: false,
+        error: "Workspace source path does not exist.",
+      };
+    }
+
+    try {
+      const command = `git clone ${url}`;
+      return new Promise((resolve, reject) => {
+        exec(command, { cwd: srcPath }, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`Failed to clone package: ${stderr.trim()}`);
+            reject({ imported: false, error: stderr.trim() });
+          } else {
+            console.log(`Package cloned successfully: ${stdout.trim()}`);
+            resolve({ imported: true });
+          }
+        });
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error while importing the package:", error);
+        return { imported: false, error: error.message };
+      }
+      return { imported: false, error: "An unknown error occurred." };
+    }
+  }
+);

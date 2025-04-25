@@ -24,4 +24,6 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       packagePath,
       packageName
     ),
+  importPackage: (url: string, workspacePath: string) =>
+    ipcRenderer.invoke("import-package", url, workspacePath),
 });

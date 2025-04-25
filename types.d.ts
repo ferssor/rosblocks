@@ -40,5 +40,9 @@ interface Window {
       packagePath: string,
       packageName: string
     ) => Promise<{ created: boolean; nodePath?: string; error?: string }>;
+    importPackage: (
+      url: string,
+      workspacePath: string
+    ) => Promise<{ imported: boolean; error?: string }>;
   };
 }

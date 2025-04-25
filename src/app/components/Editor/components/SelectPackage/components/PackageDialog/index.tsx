@@ -38,6 +38,7 @@ function PackageDialog(props: Props) {
   const closeDialog = () => {
     setIsModalOpen(false);
     createForm.resetFields();
+    importForm.resetFields();
     createForm.setFieldsValue({
       location: packageLocation,
       name: undefined,
@@ -98,7 +99,32 @@ function PackageDialog(props: Props) {
     setIsInputChanged(urlValue.length > 0 ? true : false);
   };
 
-  const handleImportPackage = () => {};
+  const handleImportPackage = async () => {
+    try {
+      await importForm.validateFields();
+      const packageUrl: string = importForm.getFieldValue("url");
+      const result = await window.electronAPI.importPackage(
+        packageUrl,
+        packageLocation
+      );
+
+      if (result.imported) {
+        message.success("Package importado com sucesso!");
+        closeDialog();
+        fetchPackages();
+      } else if (result.error) {
+        const errorMessage =
+          typeof result.error === "string"
+            ? result.error
+            : JSON.stringify(result.error);
+        message.error(`Erro ao importar o pacote: ${errorMessage}`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Ocorreu um erro ao criar o pacote!`);
+      }
+    }
+  };
 
   useEffect(() => {
     if (isModalOpen) {
