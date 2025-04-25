@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Modal, Radio } from "antd";
+import { Button, Form, Input, message, Modal, Radio, Result } from "antd";
 import "./styles.css";
 import { useEffect, useState } from "react";
 import { CheckboxGroupProps } from "antd/es/checkbox";
@@ -18,6 +18,8 @@ function PackageDialog(props: Props) {
   const [form] = Form.useForm();
   const { packageLocation, isModalOpen, setIsModalOpen, setPackages } = props;
   const [isInputChanged, setIsInputChanged] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showImportForm, setShowImportForm] = useState(false);
   const [packageDependency, setPackageDependency] = useState("rclpy");
   const [initialValues, setInitialValues] = useState({
     location: packageLocation,
@@ -25,6 +27,12 @@ function PackageDialog(props: Props) {
     type: packageDependency,
     dependency: packageDependency,
   });
+
+  const ADD_PKG_TITLE = "Importar ou adicionar um novo pacote";
+  const ADD_PKG_SUBTITLE =
+    "Você pode criar um novo pacote ou importar um pacote ROS2 via URL do GitHub";
+  const IMPORT_BUTTON_TITLE = "Importar";
+  const CREATE_BUTTON_TITLE = "Criar";
 
   const closeDialog = () => {
     setIsModalOpen(false);
@@ -37,6 +45,8 @@ function PackageDialog(props: Props) {
     });
     setPackageDependency("rclpy");
     setIsInputChanged(false);
+    setShowCreateForm(false);
+    setShowImportForm(false);
   };
 
   const fetchPackages = async () => {
@@ -96,33 +106,65 @@ function PackageDialog(props: Props) {
   return (
     <>
       <Modal
-        title="Criar um novo package"
+        title="Adicionar um novo package"
         open={isModalOpen}
         centered
         maskClosable={false}
         onCancel={closeDialog}
-        footer={[
-          <Button
-            key="save"
-            type="primary"
-            htmlType="submit"
-            form="package"
-            disabled={!isInputChanged}
-            onClick={handleCreatePackage}
-          >
-            Criar
-          </Button>,
-          <Button key="cancel" type="default" onClick={closeDialog}>
-            Cancelar
-          </Button>,
-        ]}
+        footer={
+          showCreateForm || showImportForm
+            ? [
+                <Button
+                  key="save"
+                  type="primary"
+                  htmlType="submit"
+                  form="package"
+                  disabled={!isInputChanged}
+                  onClick={handleCreatePackage}
+                >
+                  Criar
+                </Button>,
+                <Button key="cancel" type="default" onClick={closeDialog}>
+                  Cancelar
+                </Button>,
+              ]
+            : null
+        }
       >
+        {!showCreateForm && !showImportForm ? (
+          <Result
+            status="info"
+            title={ADD_PKG_TITLE}
+            subTitle={ADD_PKG_SUBTITLE}
+            extra={[
+              <>
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setShowImportForm(!showImportForm);
+                  }}
+                >
+                  {IMPORT_BUTTON_TITLE}
+                </Button>
+                <Button
+                  type="primary"
+                  color="green"
+                  variant="solid"
+                  onClick={() => setShowCreateForm(!showCreateForm)}
+                >
+                  {CREATE_BUTTON_TITLE}
+                </Button>
+              </>,
+            ]}
+          />
+        ) : null}
         <Form
           layout="vertical"
           form={form}
           id="package"
           onFieldsChange={handleFieldsChange}
           initialValues={initialValues}
+          hidden={!showCreateForm}
         >
           <Form.Item
             label="Localizaçao do pacote"
@@ -173,6 +215,7 @@ function PackageDialog(props: Props) {
             />
           </Form.Item>
         </Form>
+        <h1 hidden={!showImportForm}>Import</h1>
       </Modal>
     </>
   );
