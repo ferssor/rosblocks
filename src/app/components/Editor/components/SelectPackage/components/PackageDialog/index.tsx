@@ -15,7 +15,8 @@ const options: CheckboxGroupProps<string>["options"] = [
 ];
 
 function PackageDialog(props: Props) {
-  const [form] = Form.useForm();
+  const [createForm] = Form.useForm();
+  const [importForm] = Form.useForm();
   const { packageLocation, isModalOpen, setIsModalOpen, setPackages } = props;
   const [isInputChanged, setIsInputChanged] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -36,8 +37,8 @@ function PackageDialog(props: Props) {
 
   const closeDialog = () => {
     setIsModalOpen(false);
-    form.resetFields();
-    form.setFieldsValue({
+    createForm.resetFields();
+    createForm.setFieldsValue({
       location: packageLocation,
       name: undefined,
       type: "rclpy",
@@ -56,10 +57,10 @@ function PackageDialog(props: Props) {
 
   const handleCreatePackage = async () => {
     try {
-      await form.validateFields();
+      await createForm.validateFields();
 
-      const packageName: string = form.getFieldValue("name");
-      const packageDeps: string = form.getFieldValue("dependency");
+      const packageName: string = createForm.getFieldValue("name");
+      const packageDeps: string = createForm.getFieldValue("dependency");
       const result = await window.electronAPI.createPackage(
         packageLocation,
         packageName.toLowerCase(),
@@ -85,23 +86,30 @@ function PackageDialog(props: Props) {
   };
 
   const handleFieldsChange = () => {
-    const currentValues = form.getFieldsValue();
-    const nameValue = String(form.getFieldValue("name"));
+    const currentValues = createForm.getFieldsValue();
+    const nameValue = String(createForm.getFieldValue("name"));
     const isChanged =
       JSON.stringify(currentValues) !== JSON.stringify(initialValues);
     setIsInputChanged(isChanged && nameValue.length > 0);
   };
 
+  const handleFieldsChangeOnImport = () => {
+    const urlValue = String(importForm.getFieldValue("url"));
+    setIsInputChanged(urlValue.length > 0 ? true : false);
+  };
+
+  const handleImportPackage = () => {};
+
   useEffect(() => {
     if (isModalOpen) {
-      const currentValues = form.getFieldsValue();
+      const currentValues = createForm.getFieldsValue();
       setInitialValues(currentValues);
     }
 
-    form.setFieldsValue({
+    createForm.setFieldsValue({
       dependency: packageDependency,
     });
-  }, [form, isModalOpen, packageDependency, packageLocation]);
+  }, [createForm, isModalOpen, packageDependency, packageLocation]);
 
   return (
     <>
@@ -118,11 +126,13 @@ function PackageDialog(props: Props) {
                   key="save"
                   type="primary"
                   htmlType="submit"
-                  form="package"
+                  form={showCreateForm ? "packageCreate" : "packageImport"}
                   disabled={!isInputChanged}
-                  onClick={handleCreatePackage}
+                  onClick={
+                    showCreateForm ? handleCreatePackage : handleImportPackage
+                  }
                 >
-                  Criar
+                  {showCreateForm ? "Criar" : "Importar"}
                 </Button>,
                 <Button key="cancel" type="default" onClick={closeDialog}>
                   Cancelar
@@ -160,8 +170,8 @@ function PackageDialog(props: Props) {
         ) : null}
         <Form
           layout="vertical"
-          form={form}
-          id="package"
+          form={createForm}
+          id="packageCreate"
           onFieldsChange={handleFieldsChange}
           initialValues={initialValues}
           hidden={!showCreateForm}
@@ -215,7 +225,26 @@ function PackageDialog(props: Props) {
             />
           </Form.Item>
         </Form>
-        <h1 hidden={!showImportForm}>Import</h1>
+        <Form
+          layout="vertical"
+          form={importForm}
+          id="packageImport"
+          onFieldsChange={handleFieldsChangeOnImport}
+          hidden={!showImportForm}
+        >
+          <Form.Item
+            label="URL do pacote"
+            name="url"
+            rules={[
+              {
+                required: true,
+                message: "É obrigatório preencher a URL do pacote!",
+              },
+            ]}
+          >
+            <Input placeholder="https://github/user/repository-name" />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );
