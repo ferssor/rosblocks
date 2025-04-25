@@ -14,9 +14,16 @@
   }
 
   .action-buttons {
+    opacity: 0;
     display: flex;
     justify-content: center;
     gap: 16px;
+  }
+
+  .ant-table-row:hover {
+    .action-buttons {
+      opacity: 100;
+    }
   }
 
   .ant-table-wrapper {
