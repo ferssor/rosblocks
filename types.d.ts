@@ -44,5 +44,8 @@ interface Window {
       url: string,
       workspacePath: string
     ) => Promise<{ imported: boolean; error?: string }>;
+    deletePackage: (
+      path: string
+    ) => Promise<{ deleted: boolean; error?: string }>;
   };
 }

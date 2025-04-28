@@ -292,3 +292,27 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle("delete-package", async (_, path: string) => {
+  if (!path) {
+    return { deleted: false, error: "URL or workspace path is missing." };
+  }
+
+  if (!fs.existsSync(path)) {
+    return {
+      deleted: false,
+      error: "Workspace source path does not exist.",
+    };
+  }
+
+  try {
+    await fs.promises.rm(path, { recursive: true, force: true });
+    return { deleted: true };
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error while deleting the package:", error);
+      return { deleted: false, error: error.message };
+    }
+    return { deleted: false, error: "An unknown error occurred." };
+  }
+});

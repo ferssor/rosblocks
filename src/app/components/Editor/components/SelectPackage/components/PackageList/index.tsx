@@ -1,4 +1,4 @@
-import { Button, Table, Tag } from "antd";
+import { Button, message, Table, Tag } from "antd";
 import "./styles.css";
 import {
   differenceInDays,
@@ -120,13 +120,48 @@ function PackageList(props: Props) {
           <Button type="default" color="green" variant="outlined">
             Buildar
           </Button>
-          <Button type="default" color="danger" variant="outlined">
+          <Button
+            type="default"
+            color="danger"
+            variant="outlined"
+            onClick={() => {
+              handleDeletePackage(pkg.fullPath);
+            }}
+          >
             Deletar
           </Button>
         </div>
       ),
     },
   ];
+
+  async function handleDeletePackage(path: string) {
+    try {
+      const result = await window.electronAPI.deletePackage(path);
+
+      if (result.deleted) {
+        message.success("Package deletado com sucesso!");
+        fetchPackages();
+      } else if (result.error) {
+        const errorMessage =
+          typeof result.error === "string"
+            ? result.error
+            : JSON.stringify(result.error);
+        message.error(`Erro ao deletar o pacote: ${errorMessage}`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Ocorreu um erro ao deletar o pacote!`);
+      }
+    }
+  }
+
+  const fetchPackages = async () => {
+    const result = await window.electronAPI.getPackages(
+      selectedWorkspaceLocation
+    );
+    setPackages(result);
+  };
 
   return (
     <>
