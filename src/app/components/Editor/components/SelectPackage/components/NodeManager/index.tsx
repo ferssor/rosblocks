@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./styles.css";
-import { Button, Empty, Layout, Menu, Result, Tag } from "antd";
+import { Button, Empty, Layout, Menu, Result, Select } from "antd";
 import { ApartmentOutlined } from "@ant-design/icons";
 import Sider from "antd/es/layout/Sider";
 import { Content } from "antd/es/layout/layout";
@@ -12,19 +12,39 @@ interface Props {
   packageName: string;
   packageLocation: string;
   packageType: string;
+  selectedWorkspaceLocation: string;
+  setPackageName: React.Dispatch<React.SetStateAction<string>>;
+  setPackageLocation: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function NodeManager(props: Props) {
-  const { packageLocation, packageName, packageType } = props;
+  const {
+    packageLocation,
+    packageName,
+    packageType,
+    selectedWorkspaceLocation,
+    setPackageName,
+    setPackageLocation,
+  } = props;
   const [nodes, setNodes] = useState(Array<ROSNode>);
   const [menuItems, setMenuItems] = useState<ItemType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<ROSNode>();
+  const [packages, setPackages] = useState(Array<Package>);
 
   const TITLE = `Parece que o package ${packageName} não possui nós ROS`;
   const SUBTITLE =
     "Nós são programas executáveis que permitem que o robô posso atuar.";
   const PRIMARY_BUTTON_TITLE = "Criar um novo nó";
+
+  const fetchPackages = async () => {
+    if (packageLocation) {
+      const result = await window.electronAPI.getPackages(
+        selectedWorkspaceLocation
+      );
+      setPackages(result);
+    }
+  };
 
   useEffect(() => {
     const fetchNodes = async () => {
@@ -59,21 +79,36 @@ function NodeManager(props: Props) {
         <Layout className="node-management-container">
           <Sider theme="light" className="sider-container">
             <div className="package-list-header">
-              <h3>{packageName}</h3>
-              <Tag
-                color={
-                  packageType === "cpp"
-                    ? "blue"
-                    : packageType === "python"
-                      ? "green"
-                      : "default"
-                }
-              >
-                {packageType}
-              </Tag>
+              <Select
+                variant="underlined"
+                labelRender={() => <h3>{packageName}</h3>}
+                value={packageName}
+                options={packages.map((pkg) => {
+                  return {
+                    value: pkg.fullPath,
+                    label: pkg.name,
+                  };
+                })}
+                onDropdownVisibleChange={fetchPackages}
+                onSelect={async (_, label) => {
+                  const result = await window.electronAPI.getNodes(
+                    label.value,
+                    label.label
+                  );
+                  setNodes(result);
+                  setPackageName(label.label);
+                  setSelectedNode(undefined);
+                  setPackageLocation(label.value);
+                }}
+              />
             </div>
             <div className="action-buttons-header">
-              <Button type="primary" onClick={() => setIsModalOpen(true)}>
+              <Button
+                type="default"
+                color="primary"
+                variant="outlined"
+                onClick={() => setIsModalOpen(true)}
+              >
                 Criar novo nó
               </Button>
             </div>

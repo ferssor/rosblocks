@@ -170,6 +170,9 @@ function PackageList(props: Props) {
           packageLocation={packageLocation}
           packageName={packageName}
           packageType={packageType}
+          selectedWorkspaceLocation={selectedWorkspaceLocation}
+          setPackageName={setPackageName}
+          setPackageLocation={setPackageLocation}
         />
       ) : (
         <div className="package-list-container">
