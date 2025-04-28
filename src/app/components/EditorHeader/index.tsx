@@ -2,7 +2,7 @@ import { RobotOutlined } from "@ant-design/icons";
 import "./styles.css";
 import { Layout } from "antd";
 
-const LOGO_NAME = "RoBlocks";
+const LOGO_NAME = "ROS_BLOCKS";
 const ICON_COLOR = "#FFF";
 
 const { Header } = Layout;
