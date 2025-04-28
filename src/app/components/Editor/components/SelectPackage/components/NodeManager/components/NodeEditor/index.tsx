@@ -210,9 +210,14 @@ function NodeEditor(props: Props) {
             </Tooltip>
           </div>
           <h3>{selectedNode.name}</h3>
-          <Button type="primary" color="green" variant="solid">
-            Salvar
-          </Button>
+          <div className="editor-action-buttons">
+            <Button variant="solid" danger>
+              Deletar
+            </Button>
+            <Button type="primary" color="green" variant="solid">
+              Salvar
+            </Button>
+          </div>
         </Header>
         <Layout
           className={

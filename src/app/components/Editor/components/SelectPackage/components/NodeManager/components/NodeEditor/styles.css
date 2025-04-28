@@ -29,6 +29,12 @@
         color: #e6f4ff;
       }
     }
+
+    .editor-action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
   }
 
   .content-container {
