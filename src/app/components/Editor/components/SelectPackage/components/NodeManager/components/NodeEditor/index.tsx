@@ -3,7 +3,7 @@ import { Button, Empty, Layout, message, Tooltip } from "antd";
 import "./styles.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
-import { BlocklyWorkspace, ToolboxDefinition } from "react-blockly";
+import { BlocklyWorkspace } from "react-blockly";
 import { pythonGenerator } from "blockly/python";
 import Blockly from "blockly";
 import Editor from "@monaco-editor/react";
@@ -12,6 +12,7 @@ import {
   CodeOutlined,
   FileTextOutlined,
 } from "@ant-design/icons";
+import { toolbox } from "./toolbox";
 
 interface Props {
   selectedNode: ROSNode;
@@ -26,97 +27,6 @@ function NodeEditor(props: Props) {
   const [generatedCode, setGeneratedCode] = useState("");
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
-  const MY_TOOLBOX: ToolboxDefinition = {
-    kind: "categoryToolbox",
-    contents: [
-      {
-        kind: "category",
-        name: "Logic",
-        colour: "#A8D5BA",
-        contents: [
-          { kind: "block", type: "controls_if" },
-          { kind: "block", type: "logic_compare" },
-          { kind: "block", type: "logic_operation" },
-          { kind: "block", type: "logic_negate" },
-          { kind: "block", type: "logic_boolean" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Math",
-        colour: "#A8C5D5",
-        contents: [
-          { kind: "block", type: "math_number" },
-          { kind: "block", type: "math_arithmetic" },
-          { kind: "block", type: "math_single" },
-          { kind: "block", type: "math_trig" },
-          { kind: "block", type: "math_constant" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Text",
-        colour: "#F9E79F",
-        contents: [
-          { kind: "block", type: "text" },
-          { kind: "block", type: "text_print" },
-          { kind: "block", type: "text_join" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Variables",
-        colour: "#F7A8A8",
-        contents: [
-          { kind: "block", type: "variables_get" },
-          { kind: "block", type: "variables_set" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Lists",
-        colour: "#A8D5E2",
-        contents: [
-          { kind: "block", type: "lists_create_with" },
-          { kind: "block", type: "lists_getIndex" },
-          { kind: "block", type: "lists_setIndex" },
-          { kind: "block", type: "lists_length" },
-          { kind: "block", type: "lists_isEmpty" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Dictionaries",
-        colour: "#D5E8A8",
-        contents: [
-          { kind: "block", type: "dicts_create_with" },
-          { kind: "block", type: "dicts_get" },
-          { kind: "block", type: "dicts_set" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Functions",
-        colour: "#F9C5D5",
-        contents: [
-          { kind: "block", type: "procedures_defnoreturn" },
-          { kind: "block", type: "procedures_defreturn" },
-          { kind: "block", type: "procedures_callnoreturn" },
-          { kind: "block", type: "procedures_callreturn" },
-        ],
-      },
-      {
-        kind: "category",
-        name: "Exceptions",
-        colour: "#F9A8A8",
-        contents: [
-          { kind: "block", type: "controls_try" },
-          { kind: "block", type: "controls_catch" },
-        ],
-      },
-    ],
-  };
-
   const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
     grid: {
       spacing: 20,
@@ -127,10 +37,6 @@ function NodeEditor(props: Props) {
     zoom: {
       controls: true,
       wheel: true,
-      startScale: 1.0,
-      maxScale: 2.0,
-      minScale: 0.5,
-      scaleSpeed: 1.0,
     },
     trashcan: true,
     move: {
@@ -246,7 +152,7 @@ function NodeEditor(props: Props) {
                   initialJson={new Object(selectedNode.content)}
                   initialXml={selectedNode.content}
                   onXmlChange={(e) => setXml(e)}
-                  toolboxConfiguration={MY_TOOLBOX}
+                  toolboxConfiguration={toolbox}
                   workspaceConfiguration={WORKSPACE_CONFIG}
                   onWorkspaceChange={handleWorkspaceChange}
                 />
