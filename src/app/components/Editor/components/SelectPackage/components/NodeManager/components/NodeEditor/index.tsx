@@ -23,7 +23,6 @@ function NodeEditor(props: Props) {
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
   const [xml, setXml] = useState("");
-  const [json, setJson] = useState({});
   const [generatedCode, setGeneratedCode] = useState("");
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
@@ -160,6 +159,13 @@ function NodeEditor(props: Props) {
     }
   }, [xml]);
 
+  useEffect(() => {
+    if (workspaceRef.current) {
+      workspaceRef.current.clear();
+    }
+    setXml(selectedNode.content || "");
+  }, [selectedNode]);
+
   return (
     <>
       <Layout className="layout-container">
@@ -235,11 +241,11 @@ function NodeEditor(props: Props) {
             <>
               <Content className="content-container" hidden={!showBlockEditor}>
                 <BlocklyWorkspace
+                  key={selectedNode.fullPath}
                   className="width-100"
-                  initialJson={json}
-                  initialXml={xml}
+                  initialJson={new Object(selectedNode.content)}
+                  initialXml={selectedNode.content}
                   onXmlChange={(e) => setXml(e)}
-                  onJsonChange={(e) => setJson(e)}
                   toolboxConfiguration={MY_TOOLBOX}
                   workspaceConfiguration={WORKSPACE_CONFIG}
                   onWorkspaceChange={handleWorkspaceChange}
