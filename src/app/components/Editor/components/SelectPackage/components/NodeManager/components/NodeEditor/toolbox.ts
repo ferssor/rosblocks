@@ -5,6 +5,20 @@ export const toolbox: ToolboxDefinition = {
   contents: [
     {
       kind: "category",
+      name: "Class",
+      colour: "259",
+      contents: [
+        {
+          kind: "block",
+          type: "add_main",
+        },
+      ],
+    },
+    {
+      kind: "sep",
+    },
+    {
+      kind: "category",
       name: "Logic",
       categorystyle: "logic_category",
       contents: [

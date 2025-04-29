@@ -13,10 +13,16 @@ import {
   FileTextOutlined,
 } from "@ant-design/icons";
 import { toolbox } from "./toolbox";
+import "./blocks/customBlocks";
+import { registerCustomBlocksToPython } from "./generators/blocksToPython";
+import { defineCustomBlocks } from "./blocks/customBlocks";
 
 interface Props {
   selectedNode: ROSNode;
 }
+
+registerCustomBlocksToPython();
+defineCustomBlocks();
 
 function NodeEditor(props: Props) {
   const { selectedNode } = props;
