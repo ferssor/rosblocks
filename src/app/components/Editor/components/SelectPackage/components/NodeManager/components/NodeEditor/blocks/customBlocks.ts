@@ -5,12 +5,17 @@ export function defineCustomBlocks() {
   const blocks = [
     {
       type: "add_class",
-      message0: "Classe %1",
+      message0: "Classe %1 Node %2",
       args0: [
         {
           type: "field_input",
           name: "CLASS_NAME",
           text: "Defina o nome da classe",
+        },
+        {
+          type: "field_input",
+          name: "NODE_NAME",
+          text: "Defina o nome do nó",
         },
       ],
       message1: "%1",
