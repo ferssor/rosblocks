@@ -27,8 +27,18 @@ if __name__ == "__main__":
     return code;
   };
 
-  pythonGenerator.forBlock["add_pub"] = function () {
-    const code = `hello`;
+  pythonGenerator.forBlock["add_class"] = function (block: Blockly.Block) {
+    const className = block.getFieldValue("CLASS_NAME") || "class_name";
+    const code = `#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+
+class ${className}(Node):
+    def __init__(self):
+
+
+if __name__ == "__main__":
+`;
     return code;
   };
 }

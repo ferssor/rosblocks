@@ -5,12 +5,12 @@ export const toolbox: ToolboxDefinition = {
   contents: [
     {
       kind: "category",
-      name: "Class",
+      name: "Ponto de início",
       colour: "120",
       contents: [
         {
           kind: "block",
-          type: "add_pub",
+          type: "add_class",
         },
       ],
     },

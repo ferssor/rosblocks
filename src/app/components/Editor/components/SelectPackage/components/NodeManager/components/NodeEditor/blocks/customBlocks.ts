@@ -4,18 +4,13 @@ export function defineCustomBlocks() {
   // Define the blocks as JSON
   const blocks = [
     {
-      type: "add_pub",
-      message0: "Classe %1 herda de %2",
+      type: "add_class",
+      message0: "Classe %1",
       args0: [
         {
           type: "field_input",
           name: "CLASS_NAME",
-          text: "Minha Classe",
-        },
-        {
-          type: "input_value",
-          name: "PARENT_CLASS",
-          text: "Classe",
+          text: "Defina o nome da classe",
         },
       ],
       message1: "%1",
