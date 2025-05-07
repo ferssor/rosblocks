@@ -1,33 +1,36 @@
 import * as Blockly from "blockly/core";
 
 export function defineCustomBlocks() {
-  // Define the add_main block
-  Blockly.Blocks["add_main"] = {
-    init: function () {
-      this.appendDummyInput()
-        .appendField("Add main function")
-        .appendField(new Blockly.FieldTextInput("node_name"), "NODE_NAME");
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(259);
-      this.setTooltip("Creates a ROS2 main function template.");
-      this.setHelpUrl("");
+  // Define the blocks as JSON
+  const blocks = [
+    {
+      type: "add_pub",
+      message0: "Classe %1 herda de %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "CLASS_NAME",
+          text: "Minha Classe",
+        },
+        {
+          type: "input_value",
+          name: "PARENT_CLASS",
+          text: "Classe",
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "CLASS_BODY",
+        },
+      ],
+      colour: 120,
+      tooltip: "Define uma classe em Python com nome e corpo opcional.",
+      helpUrl: "",
     },
-  };
+  ];
 
-  // Define the add_pub block
-  Blockly.Blocks["add_pub"] = {
-    init: function () {
-      this.appendValueInput("TEXT")
-        .setCheck("String")
-        .appendField("Add publisher");
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setColour(259);
-      this.setTooltip(
-        "Creates a ROS2 publisher with the specified topic name."
-      );
-      this.setHelpUrl("");
-    },
-  };
+  // Register the blocks using createBlockDefinitionsFromJsonArray
+  Blockly.defineBlocksWithJsonArray(blocks);
 }

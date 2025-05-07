@@ -26,4 +26,9 @@ if __name__ == "__main__":
 `;
     return code;
   };
+
+  pythonGenerator.forBlock["add_pub"] = function () {
+    const code = `hello`;
+    return code;
+  };
 }
