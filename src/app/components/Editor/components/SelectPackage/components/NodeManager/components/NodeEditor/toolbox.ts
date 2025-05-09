@@ -5,7 +5,7 @@ export const toolbox: ToolboxDefinition = {
   contents: [
     {
       kind: "category",
-      name: "Ponto de início",
+      name: "Entrada",
       colour: "120",
       contents: [
         {

@@ -5,7 +5,7 @@ export function defineCustomBlocks() {
   const blocks = [
     {
       type: "add_class",
-      message0: "Classe %1 Node %2",
+      message0: "Iniciar %1 e o nó %2",
       args0: [
         {
           type: "field_input",
