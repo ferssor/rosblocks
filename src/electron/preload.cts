@@ -27,4 +27,5 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
   importPackage: (url: string, workspacePath: string) =>
     ipcRenderer.invoke("import-package", url, workspacePath),
   deletePackage: (path: string) => ipcRenderer.invoke("delete-package", path),
+  getInterfaces: () => ipcRenderer.invoke("get-interfaces"),
 });

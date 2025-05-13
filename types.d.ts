@@ -14,6 +14,12 @@ type ROSNode = {
   relativePath: string;
   content: string;
 };
+
+type ROSInterface = {
+  name: string;
+  location: string;
+};
+
 interface Window {
   electronAPI: {
     openWorkspaceLocation: () => Promise<{
@@ -47,5 +53,6 @@ interface Window {
     deletePackage: (
       path: string
     ) => Promise<{ deleted: boolean; error?: string }>;
+    getInterfaces: () => Promise<Array<ROSInterface>>;
   };
 }

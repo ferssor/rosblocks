@@ -316,3 +316,41 @@ ipcMain.handle("delete-package", async (_, path: string) => {
     return { deleted: false, error: "An unknown error occurred." };
   }
 });
+
+ipcMain.handle("get-interfaces", async () => {
+  try {
+    const interfaces = await new Promise<string[]>((resolve, reject) => {
+      exec(
+        "ros2 interface list",
+        (error: Error | null, stdout: string, stderr: string) => {
+          if (error) {
+            console.error("Failed to fetch ROS2 interfaces:", stderr);
+            reject(stderr);
+          } else {
+            resolve(stdout.split("\n").filter((line) => line.trim() !== ""));
+          }
+        }
+      );
+    });
+
+    const formattedInterfaces = interfaces
+      .filter((interfacePath) => {
+        const parts = interfacePath.split("/");
+        return parts[parts.length - 2] === "msg";
+      })
+      .map((interfacePath) => {
+        const parts = interfacePath.split("/");
+        const interfaceName = parts[parts.length - 1];
+        const modulePath = parts.slice(0, -1).join(".").trim();
+        return {
+          name: interfaceName,
+          location: `from ${modulePath} import ${interfaceName}`,
+        };
+      });
+
+    return formattedInterfaces;
+  } catch (error) {
+    console.error("Error while fetching ROS2 interfaces:", error);
+    return [];
+  }
+});
