@@ -16,6 +16,14 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_pub",
         },
+        {
+          kind: "block",
+          type: "create_timer",
+        },
+        {
+          kind: "block",
+          type: "counter_function",
+        },
       ],
     },
     {

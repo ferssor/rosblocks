@@ -72,6 +72,62 @@ export async function defineCustomBlocks() {
         "Define um publisher ROS2 com nome, interface e taxa de atualização.",
       helpUrl: "",
     },
+    {
+      type: "create_timer",
+      message0:
+        "Criar um temporizador %1 com intervalo %2 e publique na função %3",
+      args0: [
+        {
+          type: "field_input",
+          name: "TEMP_NAME",
+          text: "Defina o nome do temporizador",
+        },
+        {
+          type: "field_number",
+          name: "DURATION",
+          value: 1.0,
+          min: 1.0,
+          precision: 1.0,
+        },
+        {
+          type: "input_value",
+          name: "PUBLISHER_COUNTER",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 50,
+      tooltip: "Adiciona uma função contadora e publicadora",
+      helpUrl: "",
+    },
+    {
+      type: "counter_function",
+      message0:
+        "Adicione a função contadora com a interface %1 e inicie o contador com o valor %2 e publique em %3",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "COUNTER_INTERFACE",
+          options: interfaceOptions,
+        },
+        {
+          type: "field_number",
+          name: "COUNTER",
+          value: 0,
+          min: 0,
+          precision: 1,
+        },
+        {
+          type: "field_input",
+          name: "PUBLISHER",
+          text: "Defina o nome do publicador",
+        },
+      ],
+      output: null,
+      colour: 2,
+      tooltip: "Adiciona uma função que publica o contador",
+      helpUrl: "",
+    },
   ];
 
   // Register the blocks using createBlockDefinitionsFromJsonArray
