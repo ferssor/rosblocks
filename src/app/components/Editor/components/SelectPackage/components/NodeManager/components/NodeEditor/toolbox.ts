@@ -24,6 +24,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "counter_function",
         },
+        {
+          kind: "block",
+          type: "add_information",
+        },
       ],
     },
     {

@@ -10,6 +10,7 @@ export function registerCustomBlocksToPython() {
     let pubCode = "";
     let counterCode = "";
     let publisherCounterCode = "";
+    let logCode = "";
 
     while (currentBlock) {
       if (currentBlock.type === "add_pub") {
@@ -37,6 +38,12 @@ export function registerCustomBlocksToPython() {
               pythonGenerator
             ) + "\n";
         }
+      } else if (currentBlock.type === "add_information") {
+        logCode +=
+          pythonGenerator.forBlock["add_information"](
+            currentBlock,
+            pythonGenerator
+          ) + "\n";
       }
 
       // Move to the next block in the chain
@@ -55,7 +62,8 @@ class ${className}(Node):
     def __init__(self):
         super().__init__("${nodeName}")
         ${pubCode.trim()}
-        ${counterCode}
+        ${counterCode.trim()}
+        ${logCode.trim()}
 
 ${publisherCounterCode}
 def main(args=None):
@@ -130,6 +138,14 @@ if __name__ == "__main__":
     self.${publisher.trim()}.publish(msg)
     `
         : "";
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_information"] = function (
+    block: Blockly.Block
+  ) {
+    const text: string = block.getFieldValue("LOG_INFO");
+    const code = text ? `self.get_logger().info("${text.trim()}")` : "";
     return code;
   };
 }

@@ -128,6 +128,22 @@ export async function defineCustomBlocks() {
       tooltip: "Adiciona uma função que publica o contador",
       helpUrl: "",
     },
+    {
+      type: "add_information",
+      message0: "Adicione o texto de log %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "LOG_INFO",
+          text: "Defina o texto que será exibido",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 300,
+      tooltip: "Adiciona um texto de log",
+      helpUrl: "",
+    },
   ];
 
   // Register the blocks using createBlockDefinitionsFromJsonArray
