@@ -54,5 +54,12 @@ interface Window {
       path: string
     ) => Promise<{ deleted: boolean; error?: string }>;
     getInterfaces: () => Promise<Array<ROSInterface>>;
+    createBlocks: (
+      interfaceName: string,
+      scriptName: string,
+      relativePath: string,
+      nodePath: string,
+      blocks: string
+    ) => Promise<{ created: boolean; error?: string }>;
   };
 }

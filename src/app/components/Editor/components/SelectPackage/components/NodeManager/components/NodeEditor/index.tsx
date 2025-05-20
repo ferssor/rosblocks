@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Empty, Layout, message, Tooltip } from "antd";
 import "./styles.css";
 import { Content, Footer, Header } from "antd/es/layout/layout";
@@ -30,6 +30,8 @@ function NodeEditor(props: Props) {
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
   const [xml, setXml] = useState("");
+  const [json, setJson] = useState(new Object());
+  const [dependency, setDependency] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
@@ -65,11 +67,72 @@ function NodeEditor(props: Props) {
     workspaceRef.current = workspace;
   };
 
-  useEffect(() => {
-    if (xml) {
-      handleGenerateCode();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const findValueByKey = useCallback((obj: any, key: string): string | null => {
+    if (!obj || typeof obj !== "object") return null;
+
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      return obj[key];
     }
-  }, [xml]);
+
+    for (const k in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, k)) {
+        const value = findValueByKey(obj[k], key);
+        if (value !== null) {
+          return value;
+        }
+      }
+    }
+
+    return null;
+  }, []);
+
+  const getInterfaceDependency = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (json: any) => {
+      const dependencyName = findValueByKey(json, "INTERFACE");
+      if (dependencyName) {
+        const match = dependencyName.match(/from\s+(\w+)\./);
+        if (match && match[1]) {
+          setDependency(match[1]);
+        } else {
+          setDependency("");
+        }
+      }
+    },
+    [findValueByKey]
+  );
+
+  const handleSaveCode = async () => {
+    if (selectedNode && dependency && generatedCode) {
+      try {
+        const result = await window.electronAPI.createBlocks(
+          dependency,
+          selectedNode.name,
+          selectedNode.relativePath,
+          selectedNode.fullPath,
+          generatedCode
+        );
+
+        if (result.created) {
+          message.success("Blocos criados com sucesso!");
+        } else {
+          message.error(result.error);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          message.error(`Ocorreu um erro ao criar o bloco!`);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (xml || json) {
+      handleGenerateCode();
+      getInterfaceDependency(json);
+    }
+  }, [getInterfaceDependency, json, xml]);
 
   useEffect(() => {
     if (workspaceRef.current) {
@@ -132,7 +195,12 @@ function NodeEditor(props: Props) {
             <Button variant="solid" danger>
               Deletar
             </Button>
-            <Button type="primary" color="green" variant="solid">
+            <Button
+              type="primary"
+              color="green"
+              variant="solid"
+              onClick={handleSaveCode}
+            >
               Salvar
             </Button>
           </div>
@@ -158,6 +226,7 @@ function NodeEditor(props: Props) {
                   initialJson={new Object(selectedNode.content)}
                   initialXml={selectedNode.content}
                   onXmlChange={(e) => setXml(e)}
+                  onJsonChange={(e) => setJson(e)}
                   toolboxConfiguration={toolbox}
                   workspaceConfiguration={WORKSPACE_CONFIG}
                   onWorkspaceChange={handleWorkspaceChange}

@@ -354,3 +354,100 @@ ipcMain.handle("get-interfaces", async () => {
     return [];
   }
 });
+
+ipcMain.handle(
+  "create-blocks",
+  async (
+    _,
+    interfaceName,
+    scriptName,
+    relativePath: string,
+    nodePath,
+    blocks
+  ) => {
+    try {
+      if (!nodePath && relativePath) {
+        return {
+          created: false,
+          error: "The path is required!",
+        };
+      }
+
+      if (!interfaceName && scriptName) {
+        return {
+          created: false,
+          error: "The interface and script name is required!",
+        };
+      }
+
+      const path = nodePath.replace(relativePath, "");
+
+      // Update package.xml
+      const packageXmlPath = `${path}/package.xml`;
+      if (!fs.existsSync(packageXmlPath)) {
+        return {
+          created: false,
+          error: "package.xml file does not exist in the specified path.",
+        };
+      }
+
+      const packageXmlContent = fs.readFileSync(packageXmlPath, "utf-8");
+      const updatedPackageXmlContent = packageXmlContent.replace(
+        /<depend>(.*?)<\/depend>/,
+        (match) => `${match}\n  <depend>${interfaceName}</depend>`
+      );
+
+      fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
+      console.log(`Updated package.xml with <depend>${interfaceName}</depend>`);
+
+      // Update setup.py
+      const setupPyPath = `${path}/setup.py`;
+      if (!fs.existsSync(setupPyPath)) {
+        return {
+          created: false,
+          error: "setup.py file does not exist in the specified path.",
+        };
+      }
+
+      const setupPyContent = fs.readFileSync(setupPyPath, "utf-8");
+      const relativePathFormatted = relativePath
+        .replace(/\//g, ".")
+        .replace(/\.py$/, "");
+      const newScriptLine = `"${scriptName} = ${relativePathFormatted}:main",`;
+
+      const updatedSetupPyContent = setupPyContent.replace(
+        /('console_scripts':\s*\[)([\s\S]*?)(\])/,
+        (match, start, middle, end) => {
+          const trimmedMiddle = middle.trim();
+          const updatedMiddle = trimmedMiddle
+            ? `${trimmedMiddle},\n      ${newScriptLine}`
+            : `      ${newScriptLine}`;
+          return `${start}${updatedMiddle}\n  ${end}`;
+        }
+      );
+
+      fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
+      console.log(`Updated setup.py with console script: ${newScriptLine}`);
+
+      // Write blocks on the file at nodePath
+      if (!fs.existsSync(nodePath)) {
+        return {
+          created: false,
+          error: "The file at nodePath does not exist.",
+        };
+      }
+
+      fs.writeFileSync(nodePath, blocks, "utf-8");
+      console.log(`Written blocks content to file at: ${nodePath}`);
+
+      return { created: true };
+    } catch (error) {
+      console.error("Error while creating the blocks", error);
+      return {
+        created: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);
