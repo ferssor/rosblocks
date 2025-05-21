@@ -46,17 +46,14 @@ function NodeManager(props: Props) {
     }
   };
 
-  useEffect(() => {
-    const fetchNodes = async () => {
-      const result = await window.electronAPI.getNodes(
-        packageLocation,
-        packageName
-      );
-      setNodes(result);
-    };
+  const fetchNodes = async (pkgLocation: string, pkgName: string) => {
+    const result = await window.electronAPI.getNodes(pkgLocation, pkgName);
+    setNodes(result);
+  };
 
-    fetchNodes();
-  }, [packageLocation, packageName, setNodes]);
+  useEffect(() => {
+    fetchNodes(packageLocation, packageName);
+  }, [packageLocation, packageName]);
 
   useEffect(() => {
     const mapNodesToMenuItems = (nodes: ROSNode[]): ItemType[] => {
@@ -118,7 +115,13 @@ function NodeManager(props: Props) {
             className={selectedNode ? "content-container" : "empty-container"}
           >
             {selectedNode ? (
-              <NodeEditor selectedNode={selectedNode} />
+              <NodeEditor
+                pkgLocation={packageLocation}
+                pkgName={packageName}
+                selectedNode={selectedNode}
+                fetchNodes={fetchNodes}
+                setSelectedNode={setSelectedNode}
+              />
             ) : (
               <Empty
                 className="empty-message"

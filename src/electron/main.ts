@@ -365,6 +365,7 @@ ipcMain.handle(
     nodePath,
     blocks
   ) => {
+    console.log({ interfaceName, scriptName, relativePath, nodePath, blocks });
     try {
       if (!nodePath && relativePath) {
         return {

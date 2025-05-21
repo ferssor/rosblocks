@@ -19,17 +19,21 @@ import { defineCustomBlocks } from "./blocks/customBlocks";
 
 interface Props {
   selectedNode: ROSNode;
+  pkgLocation: string;
+  pkgName: string;
+  setSelectedNode: React.Dispatch<React.SetStateAction<ROSNode | undefined>>;
+  fetchNodes: (pkgLocation: string, pkgName: string) => Promise<void>;
 }
 
 registerCustomBlocksToPython();
 defineCustomBlocks();
 
 function NodeEditor(props: Props) {
-  const { selectedNode } = props;
+  const { selectedNode, pkgLocation, pkgName, setSelectedNode, fetchNodes } =
+    props;
   const [showBlockEditor, setShowBlockEditor] = useState(true);
   const [showTextEditor, setShowTextEditor] = useState(false);
   const [showTerminal, setShowTerminal] = useState(false);
-  const [xml, setXml] = useState("");
   const [json, setJson] = useState(new Object());
   const [dependency, setDependency] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
@@ -104,23 +108,26 @@ function NodeEditor(props: Props) {
   );
 
   const handleSaveCode = async () => {
-    if (selectedNode && dependency && generatedCode) {
+    if (selectedNode && dependency && json) {
       try {
         const result = await window.electronAPI.createBlocks(
           dependency,
           selectedNode.name,
           selectedNode.relativePath,
           selectedNode.fullPath,
-          generatedCode
+          JSON.stringify(json)
         );
 
         if (result.created) {
           message.success("Blocos criados com sucesso!");
+          fetchNodes(pkgLocation, pkgName);
+          setSelectedNode(selectedNode);
         } else {
           message.error(result.error);
         }
       } catch (error) {
         if (error instanceof Error) {
+          console.log(error);
           message.error(`Ocorreu um erro ao criar o bloco!`);
         }
       }
@@ -128,17 +135,17 @@ function NodeEditor(props: Props) {
   };
 
   useEffect(() => {
-    if (xml || json) {
+    if (json) {
       handleGenerateCode();
       getInterfaceDependency(json);
     }
-  }, [getInterfaceDependency, json, xml]);
+  }, [getInterfaceDependency, json]);
 
   useEffect(() => {
     if (workspaceRef.current) {
       workspaceRef.current.clear();
     }
-    setXml(selectedNode.content || "");
+    setJson(selectedNode.content || "");
   }, [selectedNode]);
 
   return (
@@ -223,9 +230,11 @@ function NodeEditor(props: Props) {
                 <BlocklyWorkspace
                   key={selectedNode.fullPath}
                   className="width-100"
-                  initialJson={new Object(selectedNode.content)}
-                  initialXml={selectedNode.content}
-                  onXmlChange={(e) => setXml(e)}
+                  initialJson={
+                    selectedNode.content
+                      ? JSON.parse(selectedNode.content)
+                      : new Object()
+                  }
                   onJsonChange={(e) => setJson(e)}
                   toolboxConfiguration={toolbox}
                   workspaceConfiguration={WORKSPACE_CONFIG}
