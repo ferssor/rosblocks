@@ -449,19 +449,32 @@ ipcMain.handle(
         .replace(/\.py$/, "");
       const newScriptLine = `"${scriptName} = ${relativePathFormatted}:main",`;
 
-      const updatedSetupPyContent = setupPyContent.replace(
-        /('console_scripts':\s*\[)([\s\S]*?)(\])/,
-        (match, start, middle, end) => {
-          const trimmedMiddle = middle.trim();
-          const updatedMiddle = trimmedMiddle
-            ? `${trimmedMiddle},\n      ${newScriptLine}`
-            : `      ${newScriptLine}`;
-          return `${start}${updatedMiddle}\n  ${end}`;
-        }
-      );
+      if (!setupPyContent.includes(newScriptLine)) {
+        const updatedSetupPyContent = setupPyContent
+          .replace(/('console_scripts':\s*\[)/, `$1\n      `)
+          .replace(
+            /('console_scripts':\s*\[)([\s\S]*?)(\])/,
+            (match, start, middle, end) => {
+              const cleanedMiddle = middle
+                .replace(/,+/g, ",")
+                .replace(/,\s*$/, "")
+                .trim();
 
-      fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
-      console.log(`Updated setup.py with console script: ${newScriptLine}`);
+              const updatedMiddle = cleanedMiddle
+                ? `${cleanedMiddle},\n      ${newScriptLine}`
+                : `      ${newScriptLine}`;
+
+              return `${start}${updatedMiddle}\n  ${end}`;
+            }
+          );
+
+        fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
+        console.log(`Updated setup.py with console script: ${newScriptLine}`);
+      } else {
+        console.log(
+          `The script line "${newScriptLine}" already exists in setup.py`
+        );
+      }
 
       // Write code on the node file at nodePath
       if (!fs.existsSync(nodePath)) {
