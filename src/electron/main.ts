@@ -221,7 +221,6 @@ ipcMain.handle(
   ) => {
     const pkgPath = path.join(packagePath, packageName);
     const extension = nodeType === "python" ? ".py" : ".cpp";
-    console.log(extension);
 
     if (!pkgPath) {
       console.error("Package path does not exist!");
@@ -233,18 +232,29 @@ ipcMain.handle(
     }
 
     const filePath = path.join(pkgPath, `${nodeName}${extension}`);
+    const blockFilePath = path.join(pkgPath, `${nodeName}.blocks`);
 
     if (fs.existsSync(filePath)) {
       console.error(`Node file already exists: ${filePath}`);
       return {
         created: false,
-        error: "Node name already exists in the package.",
+        error: "Node already exists in the package.",
+      };
+    }
+
+    if (fs.existsSync(blockFilePath)) {
+      console.error(`Blocks file already exists: ${blockFilePath}`);
+      return {
+        created: false,
+        error: "Blocks file already exists in the package.",
       };
     }
 
     try {
       fs.writeFileSync(filePath, "", { mode: 0o755 });
+      fs.writeFileSync(blockFilePath, "");
       console.log(`Node created successfully at: ${filePath}`);
+      console.log(`Blocks created successfully at: ${blockFilePath}`);
       return { created: true, pkgPath };
     } catch (error) {
       if (error instanceof Error) {

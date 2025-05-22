@@ -62,8 +62,6 @@ function NodeEditor(props: Props) {
     if (workspaceRef.current) {
       const code = pythonGenerator.workspaceToCode(workspaceRef.current);
       setGeneratedCode(code);
-    } else {
-      message.error("Workspace is not available!");
     }
   };
 
