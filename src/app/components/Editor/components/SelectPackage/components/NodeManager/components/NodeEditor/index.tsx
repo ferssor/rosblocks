@@ -106,14 +106,15 @@ function NodeEditor(props: Props) {
   );
 
   const handleSaveCode = async () => {
-    if (selectedNode && dependency && json) {
+    if (selectedNode && dependency && json && generatedCode) {
       try {
         const result = await window.electronAPI.createBlocks(
           dependency,
           selectedNode.name,
           selectedNode.relativePath,
           selectedNode.fullPath,
-          JSON.stringify(json)
+          JSON.stringify(json),
+          generatedCode
         );
 
         if (result.created) {

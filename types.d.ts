@@ -59,7 +59,8 @@ interface Window {
       scriptName: string,
       relativePath: string,
       nodePath: string,
-      blocks: string
+      blocks: string,
+      code: string
     ) => Promise<{ created: boolean; error?: string }>;
   };
 }

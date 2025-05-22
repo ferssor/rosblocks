@@ -372,10 +372,19 @@ ipcMain.handle(
     interfaceName,
     scriptName,
     relativePath: string,
-    nodePath,
-    blocks
+    nodePath: string,
+    blocks,
+    code
   ) => {
-    console.log({ interfaceName, scriptName, relativePath, nodePath, blocks });
+    console.log({
+      interfaceName,
+      scriptName,
+      relativePath,
+      nodePath,
+      blocks,
+      code,
+    });
+
     try {
       if (!nodePath && relativePath) {
         return {
@@ -440,7 +449,7 @@ ipcMain.handle(
       fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
       console.log(`Updated setup.py with console script: ${newScriptLine}`);
 
-      // Write blocks on the file at nodePath
+      // Write code on the node file at nodePath
       if (!fs.existsSync(nodePath)) {
         return {
           created: false,
@@ -448,9 +457,20 @@ ipcMain.handle(
         };
       }
 
-      fs.writeFileSync(nodePath, blocks, "utf-8");
-      console.log(`Written blocks content to file at: ${nodePath}`);
+      fs.writeFileSync(nodePath, code, "utf-8");
+      console.log(`Written code content to node file at: ${nodePath}`);
 
+      // Write blocks on the blocks file at nodePath
+      const blockFilePath = nodePath.replace(".py", ".blocks");
+      if (!fs.existsSync(blockFilePath)) {
+        return {
+          created: false,
+          error: "The block file at nodePath does not exist.",
+        };
+      }
+
+      fs.writeFileSync(blockFilePath, blocks, "utf-8");
+      console.log(`Written blocks content to file at: ${blockFilePath}`);
       return { created: true };
     } catch (error) {
       console.error("Error while creating the blocks", error);

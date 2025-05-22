@@ -33,7 +33,8 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     scriptName: string,
     relativePath: string,
     nodePath: string,
-    blocks: string
+    blocks: string,
+    code: string
   ) =>
     ipcRenderer.invoke(
       "create-blocks",
@@ -41,6 +42,7 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       scriptName,
       relativePath,
       nodePath,
-      blocks
+      blocks,
+      code
     ),
 });
