@@ -197,6 +197,11 @@ ipcMain.handle(
       .filter((node) => node.endsWith(".py") && node !== "__init__.py");
 
     return nodes.map((node) => {
+      const blockFile = path.join(
+        packagePath,
+        packageName,
+        node.replace(".py", ".blocks")
+      );
       const fullPath = path.join(pkgPath, node);
       const relativePath = path.relative(packagePath, fullPath);
 
@@ -204,7 +209,7 @@ ipcMain.handle(
         name: path.basename(node, ".py"),
         fullPath,
         relativePath,
-        content: fs.readFileSync(fullPath, "utf-8"),
+        content: fs.readFileSync(blockFile, "utf-8"),
       };
     });
   }
