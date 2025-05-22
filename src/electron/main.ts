@@ -417,13 +417,22 @@ ipcMain.handle(
       }
 
       const packageXmlContent = fs.readFileSync(packageXmlPath, "utf-8");
-      const updatedPackageXmlContent = packageXmlContent.replace(
-        /<depend>(.*?)<\/depend>/,
-        (match) => `${match}\n  <depend>${interfaceName}</depend>`
-      );
 
-      fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
-      console.log(`Updated package.xml with <depend>${interfaceName}</depend>`);
+      if (!packageXmlContent.includes(`<depend>${interfaceName}</depend>`)) {
+        const updatedPackageXmlContent = packageXmlContent.replace(
+          /<\/license>/,
+          `</license>\n  <depend>${interfaceName}</depend>`
+        );
+
+        fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
+        console.log(
+          `Updated package.xml with <depend>${interfaceName}</depend>`
+        );
+      } else {
+        console.log(
+          `<depend>${interfaceName}</depend> already exists in package.xml`
+        );
+      }
 
       // Update setup.py
       const setupPyPath = `${path}/setup.py`;
