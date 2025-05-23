@@ -117,7 +117,12 @@ function PackageList(props: Props) {
           >
             Editar
           </Button>
-          <Button type="default" color="green" variant="outlined">
+          <Button
+            type="default"
+            color="green"
+            variant="outlined"
+            onClick={() => handleBuildPackage(pkg.fullPath, pkg.name)}
+          >
             Buildar
           </Button>
           <Button
@@ -152,6 +157,26 @@ function PackageList(props: Props) {
     } catch (error) {
       if (error instanceof Error) {
         message.error(`Ocorreu um erro ao deletar o pacote!`);
+      }
+    }
+  }
+
+  async function handleBuildPackage(path: string, name: string) {
+    try {
+      const result = await window.electronAPI.buildPackage(path, name);
+      if (result.wasBuilded) {
+        message.success("Package buildado com sucesso!");
+        fetchPackages();
+      } else if (result.error) {
+        const errorMessage =
+          typeof result.error === "string"
+            ? result.error
+            : JSON.stringify(result.error);
+        message.error(`Erro ao buildar o pacote: ${errorMessage}`);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        message.error(`Ocorreu um erro ao buildar o pacote!`);
       }
     }
   }

@@ -45,4 +45,6 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       blocks,
       code
     ),
+  buildPackage: (packagePath: string, packageName: string) =>
+    ipcRenderer.invoke("build-package", packagePath, packageName),
 });

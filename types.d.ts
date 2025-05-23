@@ -62,5 +62,9 @@ interface Window {
       blocks: string,
       code: string
     ) => Promise<{ created: boolean; error?: string }>;
+    buildPackage: (
+      packagePath: string,
+      packageName: string
+    ) => Promise<{ wasBuilded: boolean; error?: string }>;
   };
 }

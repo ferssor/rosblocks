@@ -509,3 +509,45 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle(
+  "build-package",
+  async (_, packagePath: string, packageName: string) => {
+    if (!packagePath && !packageName) {
+      console.log("The package path and name is required!");
+      return {
+        wasBuilded: false,
+        error: "The package path and name is required!",
+      };
+    }
+
+    try {
+      console.log(packagePath, packageName);
+      if (!fs.existsSync(packagePath)) {
+        return { wasBuilded: false, error: "The package name does not exist." };
+      }
+
+      return new Promise((resolve, reject) => {
+        exec(
+          `cd ${packagePath} && colcon build --packages-select ${packageName}`,
+          (error, stdout, stderr) => {
+            if (error) {
+              console.error(`Erro ao rodar colcon build: ${stderr}`);
+              reject({ wasBuilded: false, error: stderr });
+            } else {
+              console.log(`Build concluído: ${stdout}`);
+              resolve({ wasBuilded: true });
+            }
+          }
+        );
+      });
+    } catch (error) {
+      console.error("Error while building the package", error);
+      return {
+        wasBuilded: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);
