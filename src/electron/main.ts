@@ -7,6 +7,30 @@ import fs from "fs";
 
 const URL = "http://localhost:1337";
 
+function getShellType() {
+  const shellPath = process.env.SHELL || process.env.ComSpec || "";
+  let shellType = "";
+  switch (true) {
+    case shellPath.includes("zsh"):
+      shellType = "zsh";
+      break;
+    case shellPath.includes("bash"):
+      shellType = "bash";
+      break;
+    case shellPath.includes(".sh"):
+      shellType = "sh";
+      break;
+    case shellPath.toLowerCase().includes("powershell") ||
+      !!process.env.PSModulePath:
+      shellType = "ps1";
+      break;
+    default:
+      shellType = "unknown";
+      break;
+  }
+  return shellType;
+}
+
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
     webPreferences: {
@@ -51,7 +75,37 @@ ipcMain.handle("create-workspace", async (_, workspacePath) => {
           console.error(`Erro ao rodar colcon build: ${stderr}`);
           reject({ created: false, error: stderr });
         } else {
-          console.log(`Build concluído: ${stdout}`);
+          console.log(`[BUILD]: Build concluído: ${stdout}`);
+          const setupFile = `${workspacePath}/install/setup.${getShellType()}`;
+          if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
+            exec(
+              `${getShellType()} -c "source ${setupFile}"`,
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(
+                    `Erro ao rodar setup do ${workspacePath}: ${stderr}`
+                  );
+                } else {
+                  console.log(`Build do ${workspacePath} concluído: ${stdout}`);
+                }
+              }
+            );
+          } else {
+            console.log(
+              "[ERROR]: The setup file on install folder doens't exists!"
+            );
+          }
+
+          exec(
+            `${getShellType()} -c "source /opt/ros/jazzy/setup.${getShellType()}"`,
+            (error, stdout, stderr) => {
+              if (error) {
+                console.error(`Erro ao rodar build do ROS: ${stderr}`);
+              } else {
+                console.log(`Build do ROS concluído: ${stdout}`);
+              }
+            }
+          );
           resolve({ created: true, workspacePath: workspacePath });
         }
       });
@@ -522,7 +576,6 @@ ipcMain.handle(
     }
 
     try {
-      console.log(packagePath, packageName);
       if (!fs.existsSync(packagePath)) {
         return { wasBuilded: false, error: "The package name does not exist." };
       }
@@ -536,6 +589,39 @@ ipcMain.handle(
               reject({ wasBuilded: false, error: stderr });
             } else {
               console.log(`Build concluído: ${stdout}`);
+              const setupFile = `${packagePath}/install/setup.${getShellType()}`;
+
+              if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
+                exec(
+                  `${getShellType()} -c "source ${setupFile}"`,
+                  (error, stdout, stderr) => {
+                    if (error) {
+                      console.error(
+                        `Erro ao rodar setup do ${packagePath}: ${stderr}`
+                      );
+                    } else {
+                      console.log(
+                        `Build do ${packagePath} concluído: ${stdout}`
+                      );
+                    }
+                  }
+                );
+              } else {
+                console.log(
+                  "[ERROR]: The setup file on install folder doens't exists!"
+                );
+              }
+
+              exec(
+                `${getShellType()} -c "source /opt/ros/jazzy/setup.${getShellType()}"`,
+                (error, stdout, stderr) => {
+                  if (error) {
+                    console.error(`Erro ao rodar build do ROS: ${stderr}`);
+                  } else {
+                    console.log(`Build do ROS concluído: ${stdout}`);
+                  }
+                }
+              );
               resolve({ wasBuilded: true });
             }
           }
