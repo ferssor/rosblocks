@@ -98,22 +98,6 @@ if __name__ == "__main__":
   };
 
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
-    const interfaceName: string = block.getFieldValue("INTERFACE");
-    const publisherName: string = block.getFieldValue("PUB_NAME");
-    const refreshRate = block.getFieldValue("REFRESH_RATE");
-
-    const code =
-      interfaceName && publisherName && refreshRate
-        ? `self._${publisherName.concat(
-            "_"
-          )} = self.create_publisher(${interfaceName
-            .split(" ")
-            .slice(-1)}, "${publisherName}", ${refreshRate})`
-        : "";
-    return code;
-  };
-
-  pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
     const code =
@@ -146,6 +130,22 @@ if __name__ == "__main__":
   ) {
     const text: string = block.getFieldValue("LOG_INFO");
     const code = text ? `self.get_logger().info("${text.trim()}")` : "";
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_sub"] = function (block: Blockly.Block) {
+    const interfaceName: string = block.getFieldValue("INTERFACE");
+    const publisherName: string = block.getFieldValue("PUB_NAME");
+    const refreshRate = block.getFieldValue("REFRESH_RATE");
+    const code =
+      interfaceName && publisherName && refreshRate
+        ? `self.number_subscriber_ = self.create_subscription(${interfaceName
+            .split(" ")
+            .slice(
+              -1
+            )}, "${publisherName}", self.callback_number, ${refreshRate})`
+        : "";
+
     return code;
   };
 }
