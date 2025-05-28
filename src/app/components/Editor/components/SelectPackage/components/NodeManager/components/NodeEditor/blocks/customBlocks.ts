@@ -40,6 +40,64 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_import",
+      message0: "Importar %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "IMPORT_NAME",
+          text: "Defina o nome do pacote",
+        },
+      ],
+      colour: 200,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Importa um pacote Python",
+      helpUrl: "",
+    },
+    {
+      type: "add_import_as",
+      message0: "Importar %1 como %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "IMPORT_NAME",
+          text: "Defina o nome do pacote",
+        },
+        {
+          type: "field_input",
+          name: "ALIAS_NAME",
+          text: "Defina o nome do apelido",
+        },
+      ],
+      colour: 200,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Importa um pacote Python",
+      helpUrl: "",
+    },
+    {
+      type: "add_from_import",
+      message0: "A partir de %1 importe %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "PACKAGE_NAME",
+          text: "Defina o nome do pacote",
+        },
+        {
+          type: "field_input",
+          name: "METHOD_NAME",
+          text: "Defina o nome do método",
+        },
+      ],
+      colour: 200,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Importa um pacote Python",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",

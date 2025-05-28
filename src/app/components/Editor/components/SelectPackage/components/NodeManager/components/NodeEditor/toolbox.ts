@@ -664,5 +664,24 @@ export const toolbox: ToolboxDefinition = {
         },
       ],
     },
+    {
+      kind: "category",
+      name: "Imports",
+      colour: "200",
+      contents: [
+        {
+          kind: "block",
+          type: "add_import",
+        },
+        {
+          kind: "block",
+          type: "add_import_as",
+        },
+        {
+          kind: "block",
+          type: "add_from_import",
+        },
+      ],
+    },
   ],
 };

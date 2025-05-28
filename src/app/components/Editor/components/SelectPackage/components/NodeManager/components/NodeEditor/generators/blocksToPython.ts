@@ -6,16 +6,33 @@ export function registerCustomBlocksToPython() {
     block: Blockly.Block,
     generator: PythonGenerator
   ) {
-    // Get field values
     const className = block.getFieldValue("CLASS_NAME") || "class_name";
-
-    // Generate code for CLASS_BODY using statementToCode
     const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
-
-    // Generate the final code
-    const code = `class ${className}():
-    ${classBodyCode.trim()}
+    const code = `\nclass ${className}():
+    ${classBodyCode.trim()}\n
 `;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_import"] = function (block: Blockly.Block) {
+    const importName = block.getFieldValue("IMPORT_NAME") || "import_name";
+    const code = `import ${importName}\n`;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_import_as"] = function (block: Blockly.Block) {
+    const importName = block.getFieldValue("IMPORT_NAME") || "import_name";
+    const aliasName = block.getFieldValue("ALIAS_NAME") || "alias_name";
+    const code = `import ${importName} as ${aliasName}\n`;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_from_import"] = function (
+    block: Blockly.Block
+  ) {
+    const packageName = block.getFieldValue("PACKAGE_NAME") || "package_name";
+    const methodName = block.getFieldValue("METHOD_NAME") || "method_name";
+    const code = `from ${packageName} import ${methodName}\n`;
     return code;
   };
 
