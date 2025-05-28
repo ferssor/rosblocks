@@ -18,17 +18,12 @@ export async function defineCustomBlocks() {
   const blocks = [
     {
       type: "add_class",
-      message0: "Iniciar %1 e o nó %2",
+      message0: "Classe %1",
       args0: [
         {
           type: "field_input",
           name: "CLASS_NAME",
           text: "Defina o nome da classe",
-        },
-        {
-          type: "field_input",
-          name: "NODE_NAME",
-          text: "Defina o nome do nó",
         },
       ],
       message1: "%1",
@@ -38,8 +33,10 @@ export async function defineCustomBlocks() {
           name: "CLASS_BODY",
         },
       ],
-      colour: 120,
-      tooltip: "Define uma classe em Python com nome e corpo opcional.",
+      colour: 13,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Define uma classe em Python.",
       helpUrl: "",
     },
     {

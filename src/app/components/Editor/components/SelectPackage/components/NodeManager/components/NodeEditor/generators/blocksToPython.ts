@@ -1,80 +1,20 @@
 import * as Blockly from "blockly/core";
-import { pythonGenerator } from "blockly/python";
+import { PythonGenerator, pythonGenerator } from "blockly/python";
 
 export function registerCustomBlocksToPython() {
-  pythonGenerator.forBlock["add_class"] = function (block: Blockly.Block) {
+  pythonGenerator.forBlock["add_class"] = function (
+    block: Blockly.Block,
+    generator: PythonGenerator
+  ) {
+    // Get field values
     const className = block.getFieldValue("CLASS_NAME") || "class_name";
-    const nodeName: string = block.getFieldValue("NODE_NAME") || "node_name";
-    const importLine = new Set<string>();
-    let currentBlock = block.getInputTargetBlock("CLASS_BODY");
-    let pubCode = "";
-    let counterCode = "";
-    let publisherCounterCode = "";
-    let logCode = "";
 
-    while (currentBlock) {
-      if (currentBlock.type === "add_pub") {
-        const interfaceValue = currentBlock.getFieldValue("INTERFACE");
-        if (interfaceValue) {
-          importLine.add(interfaceValue);
-        }
-        // Generate code for the current add_pub block
-        pubCode +=
-          pythonGenerator.forBlock["add_pub"](currentBlock, pythonGenerator) +
-          "\n";
-      } else if (currentBlock.type === "create_timer") {
-        counterCode +=
-          pythonGenerator.forBlock["create_timer"](
-            currentBlock,
-            pythonGenerator
-          ) + "\n";
+    // Generate code for CLASS_BODY using statementToCode
+    const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
 
-        const counterFunctionBlock =
-          currentBlock.getInputTargetBlock("PUBLISHER_COUNTER");
-        if (counterFunctionBlock) {
-          publisherCounterCode +=
-            pythonGenerator.forBlock["counter_function"](
-              counterFunctionBlock,
-              pythonGenerator
-            ) + "\n";
-        }
-      } else if (currentBlock.type === "add_information") {
-        logCode +=
-          pythonGenerator.forBlock["add_information"](
-            currentBlock,
-            pythonGenerator
-          ) + "\n";
-      }
-
-      // Move to the next block in the chain
-      currentBlock = currentBlock.getNextBlock();
-    }
-
-    const msgImport = Array.from(importLine).join("\n");
-
-    const code = `#!/usr/bin/env python3
-import rclpy
-from rclpy.node import Node
-${msgImport}
-
-
-class ${className}(Node):
-    def __init__(self):
-        super().__init__("${nodeName}")
-        ${pubCode.trim()}
-        ${counterCode.trim()}
-        ${logCode.trim()}
-
-${publisherCounterCode}
-def main(args=None):
-    rclpy.init(args=args)
-    node = ${className}()
-    rclpy.spin(node)
-    rclpy.shutdown()
-
-
-if __name__ == "__main__":
-    main()
+    // Generate the final code
+    const code = `class ${className}():
+    ${classBodyCode.trim()}
 `;
     return code;
   };

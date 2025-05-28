@@ -646,6 +646,23 @@ export const toolbox: ToolboxDefinition = {
       name: "Funções",
       categorystyle: "procedure_category",
       custom: "PROCEDURE",
+      contents: [
+        {
+          kind: "block",
+          type: "add_class",
+        },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Classes",
+      colour: "13",
+      contents: [
+        {
+          kind: "block",
+          type: "add_class",
+        },
+      ],
     },
   ],
 };
