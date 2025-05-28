@@ -8,7 +8,20 @@ export function registerCustomBlocksToPython() {
   ) {
     const className = block.getFieldValue("CLASS_NAME") || "class_name";
     const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
-    const code = `\nclass ${className}():
+    const code = `\nclass ${className}:
+    ${classBodyCode.trim()}\n
+`;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_class_inheritance"] = function (
+    block: Blockly.Block,
+    generator: PythonGenerator
+  ) {
+    const className = block.getFieldValue("CLASS_NAME") || "class_name";
+    const extendsName = block.getFieldValue("EXTENDS_NAME") || "extends_name";
+    const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
+    const code = `\nclass ${className}(${extendsName}):
     ${classBodyCode.trim()}\n
 `;
     return code;

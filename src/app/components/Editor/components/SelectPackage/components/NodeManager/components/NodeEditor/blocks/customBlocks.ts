@@ -18,12 +18,40 @@ export async function defineCustomBlocks() {
   const blocks = [
     {
       type: "add_class",
-      message0: "Classe %1",
+      message0: "Iniciar classe %1",
       args0: [
         {
           type: "field_input",
           name: "CLASS_NAME",
           text: "Defina o nome da classe",
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "CLASS_BODY",
+        },
+      ],
+      colour: 13,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Define uma classe em Python.",
+      helpUrl: "",
+    },
+    {
+      type: "add_class_inheritance",
+      message0: "Iniciar classe %1 herdando da classe %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "CLASS_NAME",
+          text: "Defina o nome da classe",
+        },
+        {
+          type: "field_input",
+          name: "EXTENDS_NAME",
+          text: "Defina o nome da classe a ser herdada",
         },
       ],
       message1: "%1",
