@@ -126,6 +126,29 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_function",
+      message0: "Função %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "FUNCTION_BODY",
+        },
+      ],
+      colour: 321,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Adicione uma função",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",

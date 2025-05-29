@@ -642,14 +642,16 @@ export const toolbox: ToolboxDefinition = {
       custom: "VARIABLE",
     },
     {
+      kind: "sep",
+    },
+    {
       kind: "category",
       name: "Funções",
-      categorystyle: "procedure_category",
-      custom: "PROCEDURE",
+      colour: "321",
       contents: [
         {
           kind: "block",
-          type: "add_class",
+          type: "add_function",
         },
       ],
     },

@@ -1,6 +1,21 @@
 import * as Blockly from "blockly/core";
 import { PythonGenerator, pythonGenerator } from "blockly/python";
 
+function indentCode(code: string, indent: string = "  "): string {
+  const isAlreadyIndented = code
+    .split("\n")
+    .some((line) => line.startsWith("  "));
+
+  if (isAlreadyIndented) {
+    return code;
+  }
+
+  return code
+    .split("\n")
+    .map((line) => (line.trim() ? indent + line : ""))
+    .join("\n");
+}
+
 export function registerCustomBlocksToPython() {
   pythonGenerator.forBlock["add_class"] = function (
     block: Blockly.Block,
@@ -8,9 +23,7 @@ export function registerCustomBlocksToPython() {
   ) {
     const className = block.getFieldValue("CLASS_NAME") || "class_name";
     const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
-    const code = `\nclass ${className}:
-    ${classBodyCode.trim()}\n
-`;
+    const code = `\nclass ${className}:\n${indentCode(classBodyCode)}\n`;
     return code;
   };
 
@@ -21,9 +34,9 @@ export function registerCustomBlocksToPython() {
     const className = block.getFieldValue("CLASS_NAME") || "class_name";
     const extendsName = block.getFieldValue("EXTENDS_NAME") || "extends_name";
     const classBodyCode = generator.statementToCode(block, "CLASS_BODY") || "";
-    const code = `\nclass ${className}(${extendsName}):
-    ${classBodyCode.trim()}\n
-`;
+    const code = `\nclass ${className}(${extendsName}):\n${indentCode(
+      classBodyCode
+    )}\n`;
     return code;
   };
 
@@ -46,6 +59,18 @@ export function registerCustomBlocksToPython() {
     const packageName = block.getFieldValue("PACKAGE_NAME") || "package_name";
     const methodName = block.getFieldValue("METHOD_NAME") || "method_name";
     const code = `from ${packageName} import ${methodName}\n`;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_function"] = function (
+    block: Blockly.Block,
+    generator: PythonGenerator
+  ) {
+    const functionName =
+      block.getFieldValue("FUNCTION_NAME") || "function_name";
+    const functionBodyCode =
+      generator.statementToCode(block, "FUNCTION_BODY") || "";
+    const code = `def ${functionName}():\n${indentCode(functionBodyCode)}\n`;
     return code;
   };
 
