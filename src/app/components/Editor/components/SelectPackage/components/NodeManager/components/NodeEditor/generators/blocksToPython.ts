@@ -87,6 +87,19 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["node_init"] = function (
+    block: Blockly.Block,
+    generator: PythonGenerator
+  ) {
+    const nodeName = block.getFieldValue("NODE_NAME") || "node_name";
+    const constructorBodyCode =
+      generator.statementToCode(block, "CONSTRUCTOR_BODY") || "";
+    const code = `def __init__(self):
+  super().__init__('${nodeName}')
+    \n${indentCode(constructorBodyCode)}\n`;
+    return code;
+  };
+
   pythonGenerator.forBlock["add_pub"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
     const publisherName: string = block

@@ -172,6 +172,29 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "node_init",
+      message0: "Inicializa o nó %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "NODE_NAME",
+          text: "Defina o nome do nó",
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "CONSTRUCTOR_BODY",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Adicione o nó",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",

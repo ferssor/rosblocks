@@ -5,40 +5,6 @@ export const toolbox: ToolboxDefinition = {
   contents: [
     {
       kind: "category",
-      name: "ROS",
-      colour: "700",
-      contents: [
-        {
-          kind: "block",
-          type: "add_class",
-        },
-        {
-          kind: "block",
-          type: "add_pub",
-        },
-        {
-          kind: "block",
-          type: "create_timer",
-        },
-        {
-          kind: "block",
-          type: "counter_function",
-        },
-        {
-          kind: "block",
-          type: "add_information",
-        },
-        {
-          kind: "block",
-          type: "add_sub",
-        },
-      ],
-    },
-    {
-      kind: "sep",
-    },
-    {
-      kind: "category",
       name: "Lógica",
       categorystyle: "logic_category",
       contents: [
@@ -690,6 +656,17 @@ export const toolbox: ToolboxDefinition = {
         {
           kind: "block",
           type: "add_from_import",
+        },
+      ],
+    },
+    {
+      kind: "category",
+      name: "ROS",
+      colour: "420",
+      contents: [
+        {
+          kind: "block",
+          type: "node_init",
         },
       ],
     },
