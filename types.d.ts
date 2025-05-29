@@ -55,9 +55,6 @@ interface Window {
     ) => Promise<{ deleted: boolean; error?: string }>;
     getInterfaces: () => Promise<Array<ROSInterface>>;
     createBlocks: (
-      interfaceName: string,
-      scriptName: string,
-      relativePath: string,
       nodePath: string,
       blocks: string,
       code: string
@@ -66,5 +63,11 @@ interface Window {
       packagePath: string,
       packageName: string
     ) => Promise<{ wasBuilded: boolean; error?: string }>;
+    addDependency: (
+      relativePath: string,
+      nodePath: string,
+      scriptName: string,
+      interfaceName: string
+    ) => Promise<{ wasAdded: boolean; error?: string }>;
   };
 }

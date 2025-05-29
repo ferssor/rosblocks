@@ -425,40 +425,141 @@ ipcMain.handle("get-interfaces", async () => {
 });
 
 ipcMain.handle(
-  "create-blocks",
-  async (
-    _,
-    interfaceName,
-    scriptName,
-    relativePath: string,
-    nodePath: string,
-    blocks,
-    code
-  ) => {
-    console.log({
-      interfaceName,
-      scriptName,
-      relativePath,
-      nodePath,
-      blocks,
-      code,
-    });
+  "build-package",
+  async (_, packagePath: string, packageName: string) => {
+    if (!packagePath && !packageName) {
+      console.log("The package path and name is required!");
+      return {
+        wasBuilded: false,
+        error: "The package path and name is required!",
+      };
+    }
 
     try {
-      if (!nodePath && relativePath) {
-        return {
-          created: false,
-          error: "The path is required!",
-        };
+      if (!fs.existsSync(packagePath)) {
+        return { wasBuilded: false, error: "The package name does not exist." };
       }
 
-      if (!interfaceName && scriptName) {
-        return {
-          created: false,
-          error: "The interface and script name is required!",
-        };
-      }
+      return new Promise((resolve, reject) => {
+        exec(
+          `cd ${packagePath} && colcon build --packages-select ${packageName}`,
+          (error, stdout, stderr) => {
+            if (error) {
+              console.error(`Erro ao rodar colcon build: ${stderr}`);
+              reject({ wasBuilded: false, error: stderr });
+            } else {
+              console.log(`Build concluído: ${stdout}`);
+              const setupFile = `${packagePath}/install/setup.${getShellType()}`;
 
+              if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
+                exec(
+                  `${getShellType()} -c "source ${setupFile}"`,
+                  (error, stdout, stderr) => {
+                    if (error) {
+                      console.error(
+                        `Erro ao rodar setup do ${packagePath}: ${stderr}`
+                      );
+                    } else {
+                      console.log(
+                        `Build do ${packagePath} concluído: ${stdout}`
+                      );
+                    }
+                  }
+                );
+              } else {
+                console.log(
+                  "[ERROR]: The setup file on install folder doens't exists!"
+                );
+              }
+
+              exec(
+                `${getShellType()} -c "source /opt/ros/jazzy/setup.${getShellType()}"`,
+                (error, stdout, stderr) => {
+                  if (error) {
+                    console.error(`Erro ao rodar build do ROS: ${stderr}`);
+                  } else {
+                    console.log(`Build do ROS concluído: ${stdout}`);
+                  }
+                }
+              );
+              resolve({ wasBuilded: true });
+            }
+          }
+        );
+      });
+    } catch (error) {
+      console.error("Error while building the package", error);
+      return {
+        wasBuilded: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);
+
+ipcMain.handle("create-blocks", async (_, nodePath: string, blocks, code) => {
+  try {
+    if (!nodePath && !blocks && !code) {
+      return {
+        created: false,
+        error: "The path, blocks and code is required!",
+      };
+    }
+
+    // Write code on the node file at nodePath
+    if (!fs.existsSync(nodePath)) {
+      return {
+        created: false,
+        error: "The file at nodePath does not exist.",
+      };
+    }
+
+    fs.writeFileSync(nodePath, code, "utf-8");
+    console.log(`Written code content to node file at: ${nodePath}`);
+
+    // Write blocks on the blocks file at nodePath
+    const blockFilePath = nodePath.replace(".py", ".blocks");
+    if (!fs.existsSync(blockFilePath)) {
+      return {
+        created: false,
+        error: "The block file at nodePath does not exist.",
+      };
+    }
+
+    fs.writeFileSync(blockFilePath, blocks, "utf-8");
+    console.log(`Written blocks content to file at: ${blockFilePath}`);
+    return { created: true };
+  } catch (error) {
+    console.error("Error while creating the blocks", error);
+    return {
+      created: false,
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred.",
+    };
+  }
+});
+
+ipcMain.handle(
+  "add-dependency",
+  async (
+    _,
+    relativePath: string,
+    nodePath: string,
+    scriptName: string,
+    interfaceName: string
+  ) => {
+    if (!relativePath && !nodePath && !scriptName && !interfaceName) {
+      console.log(
+        "The package path, script name and interface name is required!"
+      );
+      return {
+        wasAdded: false,
+        error: "The package path and name is required!",
+      };
+    }
+
+    try {
       const path = nodePath.replace(relativePath, "");
 
       // Update package.xml
@@ -529,108 +630,11 @@ ipcMain.handle(
           `The script line "${newScriptLine}" already exists in setup.py`
         );
       }
-
-      // Write code on the node file at nodePath
-      if (!fs.existsSync(nodePath)) {
-        return {
-          created: false,
-          error: "The file at nodePath does not exist.",
-        };
-      }
-
-      fs.writeFileSync(nodePath, code, "utf-8");
-      console.log(`Written code content to node file at: ${nodePath}`);
-
-      // Write blocks on the blocks file at nodePath
-      const blockFilePath = nodePath.replace(".py", ".blocks");
-      if (!fs.existsSync(blockFilePath)) {
-        return {
-          created: false,
-          error: "The block file at nodePath does not exist.",
-        };
-      }
-
-      fs.writeFileSync(blockFilePath, blocks, "utf-8");
-      console.log(`Written blocks content to file at: ${blockFilePath}`);
-      return { created: true };
+      return { wasAdded: true };
     } catch (error) {
-      console.error("Error while creating the blocks", error);
+      console.error("Error while adding the dependencies", error);
       return {
-        created: false,
-        error:
-          error instanceof Error ? error.message : "An unknown error occurred.",
-      };
-    }
-  }
-);
-
-ipcMain.handle(
-  "build-package",
-  async (_, packagePath: string, packageName: string) => {
-    if (!packagePath && !packageName) {
-      console.log("The package path and name is required!");
-      return {
-        wasBuilded: false,
-        error: "The package path and name is required!",
-      };
-    }
-
-    try {
-      if (!fs.existsSync(packagePath)) {
-        return { wasBuilded: false, error: "The package name does not exist." };
-      }
-
-      return new Promise((resolve, reject) => {
-        exec(
-          `cd ${packagePath} && colcon build --packages-select ${packageName}`,
-          (error, stdout, stderr) => {
-            if (error) {
-              console.error(`Erro ao rodar colcon build: ${stderr}`);
-              reject({ wasBuilded: false, error: stderr });
-            } else {
-              console.log(`Build concluído: ${stdout}`);
-              const setupFile = `${packagePath}/install/setup.${getShellType()}`;
-
-              if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
-                exec(
-                  `${getShellType()} -c "source ${setupFile}"`,
-                  (error, stdout, stderr) => {
-                    if (error) {
-                      console.error(
-                        `Erro ao rodar setup do ${packagePath}: ${stderr}`
-                      );
-                    } else {
-                      console.log(
-                        `Build do ${packagePath} concluído: ${stdout}`
-                      );
-                    }
-                  }
-                );
-              } else {
-                console.log(
-                  "[ERROR]: The setup file on install folder doens't exists!"
-                );
-              }
-
-              exec(
-                `${getShellType()} -c "source /opt/ros/jazzy/setup.${getShellType()}"`,
-                (error, stdout, stderr) => {
-                  if (error) {
-                    console.error(`Erro ao rodar build do ROS: ${stderr}`);
-                  } else {
-                    console.log(`Build do ROS concluído: ${stdout}`);
-                  }
-                }
-              );
-              resolve({ wasBuilded: true });
-            }
-          }
-        );
-      });
-    } catch (error) {
-      console.error("Error while building the package", error);
-      return {
-        wasBuilded: false,
+        wasAdded: false,
         error:
           error instanceof Error ? error.message : "An unknown error occurred.",
       };

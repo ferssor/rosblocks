@@ -105,13 +105,39 @@ function NodeEditor(props: Props) {
     [findValueByKey]
   );
 
+  const handleAddDependency = async (
+    relativePath: string,
+    nodePath: string,
+    scriptName: string,
+    interfaceName: string
+  ) => {
+    if (relativePath && nodePath && scriptName && interfaceName) {
+      try {
+        const result = await window.electronAPI.addDependency(
+          relativePath,
+          nodePath,
+          scriptName,
+          interfaceName
+        );
+
+        if (result.wasAdded) {
+          message.success("Dependências adicionadas com sucesso!");
+        } else {
+          message.error(result.error);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+          message.error(`Ocorreu um erro ao adicionar a dependência!`);
+        }
+      }
+    }
+  };
+
   const handleSaveCode = async () => {
-    if (selectedNode && dependency && json && generatedCode) {
+    if (selectedNode && json && generatedCode) {
       try {
         const result = await window.electronAPI.createBlocks(
-          dependency,
-          selectedNode.name,
-          selectedNode.relativePath,
           selectedNode.fullPath,
           JSON.stringify(json),
           generatedCode
@@ -121,6 +147,14 @@ function NodeEditor(props: Props) {
           message.success("Blocos criados com sucesso!");
           fetchNodes(pkgLocation, pkgName);
           setSelectedNode(selectedNode);
+          if (selectedNode && dependency) {
+            handleAddDependency(
+              selectedNode.relativePath,
+              selectedNode.fullPath,
+              selectedNode.name,
+              dependency
+            );
+          }
         } else {
           message.error(result.error);
         }

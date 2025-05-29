@@ -47,4 +47,17 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     ),
   buildPackage: (packagePath: string, packageName: string) =>
     ipcRenderer.invoke("build-package", packagePath, packageName),
+  addDependency: (
+    relativePath: string,
+    nodePath: string,
+    scriptName: string,
+    interfaceName: string
+  ) =>
+    ipcRenderer.invoke(
+      "add-dependency",
+      relativePath,
+      nodePath,
+      scriptName,
+      interfaceName
+    ),
 });

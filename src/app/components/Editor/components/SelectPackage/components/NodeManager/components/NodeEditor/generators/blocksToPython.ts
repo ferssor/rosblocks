@@ -108,7 +108,7 @@ export function registerCustomBlocksToPython() {
     rclpy.init(args=args)
     node = ${className}()     
     rclpy.spin(node)     
-    rclpy.shutdown() 
+    rclpy.shutdown()\n
 `;
     return code;
   };
