@@ -100,6 +100,19 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["start_node"] = function (block: Blockly.Block) {
+    const className = block.getFieldValue("CLASS_NAME") || "class_name";
+    const functionName =
+      block.getFieldValue("FUNCTION_NAME") || "function_name";
+    const code = `def ${functionName}(args=None):
+    rclpy.init(args=args)
+    node = ${className}()     
+    rclpy.spin(node)     
+    rclpy.shutdown() 
+`;
+    return code;
+  };
+
   pythonGenerator.forBlock["add_pub"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
     const publisherName: string = block
