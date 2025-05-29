@@ -668,6 +668,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_class_inheritance",
         },
+        {
+          kind: "block",
+          type: "class_init",
+        },
       ],
     },
     {

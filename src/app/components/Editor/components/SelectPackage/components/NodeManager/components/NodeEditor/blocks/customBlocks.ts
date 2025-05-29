@@ -149,6 +149,29 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "class_init",
+      message0: "Inicializa o construtor da classe %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "CLASS_NAME",
+          text: "Defina o nome da classe",
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "CONSTRUCTOR_BODY",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Adicione o construtor da classe",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",
