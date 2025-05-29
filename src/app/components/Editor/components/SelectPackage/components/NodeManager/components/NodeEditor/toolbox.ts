@@ -672,6 +672,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "start_node",
         },
+        {
+          kind: "block",
+          type: "init_statement",
+        },
       ],
     },
   ],

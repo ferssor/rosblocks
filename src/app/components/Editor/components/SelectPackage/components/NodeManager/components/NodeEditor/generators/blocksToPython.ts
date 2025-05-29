@@ -113,6 +113,15 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["init_statement"] = function (block: Blockly.Block) {
+    const functionName =
+      block.getFieldValue("FUNCTION_NAME") || "function_name";
+    const code = `if __name__ == '__main__':
+  ${functionName}()
+`;
+    return code;
+  };
+
   pythonGenerator.forBlock["add_pub"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
     const publisherName: string = block

@@ -216,6 +216,22 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "init_statement",
+      message0: "Inicializa a função %1 no script",
+      args0: [
+        {
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Adicione o inicializador do script",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",
