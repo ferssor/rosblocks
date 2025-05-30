@@ -601,12 +601,7 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "sep",
     },
-    {
-      kind: "category",
-      name: "Variáveis",
-      categorystyle: "variable_category",
-      custom: "VARIABLE",
-    },
+
     {
       kind: "sep",
     },
@@ -683,6 +678,17 @@ export const toolbox: ToolboxDefinition = {
         {
           kind: "block",
           type: "add_pub",
+        },
+      ],
+    },
+    {
+      kind: "category",
+      name: "Variáveis",
+      colour: "410",
+      contents: [
+        {
+          kind: "block",
+          type: "add_variable",
         },
       ],
     },

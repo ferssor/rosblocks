@@ -146,6 +146,13 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["add_variable"] = function (block: Blockly.Block) {
+    const variableName: string = block.getFieldValue("VARIABLE");
+    const value: string = block.getFieldValue("VALUE");
+    const code = `self.${variableName} = ${value}\n`;
+    return code;
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");

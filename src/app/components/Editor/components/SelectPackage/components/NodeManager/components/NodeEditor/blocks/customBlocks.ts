@@ -278,6 +278,27 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_variable",
+      message0: "Adicione uma variável %1 com o valor %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "VARIABLE",
+          text: "Defina o nome da variável",
+        },
+        {
+          type: "input_value",
+          name: "VALUE",
+          text: "Defina o valor da variável",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 410,
+      tooltip: "Adicione uma variável ao script",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",
