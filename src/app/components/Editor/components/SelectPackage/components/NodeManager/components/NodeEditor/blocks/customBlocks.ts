@@ -274,7 +274,7 @@ export async function defineCustomBlocks() {
       nextStatement: null,
       colour: 230,
       tooltip:
-        "Define um publisher ROS2 com nome, interface e taxa de atualização.",
+        "Define um publisher ROS com nome, interface e taxa de atualização.",
       helpUrl: "",
     },
     {

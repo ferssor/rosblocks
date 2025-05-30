@@ -141,7 +141,7 @@ export function registerCustomBlocksToPython() {
             "_"
           )} = self.create_publisher(${interfaceName
             .split(" ")
-            .slice(-1)}, "${publisherName}", ${refreshRate})`
+            .slice(-1)}, "${publisherName}", ${refreshRate})\n`
         : "";
     return code;
   };

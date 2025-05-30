@@ -680,6 +680,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_interface",
         },
+        {
+          kind: "block",
+          type: "add_pub",
+        },
       ],
     },
   ],
