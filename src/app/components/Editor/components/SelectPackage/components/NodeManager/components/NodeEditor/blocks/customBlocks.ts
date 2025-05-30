@@ -232,6 +232,22 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_interface",
+      message0: "Importe a interface %1",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Adicione uma interface ROS2",
+      helpUrl: "",
+    },
+    {
       type: "add_pub",
       message0:
         "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",

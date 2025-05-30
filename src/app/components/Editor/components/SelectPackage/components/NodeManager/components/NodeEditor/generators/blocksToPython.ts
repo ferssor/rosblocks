@@ -122,6 +122,12 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["add_interface"] = function (block: Blockly.Block) {
+    const interfaceName: string = block.getFieldValue("INTERFACE");
+    const code = `${interfaceName}\n`;
+    return code;
+  };
+
   pythonGenerator.forBlock["add_pub"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
     const publisherName: string = block

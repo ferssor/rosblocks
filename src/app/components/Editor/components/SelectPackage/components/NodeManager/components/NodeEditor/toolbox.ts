@@ -676,6 +676,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "init_statement",
         },
+        {
+          kind: "block",
+          type: "add_interface",
+        },
       ],
     },
   ],
