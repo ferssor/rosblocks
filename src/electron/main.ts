@@ -440,9 +440,15 @@ ipcMain.handle(
         return { wasBuilded: false, error: "The package name does not exist." };
       }
 
+      const workspacePath = packagePath.replace(`/src/${packageName}`, "");
+
+      console.log(
+        `Building package at path: ${workspacePath} with name: ${packageName}`
+      );
+
       return new Promise((resolve, reject) => {
         exec(
-          `cd ${packagePath} && colcon build --packages-select ${packageName}`,
+          `cd ${workspacePath} && colcon build --packages-select ${packageName}`,
           (error, stdout, stderr) => {
             if (error) {
               console.error(`Erro ao rodar colcon build: ${stderr}`);
@@ -461,7 +467,7 @@ ipcMain.handle(
                       );
                     } else {
                       console.log(
-                        `Build do ${packagePath} concluído: ${stdout}`
+                        `Build do ${workspacePath} concluído: ${stdout}`
                       );
                     }
                   }
