@@ -46,6 +46,7 @@ function NodeEditor(props: Props) {
       colour: "#ccc",
       snap: true,
     },
+    scrollbars: true,
     zoom: {
       controls: true,
       wheel: true,

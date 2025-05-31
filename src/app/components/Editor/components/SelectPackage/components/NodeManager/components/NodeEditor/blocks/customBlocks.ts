@@ -348,7 +348,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "add_python_version",
-      message0: "Defina a versão do Python %1",
+      message0: "Defina a versão %1 do Python",
       args0: [
         {
           type: "field_dropdown",
@@ -367,6 +367,33 @@ export async function defineCustomBlocks() {
       colour: 200,
       nextStatement: null,
       tooltip: "Adicione uma variável ao script",
+      helpUrl: "",
+    },
+    {
+      type: "add_logger",
+      message0: "Registre %1: %2",
+      args0: [
+        {
+          type: "field_dropdown",
+          options: [
+            ["a informação", "info"],
+            ["o erro", "error"],
+            ["o aviso", "warning"],
+            ["o debug", "debug"],
+          ],
+          name: "LOG_LEVEL",
+          checked: true,
+        },
+        {
+          type: "field_input",
+          name: "LOG_TEXT",
+          text: "Defina o texto que será exibido",
+        },
+      ],
+      colour: 200,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Adicione um registro ao nó",
       helpUrl: "",
     },
     {

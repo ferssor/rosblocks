@@ -185,6 +185,13 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["add_logger"] = function (block: Blockly.Block) {
+    const value: string = block.getFieldValue("LOG_LEVEL");
+    const text: string = block.getFieldValue("LOG_TEXT");
+    const code = `self.get_logger().${value}("${text.trim()}")\n`;
+    return code;
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
