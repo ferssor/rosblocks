@@ -692,5 +692,16 @@ export const toolbox: ToolboxDefinition = {
         },
       ],
     },
+    {
+      kind: "category",
+      name: "Valores",
+      colour: "214",
+      contents: [
+        {
+          kind: "block",
+          type: "add_numeric_value",
+        },
+      ],
+    },
   ],
 };

@@ -279,7 +279,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "add_variable",
-      message0: "Adicione uma variável %1 com o valor %2",
+      message0: "Adicione à variável %1 com o valor %2",
       args0: [
         {
           type: "field_input",
@@ -294,7 +294,22 @@ export async function defineCustomBlocks() {
       ],
       previousStatement: null,
       nextStatement: null,
-      colour: 410,
+      colour: "#2966ff",
+      tooltip: "Adicione uma variável ao script",
+      helpUrl: "",
+    },
+    {
+      type: "add_numeric_value",
+      message0: "%1",
+      args0: [
+        {
+          type: "field_number",
+          name: "NUMERIC_VALUE",
+          text: "Defina o valor da variável",
+        },
+      ],
+      colour: "#9966ff",
+      output: null,
       tooltip: "Adicione uma variável ao script",
       helpUrl: "",
     },
