@@ -107,10 +107,10 @@ export function registerCustomBlocksToPython() {
     const functionName =
       block.getFieldValue("FUNCTION_NAME") || "function_name";
     const code = `def ${functionName}(args=None):
-    rclpy.init(args=args)
-    node = ${className}()     
-    rclpy.spin(node)     
-    rclpy.shutdown()\n
+  rclpy.init(args=args)
+  node = ${className}()     
+  rclpy.spin(node)     
+  rclpy.shutdown()\n
 `;
     return code;
   };
@@ -185,6 +185,15 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
+  pythonGenerator.forBlock["add_counter"] = function (block: Blockly.Block) {
+    const functionName: string = block.getFieldValue("FUNCTION_NAME");
+    const interval: number = block.getFieldValue("INTERVAL");
+    const code = `self.create_timer(${interval.toFixed(
+      1
+    )}, self.${functionName})\n`;
+    return [code, 0];
+  };
+
   pythonGenerator.forBlock["add_python_version"] = function (
     block: Blockly.Block
   ) {
@@ -209,7 +218,7 @@ export function registerCustomBlocksToPython() {
     const code =
       interfaceName && functionName
         ? `msg = ${interfaceName.split(" ").slice(-1)}()
-msg.data = ${functionName}\n`
+msg.data = self.${functionName}\n`
         : "";
     return code;
   };

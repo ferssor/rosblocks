@@ -708,6 +708,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_callback_function",
         },
+        {
+          kind: "block",
+          type: "add_counter",
+        },
       ],
     },
     {

@@ -362,6 +362,28 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_counter",
+      message0: `Adicione o contador a função %1 com intervalo de %2`,
+      args0: [
+        {
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
+        },
+        {
+          type: "field_number",
+          name: "INTERVAL",
+          value: 1,
+          min: 1,
+          precision: 1,
+        },
+      ],
+      colour: 200,
+      output: null,
+      tooltip: "Adiciona um contador com intervalo que chama uma função",
+      helpUrl: "",
+    },
+    {
       type: "add_python_version",
       message0: "Defina a versão %1 do Python",
       args0: [
