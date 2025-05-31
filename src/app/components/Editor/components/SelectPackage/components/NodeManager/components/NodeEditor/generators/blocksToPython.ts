@@ -139,9 +139,7 @@ export function registerCustomBlocksToPython() {
 
     const code =
       interfaceName && publisherName && refreshRate
-        ? `self._${publisherName.concat(
-            "_"
-          )} = self.create_publisher(${interfaceName
+        ? `self.${publisherName} = self.create_publisher(${interfaceName
             .split(" ")
             .slice(-1)}, "${publisherName}", ${refreshRate})\n`
         : "";
@@ -207,6 +205,18 @@ msg.data = ${functionName}\n`
         : "";
     return code;
   };
+
+  pythonGenerator.forBlock["publish_message"] = function (
+    block: Blockly.Block
+  ) {
+    const publisherName: string = block
+      .getFieldValue("PUBLISHER_NAME")
+      .replace(/\s+/g, "_");
+
+    const code = publisherName ? `self.${publisherName}.publish(msg)\n` : "";
+    return code;
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");

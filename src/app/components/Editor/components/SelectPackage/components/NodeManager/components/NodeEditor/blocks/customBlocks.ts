@@ -419,6 +419,22 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "publish_message",
+      message0: "Publique a mensagem no %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "PUBLISHER_NAME",
+          text: "Defina o nome do publicador",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Publica a mensagem no publicador",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",
