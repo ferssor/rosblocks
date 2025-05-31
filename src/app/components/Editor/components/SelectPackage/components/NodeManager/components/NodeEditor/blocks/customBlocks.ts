@@ -397,6 +397,28 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_message",
+      message0:
+        "Adicione a mensagem com a interface %1 e os dados da variável %2",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+        {
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Adicione uma mensagem ROS2",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",

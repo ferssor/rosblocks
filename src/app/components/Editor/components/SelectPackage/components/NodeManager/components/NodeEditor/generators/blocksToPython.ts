@@ -70,7 +70,9 @@ export function registerCustomBlocksToPython() {
       block.getFieldValue("FUNCTION_NAME") || "function_name";
     const functionBodyCode =
       generator.statementToCode(block, "FUNCTION_BODY") || "";
-    const code = `def ${functionName}():\n${indentCode(functionBodyCode)}\n`;
+    const code = `def ${functionName}(self):\n${indentCode(
+      functionBodyCode
+    )}\n`;
     return code;
   };
 
@@ -192,6 +194,19 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["add_message"] = function (block: Blockly.Block) {
+    const interfaceName: string = block.getFieldValue("INTERFACE");
+    const functionName: string = block
+      .getFieldValue("FUNCTION_NAME")
+      .replace(/\s+/g, "_");
+
+    const code =
+      interfaceName && functionName
+        ? `msg = ${interfaceName.split(" ").slice(-1)}()
+msg.data = ${functionName}\n`
+        : "";
+    return code;
+  };
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");

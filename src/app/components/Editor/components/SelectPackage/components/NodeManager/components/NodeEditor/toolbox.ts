@@ -688,6 +688,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_logger",
         },
+        {
+          kind: "block",
+          type: "add_message",
+        },
       ],
     },
     {
