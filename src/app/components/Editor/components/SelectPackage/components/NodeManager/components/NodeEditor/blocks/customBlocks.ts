@@ -328,6 +328,25 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_boolean_value",
+      message0: `%1`,
+      args0: [
+        {
+          type: "field_dropdown",
+          options: [
+            ["Verdadeiro", "True"],
+            ["Falso", "False"],
+          ],
+          name: "BOOL_VALUE",
+          checked: true,
+        },
+      ],
+      colour: "#9966ff",
+      output: null,
+      tooltip: "Adicione uma variável ao script",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",

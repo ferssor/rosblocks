@@ -705,6 +705,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_string_value",
         },
+        {
+          kind: "block",
+          type: "add_boolean_value",
+        },
       ],
     },
   ],

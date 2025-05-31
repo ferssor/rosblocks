@@ -169,6 +169,15 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
+  pythonGenerator.forBlock["add_boolean_value"] = function (
+    block: Blockly.Block
+  ) {
+    const value: string = block.getFieldValue("BOOL_VALUE");
+    console.log(value);
+    const code = `${value}`;
+    return [code, 0];
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
