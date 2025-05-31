@@ -254,16 +254,18 @@ msg.data = ${functionName}\n`
   };
 
   pythonGenerator.forBlock["add_sub"] = function (block: Blockly.Block) {
+    const subscriberName: string = block.getFieldValue("SUB_NAME");
     const interfaceName: string = block.getFieldValue("INTERFACE");
     const publisherName: string = block.getFieldValue("PUB_NAME");
     const refreshRate = block.getFieldValue("REFRESH_RATE");
+    const functionName = block.getFieldValue("FUNCTION_NAME");
     const code =
       interfaceName && publisherName && refreshRate
-        ? `self.number_subscriber_ = self.create_subscription(${interfaceName
+        ? `self.${subscriberName} = self.create_subscription(${interfaceName
             .split(" ")
             .slice(
               -1
-            )}, "${publisherName}", self.callback_number, ${refreshRate})`
+            )}, "${publisherName}", self.${functionName}, ${refreshRate})`
         : "";
 
     return code;

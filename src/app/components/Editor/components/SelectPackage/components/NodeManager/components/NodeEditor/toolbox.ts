@@ -696,6 +696,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "publish_message",
         },
+        {
+          kind: "block",
+          type: "add_sub",
+        },
       ],
     },
     {

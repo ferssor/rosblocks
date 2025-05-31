@@ -508,9 +508,16 @@ export async function defineCustomBlocks() {
     },
     {
       type: "add_sub",
-      message0:
-        "Adicionar assinante no publicador %1 com interface %2, taxa de atualização %3 Hz e armazene na função %4",
+      message0: `Adicionar assinante %1 
+      no publicador %2 
+      com interface %3, taxa de atualização %4 Hz 
+      e armazene os dados na %5`,
       args0: [
+        {
+          type: "field_input",
+          name: "SUB_NAME",
+          text: "Defina o nome do assinante",
+        },
         {
           type: "field_input",
           name: "PUB_NAME",
@@ -529,8 +536,9 @@ export async function defineCustomBlocks() {
           precision: 1,
         },
         {
-          type: "input_value",
-          name: "SUBSCRIBER_COUNTER",
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
         },
       ],
       previousStatement: null,
