@@ -279,7 +279,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "add_variable",
-      message0: "Adicione à variável %1 com o valor %2",
+      message0: "Adicione à variável %1 o valor %2",
       args0: [
         {
           type: "field_input",
@@ -343,6 +343,29 @@ export async function defineCustomBlocks() {
       ],
       colour: "#9966ff",
       output: null,
+      tooltip: "Adicione uma variável ao script",
+      helpUrl: "",
+    },
+    {
+      type: "add_python_version",
+      message0: "Defina a versão do Python %1",
+      args0: [
+        {
+          type: "field_dropdown",
+          options: [
+            ["3", "3"],
+            ["3.6", "3.6"],
+            ["3.7", "3.7"],
+            ["3.8", "3.8"],
+            ["3.9", "3.9"],
+            ["3.10", "3.10"],
+          ],
+          name: "PYTHON_VERSION",
+          checked: true,
+        },
+      ],
+      colour: 200,
+      nextStatement: null,
       tooltip: "Adicione uma variável ao script",
       helpUrl: "",
     },

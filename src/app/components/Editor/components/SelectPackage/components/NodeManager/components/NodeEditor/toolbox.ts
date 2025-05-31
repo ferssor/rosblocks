@@ -652,6 +652,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_from_import",
         },
+        {
+          kind: "block",
+          type: "add_python_version",
+        },
       ],
     },
     {

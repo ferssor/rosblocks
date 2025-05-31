@@ -173,9 +173,16 @@ export function registerCustomBlocksToPython() {
     block: Blockly.Block
   ) {
     const value: string = block.getFieldValue("BOOL_VALUE");
-    console.log(value);
     const code = `${value}`;
     return [code, 0];
+  };
+
+  pythonGenerator.forBlock["add_python_version"] = function (
+    block: Blockly.Block
+  ) {
+    const value: string = block.getFieldValue("PYTHON_VERSION");
+    const code = `#!/usr/bin/env python${value}\n`;
+    return code;
   };
 
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
