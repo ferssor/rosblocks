@@ -451,6 +451,34 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_callback_function",
+      message0: `Adicione a função de retorno %1 com a interface %2`,
+      args0: [
+        {
+          type: "field_input",
+          name: "FUNCTION_NAME",
+          text: "Defina o nome da função",
+        },
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+      ],
+      message1: "%1",
+      args1: [
+        {
+          type: "input_statement",
+          name: "FUNCTION_BODY",
+        },
+      ],
+      colour: 200,
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Adicione uma função de retorno de chamada",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",

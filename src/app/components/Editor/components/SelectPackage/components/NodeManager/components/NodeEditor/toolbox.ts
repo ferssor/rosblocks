@@ -704,6 +704,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "subscribe_message",
         },
+        {
+          kind: "block",
+          type: "add_callback_function",
+        },
       ],
     },
     {

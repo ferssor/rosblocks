@@ -227,6 +227,24 @@ msg.data = ${functionName}\n`
     return code;
   };
 
+  pythonGenerator.forBlock["add_callback_function"] = function (
+    block: Blockly.Block,
+    generator: PythonGenerator
+  ) {
+    const interfaceName: string = block
+      .getFieldValue("INTERFACE")
+      .split(" ")
+      .slice(-1);
+    const functionName =
+      block.getFieldValue("FUNCTION_NAME") || "function_name";
+    const functionBodyCode =
+      generator.statementToCode(block, "FUNCTION_BODY") || "";
+    const code = `def callback_${functionName}(self, msg:${interfaceName}):\n${indentCode(
+      functionBodyCode
+    )}\n`;
+    return code;
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
