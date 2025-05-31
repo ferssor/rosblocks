@@ -701,6 +701,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_numeric_value",
         },
+        {
+          kind: "block",
+          type: "add_string_value",
+        },
       ],
     },
   ],
