@@ -435,6 +435,22 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "subscribe_message",
+      message0: "Inscreva a mensagem na %1",
+      args0: [
+        {
+          type: "field_input",
+          name: "VARIABLE_NAME",
+          text: "Defina o nome da variável",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: 160,
+      tooltip: "Armazena os dados da mensagem no assinante",
+      helpUrl: "",
+    },
+    {
       type: "create_timer",
       message0:
         "Criar um temporizador %1 com intervalo %2 e publique na função %3",
@@ -510,7 +526,8 @@ export async function defineCustomBlocks() {
       type: "add_sub",
       message0: `Adicionar assinante %1 
       no publicador %2 
-      com interface %3, taxa de atualização %4 Hz 
+      com interface %3, 
+      taxa de atualização %4 Hz 
       e armazene os dados na %5`,
       args0: [
         {

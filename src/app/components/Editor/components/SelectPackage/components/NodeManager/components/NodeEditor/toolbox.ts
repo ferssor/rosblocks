@@ -700,6 +700,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_sub",
         },
+        {
+          kind: "block",
+          type: "subscribe_message",
+        },
       ],
     },
     {

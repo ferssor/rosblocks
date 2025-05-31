@@ -217,6 +217,16 @@ msg.data = ${functionName}\n`
     return code;
   };
 
+  pythonGenerator.forBlock["subscribe_message"] = function (
+    block: Blockly.Block
+  ) {
+    const variableName: string = block
+      .getFieldValue("VARIABLE_NAME")
+      .replace(/\s+/g, "_");
+    const code = variableName ? `self.${variableName} += msg.data\n` : "";
+    return code;
+  };
+
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
