@@ -347,6 +347,21 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "add_literal_value",
+      message0: `%1`,
+      args0: [
+        {
+          type: "field_input",
+          name: "LITERAL_VALUE",
+          text: "Defina o nome da váriavel",
+        },
+      ],
+      colour: "#9966ff",
+      output: null,
+      tooltip: "Descreve uma variável literal",
+      helpUrl: "",
+    },
+    {
       type: "add_python_version",
       message0: "Defina a versão %1 do Python",
       args0: [
@@ -385,7 +400,7 @@ export async function defineCustomBlocks() {
           checked: true,
         },
         {
-          type: "field_input",
+          type: "input_value",
           name: "LOG_TEXT",
           text: "Defina o texto que será exibido",
         },

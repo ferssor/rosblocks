@@ -177,6 +177,14 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
+  pythonGenerator.forBlock["add_literal_value"] = function (
+    block: Blockly.Block
+  ) {
+    const value: string = block.getFieldValue("LITERAL_VALUE");
+    const code = `${value}`;
+    return [code, 0];
+  };
+
   pythonGenerator.forBlock["add_python_version"] = function (
     block: Blockly.Block
   ) {
@@ -187,8 +195,8 @@ export function registerCustomBlocksToPython() {
 
   pythonGenerator.forBlock["add_logger"] = function (block: Blockly.Block) {
     const value: string = block.getFieldValue("LOG_LEVEL");
-    const text: string = block.getFieldValue("LOG_TEXT");
-    const code = `self.get_logger().${value}("${text.trim()}")\n`;
+    const text: string = pythonGenerator.valueToCode(block, "LOG_TEXT", 0);
+    const code = `self.get_logger().${value}(${text})\n`;
     return code;
   };
 
@@ -239,7 +247,7 @@ msg.data = ${functionName}\n`
       block.getFieldValue("FUNCTION_NAME") || "function_name";
     const functionBodyCode =
       generator.statementToCode(block, "FUNCTION_BODY") || "";
-    const code = `def callback_${functionName}(self, msg:${interfaceName}):\n${indentCode(
+    const code = `def ${functionName}(self, msg:${interfaceName}):\n${indentCode(
       functionBodyCode
     )}\n`;
     return code;
