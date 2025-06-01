@@ -37,6 +37,7 @@ function NodeEditor(props: Props) {
   const [json, setJson] = useState(new Object());
   const [dependency, setDependency] = useState("");
   const [generatedCode, setGeneratedCode] = useState("");
+  const [wasEdited, setWasEdited] = useState(false);
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
 
   const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
@@ -182,7 +183,15 @@ function NodeEditor(props: Props) {
       handleGenerateCode();
       getInterfaceDependency(json);
     }
-  }, [getInterfaceDependency, json]);
+
+    if (json && Object.keys(json).length > 0) {
+      const parsedContent = JSON.parse(selectedNode.content || "{}");
+      const wasChanged = JSON.stringify(json) !== JSON.stringify(parsedContent);
+      setWasEdited(wasChanged);
+    } else {
+      setWasEdited(false);
+    }
+  }, [getInterfaceDependency, json, selectedNode.content]);
 
   useEffect(() => {
     if (workspaceRef.current) {
@@ -251,6 +260,7 @@ function NodeEditor(props: Props) {
               color="green"
               variant="solid"
               onClick={handleSaveCode}
+              disabled={!wasEdited}
             >
               Salvar
             </Button>
@@ -293,6 +303,7 @@ function NodeEditor(props: Props) {
                 <Editor
                   height="100%"
                   defaultLanguage="python"
+                  language="python"
                   value={generatedCode ?? selectedNode.content}
                   options={{ readOnly: true, minimap: { enabled: false } }}
                 />
