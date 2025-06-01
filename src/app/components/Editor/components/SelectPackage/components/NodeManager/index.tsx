@@ -7,6 +7,7 @@ import { Content } from "antd/es/layout/layout";
 import { ItemType } from "antd/es/menu/interface";
 import NodeDialog from "./components/NodeDialog";
 import NodeEditor from "./components/NodeEditor";
+import PackageDialog from "../PackageDialog";
 
 interface Props {
   packageName: string;
@@ -29,6 +30,7 @@ function NodeManager(props: Props) {
   const [nodes, setNodes] = useState(Array<ROSNode>);
   const [menuItems, setMenuItems] = useState<ItemType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPackageModalOpen, setIsPackageModalOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<ROSNode>();
   const [packages, setPackages] = useState(Array<Package>);
 
@@ -108,6 +110,15 @@ function NodeManager(props: Props) {
               >
                 Criar novo nó
               </Button>
+
+              <Button
+                type="default"
+                color="primary"
+                variant="outlined"
+                onClick={() => setIsPackageModalOpen(true)}
+              >
+                Criar novo pacote
+              </Button>
             </div>
             <Menu mode="inline" items={menuItems} />
           </Sider>
@@ -159,6 +170,12 @@ function NodeManager(props: Props) {
         packageType={packageType}
         setIsModalOpen={setIsModalOpen}
         setNodes={setNodes}
+      />
+      <PackageDialog
+        isModalOpen={isPackageModalOpen}
+        setIsModalOpen={setIsPackageModalOpen}
+        packageLocation={selectedWorkspaceLocation}
+        setPackages={setPackages}
       />
     </>
   );

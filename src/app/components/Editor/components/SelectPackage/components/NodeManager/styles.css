@@ -22,8 +22,10 @@
 
   .action-buttons-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
     margin: 16px 16px;
 
     button {
