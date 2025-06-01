@@ -70,7 +70,7 @@ export function registerCustomBlocksToPython() {
       block.getFieldValue("FUNCTION_NAME") || "function_name";
     const functionBodyCode =
       generator.statementToCode(block, "FUNCTION_BODY") || "";
-    const code = `def ${functionName}(self):\n${indentCode(
+    const code = `\ndef ${functionName}(self):\n${indentCode(
       functionBodyCode
     )}\n`;
     return code;
@@ -181,7 +181,7 @@ export function registerCustomBlocksToPython() {
     block: Blockly.Block
   ) {
     const value: string = block.getFieldValue("LITERAL_VALUE");
-    const code = `${value}`;
+    const code = `self.${value}`;
     return [code, 0];
   };
 
@@ -190,7 +190,7 @@ export function registerCustomBlocksToPython() {
     const interval: number = block.getFieldValue("INTERVAL");
     const code = `self.create_timer(${interval.toFixed(
       1
-    )}, self.${functionName})\n`;
+    )}, self.${functionName})`;
     return [code, 0];
   };
 
@@ -205,7 +205,7 @@ export function registerCustomBlocksToPython() {
   pythonGenerator.forBlock["add_logger"] = function (block: Blockly.Block) {
     const value: string = block.getFieldValue("LOG_LEVEL");
     const text: string = pythonGenerator.valueToCode(block, "LOG_TEXT", 0);
-    const code = `self.get_logger().${value}(${text})\n`;
+    const code = `self.get_logger().${value}(str(${text.toString()}))\n`;
     return code;
   };
 
@@ -256,7 +256,7 @@ msg.data = self.${functionName}\n`
       block.getFieldValue("FUNCTION_NAME") || "function_name";
     const functionBodyCode =
       generator.statementToCode(block, "FUNCTION_BODY") || "";
-    const code = `def ${functionName}(self, msg:${interfaceName}):\n${indentCode(
+    const code = `\ndef ${functionName}(self, msg:${interfaceName}):\n${indentCode(
       functionBodyCode
     )}\n`;
     return code;
@@ -310,7 +310,7 @@ msg.data = self.${functionName}\n`
             .split(" ")
             .slice(
               -1
-            )}, "${publisherName}", self.${functionName}, ${refreshRate})`
+            )}, "${publisherName}", self.${functionName}, ${refreshRate})\n`
         : "";
 
     return code;

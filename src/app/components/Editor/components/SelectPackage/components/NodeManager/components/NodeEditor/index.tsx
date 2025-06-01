@@ -206,6 +206,7 @@ function NodeEditor(props: Props) {
               title={`${!showTerminal ? "Mostrar" : "Ocultar"} terminal`}
             >
               <Button
+                style={{ display: "none" }}
                 className={showTerminal ? "active-button" : ""}
                 type="default"
                 icon={<CodeOutlined />}
