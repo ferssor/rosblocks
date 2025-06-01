@@ -110,15 +110,13 @@ function NodeEditor(props: Props) {
   const handleAddDependency = async (
     relativePath: string,
     nodePath: string,
-    scriptName: string,
     interfaceName: string
   ) => {
-    if (relativePath && nodePath && scriptName && interfaceName) {
+    if (relativePath && nodePath && interfaceName) {
       try {
         const result = await window.electronAPI.addDependency(
           relativePath,
           nodePath,
-          scriptName,
           interfaceName
         );
 
@@ -153,10 +151,15 @@ function NodeEditor(props: Props) {
             handleAddDependency(
               selectedNode.relativePath,
               selectedNode.fullPath,
-              selectedNode.name,
               dependency
             );
           }
+          handleAddScript(
+            selectedNode.relativePath,
+            selectedNode.fullPath,
+            selectedNode.name
+          );
+
           const buildPackage = await window.electronAPI.buildPackage(
             pkgLocation,
             pkgName
@@ -212,6 +215,54 @@ function NodeEditor(props: Props) {
         if (error instanceof Error) {
           console.log(error);
           message.error(`Ocorreu um erro ao deletar o nó!`);
+        }
+      }
+    }
+  };
+
+  const handleExecuteCode = async () => {
+    if (selectedNode) {
+      try {
+        const result = await window.electronAPI.executeNode(
+          pkgName,
+          selectedNode.name,
+          pkgLocation
+        );
+        if (result.executed) {
+          message.success("Código executado com sucesso!");
+        } else {
+          message.error(result.error);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+          message.error(`Ocorreu um erro ao executar o código!`);
+        }
+      }
+    }
+  };
+
+  const handleAddScript = async (
+    relativePath: string,
+    nodePath: string,
+    scriptName: string
+  ) => {
+    if (selectedNode) {
+      try {
+        const result = await window.electronAPI.addScript(
+          relativePath,
+          nodePath,
+          scriptName
+        );
+        if (result.wasAdded) {
+          message.success("Script adicionado com sucesso!");
+        } else {
+          message.error(result.error);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+          message.error(`Ocorreu um erro ao adicionar o script!`);
         }
       }
     }
@@ -293,6 +344,14 @@ function NodeEditor(props: Props) {
           <div className="editor-action-buttons">
             <Button variant="solid" danger onClick={handleDeleteNode}>
               Deletar
+            </Button>
+            <Button
+              type="primary"
+              color="primary"
+              variant="solid"
+              onClick={handleExecuteCode}
+            >
+              Executar
             </Button>
             <Button
               type="primary"

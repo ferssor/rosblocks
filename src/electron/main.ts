@@ -455,7 +455,7 @@ ipcMain.handle(
               reject({ wasBuilded: false, error: stderr });
             } else {
               console.log(`Build concluído: ${stdout}`);
-              const setupFile = `${packagePath}/install/setup.${getShellType()}`;
+              const setupFile = `${workspacePath}/install/setup.${getShellType()}`;
 
               if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
                 exec(
@@ -548,14 +548,8 @@ ipcMain.handle("create-blocks", async (_, nodePath: string, blocks, code) => {
 
 ipcMain.handle(
   "add-dependency",
-  async (
-    _,
-    relativePath: string,
-    nodePath: string,
-    scriptName: string,
-    interfaceName: string
-  ) => {
-    if (!relativePath && !nodePath && !scriptName && !interfaceName) {
+  async (_, relativePath: string, nodePath: string, interfaceName: string) => {
+    if (!relativePath && !nodePath && !interfaceName) {
       console.log(
         "The package path, script name and interface name is required!"
       );
@@ -594,9 +588,33 @@ ipcMain.handle(
           `<depend>${interfaceName}</depend> already exists in package.xml`
         );
       }
+      return { wasAdded: true };
+    } catch (error) {
+      console.error("Error while adding the dependencies", error);
+      return {
+        wasAdded: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);
 
-      // Update setup.py
+ipcMain.handle(
+  "add-script",
+  async (_, relativePath: string, nodePath: string, scriptName: string) => {
+    if (!relativePath && !nodePath && !scriptName) {
+      console.log("The package path, script name is required!");
+      return {
+        wasAdded: false,
+        error: "The package path and name is required!",
+      };
+    }
+
+    try {
+      const path = nodePath.replace(relativePath, "");
       const setupPyPath = `${path}/setup.py`;
+
       if (!fs.existsSync(setupPyPath)) {
         return {
           created: false,
@@ -772,6 +790,53 @@ ipcMain.handle(
       console.error("Error while removing dependencies", error);
       return {
         wasRemoved: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);
+
+ipcMain.handle(
+  "execute-node",
+  async (_, packageName: string, nodeName: string, packagePath: string) => {
+    if (!packageName || !nodeName || !packagePath) {
+      return {
+        executed: false,
+        error: "Package name, node name, and workspace path are required.",
+      };
+    }
+
+    try {
+      const workspacePath = path.join(
+        packagePath.replace(`/src/${packageName}`, ""),
+        "install"
+      );
+      const setupScript = path.join(workspacePath, `setup.${getShellType()}`);
+
+      if (!fs.existsSync(setupScript)) {
+        return {
+          executed: false,
+          error: `Setup script not found at ${setupScript}. Make sure the package is built.`,
+        };
+      }
+
+      // Open a new terminal window and execute the ROS node
+      const command = `gnome-terminal -- bash -c "ros2 run ${packageName} ${nodeName}; echo 'Press Enter to close'; read"`;
+
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error executing node: ${stderr}`);
+          return { success: false, error: stderr };
+        }
+        console.log(`Node execution started: ${stdout}`);
+      });
+
+      return { executed: true };
+    } catch (error) {
+      console.error("Error while executing the node", error);
+      return {
+        executed: false,
         error:
           error instanceof Error ? error.message : "An unknown error occurred.",
       };

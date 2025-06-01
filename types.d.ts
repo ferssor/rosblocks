@@ -66,7 +66,6 @@ interface Window {
     addDependency: (
       relativePath: string,
       nodePath: string,
-      scriptName: string,
       interfaceName: string
     ) => Promise<{ wasAdded: boolean; error?: string }>;
     deleteNode: (
@@ -80,5 +79,15 @@ interface Window {
       scriptName: string,
       interfaceName: string
     ) => Promise<{ wasRemoved: boolean; error?: string }>;
+    executeNode: (
+      packageName: string,
+      nodeName: string,
+      packagePath: string
+    ) => Promise<{ executed: boolean; error?: string }>;
+    addScript: (
+      relativePath: string,
+      nodePath: string,
+      scriptName: string
+    ) => Promise<{ wasAdded: boolean; error?: string }>;
   };
 }

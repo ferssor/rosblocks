@@ -75,4 +75,8 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       scriptName,
       interfaceName
     ),
+  executeNode: (packageName: string, nodeName: string, packagePath: string) =>
+    ipcRenderer.invoke("execute-node", packageName, nodeName, packagePath),
+  addScript: (relativePath: string, nodePath: string, scriptName: string) =>
+    ipcRenderer.invoke("add-script", relativePath, nodePath, scriptName),
 });
