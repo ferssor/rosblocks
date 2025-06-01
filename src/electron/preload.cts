@@ -62,4 +62,17 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     ),
   deleteNode: (nodeName: string, nodePath: string, packageName: string) =>
     ipcRenderer.invoke("delete-node", nodeName, nodePath, packageName),
+  removeDependency: (
+    relativePath: string,
+    nodePath: string,
+    scriptName: string,
+    interfaceName: string
+  ) =>
+    ipcRenderer.invoke(
+      "remove-dependency",
+      relativePath,
+      nodePath,
+      scriptName,
+      interfaceName
+    ),
 });

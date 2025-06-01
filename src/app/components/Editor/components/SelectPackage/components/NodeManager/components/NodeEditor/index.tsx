@@ -190,6 +190,21 @@ function NodeEditor(props: Props) {
           message.success("Nó deletado com sucesso!");
           fetchNodes(pkgLocation, pkgName);
           setSelectedNode(undefined);
+
+          if (dependency) {
+            const removeDependencyResult =
+              await window.electronAPI.removeDependency(
+                selectedNode.relativePath,
+                selectedNode.fullPath,
+                selectedNode.name,
+                dependency
+              );
+            if (removeDependencyResult.wasRemoved) {
+              message.success("Dependência removida com sucesso!");
+            } else {
+              message.error(removeDependencyResult.error);
+            }
+          }
         } else {
           message.error(result.error);
         }

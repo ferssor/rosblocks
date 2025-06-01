@@ -687,3 +687,94 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle(
+  "remove-dependency",
+  async (
+    _,
+    relativePath: string,
+    nodePath: string,
+    scriptName: string,
+    interfaceName: string
+  ) => {
+    if (!relativePath && !nodePath && !scriptName && !interfaceName) {
+      console.log(
+        "The package path, script name and interface name is required!"
+      );
+      return {
+        wasRemoved: false,
+        error: "The package path and name is required!",
+      };
+    }
+
+    try {
+      const path = nodePath.replace(relativePath, "");
+
+      // Update package.xml
+      const packageXmlPath = `${path}/package.xml`;
+      if (!fs.existsSync(packageXmlPath)) {
+        return {
+          wasRemoved: false,
+          error: "package.xml file does not exist in the specified path.",
+        };
+      }
+
+      const packageXmlContent = fs.readFileSync(packageXmlPath, "utf-8");
+
+      if (packageXmlContent.includes(`<depend>${interfaceName}</depend>`)) {
+        const updatedPackageXmlContent = packageXmlContent
+          .replace(`<depend>${interfaceName}</depend>`, "")
+          .replace(/\n\s*\n/g, "\n"); // Remove extra empty lines
+
+        fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
+        console.log(
+          `Removed <depend>${interfaceName}</depend> from package.xml`
+        );
+      } else {
+        console.log(
+          `<depend>${interfaceName}</depend> does not exist in package.xml`
+        );
+      }
+
+      // Update setup.py
+      const setupPyPath = `${path}/setup.py`;
+      if (!fs.existsSync(setupPyPath)) {
+        return {
+          wasRemoved: false,
+          error: "setup.py file does not exist in the specified path.",
+        };
+      }
+
+      const setupPyContent = fs.readFileSync(setupPyPath, "utf-8");
+      const relativePathFormatted = relativePath
+        .replace(/\//g, ".")
+        .replace(/\.py$/, "");
+      const scriptLine = `"${scriptName} = ${relativePathFormatted}:main",`;
+
+      if (setupPyContent.includes(scriptLine)) {
+        const updatedSetupPyContent = setupPyContent
+          .replace(scriptLine, "")
+          .replace(/,\s*\n\s*\]/g, "\n  ]") // Fix trailing commas
+          .replace(/,\s*,/g, ",") // Fix double commas
+          .replace(/\[\s*,/g, "[") // Fix leading commas
+          .replace(/\n\s*\n/g, "\n"); // Remove extra empty lines
+
+        fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
+        console.log(`Removed console script: ${scriptLine} from setup.py`);
+      } else {
+        console.log(
+          `The script line "${scriptLine}" does not exist in setup.py`
+        );
+      }
+
+      return { wasRemoved: true };
+    } catch (error) {
+      console.error("Error while removing dependencies", error);
+      return {
+        wasRemoved: false,
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred.",
+      };
+    }
+  }
+);

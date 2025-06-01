@@ -74,5 +74,11 @@ interface Window {
       packagePath: string,
       packageName: string
     ) => Promise<{ wasDeleted: boolean; error?: string }>;
+    removeDependency: (
+      relativePath: string,
+      nodePath: string,
+      scriptName: string,
+      interfaceName: string
+    ) => Promise<{ wasRemoved: boolean; error?: string }>;
   };
 }
