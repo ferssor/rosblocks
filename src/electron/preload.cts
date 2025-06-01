@@ -60,4 +60,6 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       scriptName,
       interfaceName
     ),
+  deleteNode: (nodeName: string, nodePath: string, packageName: string) =>
+    ipcRenderer.invoke("delete-node", nodeName, nodePath, packageName),
 });

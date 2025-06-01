@@ -647,3 +647,43 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle(
+  "delete-node",
+  async (_, nodeName: string, nodePath: string, packageName: string) => {
+    if (!nodeName || !nodePath || !packageName) {
+      console.error("Node name, package path and package name are required.");
+      return { wasDeleted: false, error: "Required parameters are missing." };
+    }
+
+    const blockFilePath = nodePath.replace(".py", ".blocks");
+
+    if (!fs.existsSync(nodePath)) {
+      console.error(`Node file does not exist: ${nodePath}`);
+      return {
+        wasDeleted: false,
+        error: "Node does not exist in the package.",
+      };
+    }
+
+    if (!fs.existsSync(blockFilePath)) {
+      console.error(`Blocks file does not exist: ${blockFilePath}`);
+      return {
+        wasDeleted: false,
+        error: "Blocks file does not exist in the package.",
+      };
+    }
+
+    try {
+      fs.unlinkSync(nodePath);
+      fs.unlinkSync(blockFilePath);
+      console.log(`Node deleted successfully at: ${nodePath}`);
+      console.log(`Blocks deleted successfully at: ${blockFilePath}`);
+      return { wasDeleted: true };
+    } catch (error) {
+      if (error instanceof Error) {
+        return { wasDeleted: false, error: "An unknown error occurred." };
+      }
+    }
+  }
+);

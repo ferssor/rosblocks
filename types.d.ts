@@ -69,5 +69,10 @@ interface Window {
       scriptName: string,
       interfaceName: string
     ) => Promise<{ wasAdded: boolean; error?: string }>;
+    deleteNode: (
+      nodeName: string,
+      packagePath: string,
+      packageName: string
+    ) => Promise<{ wasDeleted: boolean; error?: string }>;
   };
 }

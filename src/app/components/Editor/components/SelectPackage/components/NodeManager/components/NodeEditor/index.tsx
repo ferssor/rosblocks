@@ -178,6 +178,30 @@ function NodeEditor(props: Props) {
     }
   };
 
+  const handleDeleteNode = async () => {
+    if (selectedNode) {
+      try {
+        const result = await window.electronAPI.deleteNode(
+          selectedNode.name,
+          selectedNode.fullPath,
+          pkgName
+        );
+        if (result.wasDeleted) {
+          message.success("Nó deletado com sucesso!");
+          fetchNodes(pkgLocation, pkgName);
+          setSelectedNode(undefined);
+        } else {
+          message.error(result.error);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+          message.error(`Ocorreu um erro ao deletar o nó!`);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     if (json) {
       handleGenerateCode();
@@ -252,7 +276,7 @@ function NodeEditor(props: Props) {
           </div>
           <h3>{selectedNode.name}</h3>
           <div className="editor-action-buttons">
-            <Button variant="solid" danger>
+            <Button variant="solid" danger onClick={handleDeleteNode}>
               Deletar
             </Button>
             <Button
