@@ -156,6 +156,15 @@ function NodeEditor(props: Props) {
               dependency
             );
           }
+          const buildPackage = await window.electronAPI.buildPackage(
+            pkgLocation,
+            pkgName
+          );
+          if (buildPackage.wasBuilded) {
+            message.success("Pacote compilado com sucesso!");
+          } else {
+            message.error(buildPackage.error);
+          }
         } else {
           message.error(result.error);
         }
