@@ -11,7 +11,11 @@ function EditorHeader() {
   return (
     <>
       <Header>
-        <div className="logo">
+        <div
+          className="logo"
+          onClick={() => (window.location.href = "/")}
+          style={{ cursor: "pointer" }}
+        >
           <RobotOutlined color={ICON_COLOR} />
           <h1 className="title">{LOGO_NAME}</h1>
         </div>
