@@ -46,7 +46,10 @@ function WorkspaceDialog(props: Props) {
       await form.validateFields();
 
       const values = form.getFieldsValue();
-      const workspacePath = path.join(values.location, `${values.name}_ws`);
+      const workspacePath = path.join(
+        values.location,
+        `${new String(values.name).replace(" ", "_")}_ws`
+      );
       const result = await window.electronAPI.createWorkspace(
         workspacePath.toLowerCase()
       );
