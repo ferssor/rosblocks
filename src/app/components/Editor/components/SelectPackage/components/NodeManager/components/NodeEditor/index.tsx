@@ -159,16 +159,7 @@ function NodeEditor(props: Props) {
             selectedNode.fullPath,
             selectedNode.name
           );
-
-          const buildPackage = await window.electronAPI.buildPackage(
-            pkgLocation,
-            pkgName
-          );
-          if (buildPackage.wasBuilded) {
-            message.success("Pacote compilado com sucesso!");
-          } else {
-            message.error(buildPackage.error);
-          }
+          handleBuildPackage(pkgName, pkgLocation);
         } else {
           message.error(result.error);
         }
@@ -221,7 +212,7 @@ function NodeEditor(props: Props) {
   };
 
   const handleExecuteCode = async () => {
-    if (selectedNode) {
+    if (selectedNode && pkgLocation && pkgName) {
       try {
         const result = await window.electronAPI.executeNode(
           pkgName,
@@ -264,6 +255,28 @@ function NodeEditor(props: Props) {
           console.log(error);
           message.error(`Ocorreu um erro ao adicionar o script!`);
         }
+      }
+    }
+  };
+
+  const handleBuildPackage = async (
+    packageName: string,
+    packageLocation: string
+  ) => {
+    try {
+      const result = await window.electronAPI.buildPackage(
+        packageLocation,
+        packageName
+      );
+      if (result.wasBuilded) {
+        message.success("Pacote compilado com sucesso!");
+      } else {
+        message.error(result.error);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error);
+        message.error(`Ocorreu um erro ao compilar o pacote!`);
       }
     }
   };

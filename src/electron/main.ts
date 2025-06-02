@@ -822,7 +822,8 @@ ipcMain.handle(
       }
 
       // Open a new terminal window and execute the ROS node
-      const command = `gnome-terminal -- bash -c "ros2 run ${packageName} ${nodeName}; echo 'Press Enter to close'; read"`;
+      const sourceSetup = `source ${setupScript} && source /opt/ros/jazzy/setup.${getShellType()}`;
+      const command = `gnome-terminal -- ${getShellType()} -c "${sourceSetup} && ros2 run ${packageName} ${nodeName}; echo 'Press Enter to close'; read"`;
 
       exec(command, (error, stdout, stderr) => {
         if (error) {
