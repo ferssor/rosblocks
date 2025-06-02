@@ -310,194 +310,6 @@ export const toolbox: ToolboxDefinition = {
     },
     {
       kind: "category",
-      name: "Texto",
-      categorystyle: "text_category",
-      contents: [
-        {
-          kind: "block",
-          type: "text",
-        },
-        {
-          kind: "block",
-          type: "text_join",
-        },
-        {
-          kind: "block",
-          type: "text_append",
-          inputs: {
-            TEXT: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_length",
-          inputs: {
-            VALUE: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "abc",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_isEmpty",
-          inputs: {
-            VALUE: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_indexOf",
-          inputs: {
-            VALUE: {
-              block: {
-                type: "variables_get",
-              },
-            },
-            FIND: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "abc",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_charAt",
-          inputs: {
-            VALUE: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_getSubstring",
-          inputs: {
-            STRING: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_changeCase",
-          inputs: {
-            TEXT: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "abc",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_trim",
-          inputs: {
-            TEXT: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "abc",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_count",
-          inputs: {
-            SUB: {
-              shadow: {
-                type: "text",
-              },
-            },
-            TEXT: {
-              shadow: {
-                type: "text",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_replace",
-          inputs: {
-            FROM: {
-              shadow: {
-                type: "text",
-              },
-            },
-            TO: {
-              shadow: {
-                type: "text",
-              },
-            },
-            TEXT: {
-              shadow: {
-                type: "text",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "text_reverse",
-          inputs: {
-            TEXT: {
-              shadow: {
-                type: "text",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "add_text",
-          inputs: {
-            TEXT: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: "abc",
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-    {
-      kind: "category",
       name: "Listas",
       categorystyle: "list_category",
       contents: [
@@ -602,14 +414,10 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "sep",
     },
-
-    {
-      kind: "sep",
-    },
     {
       kind: "category",
       name: "Funções",
-      colour: "321",
+      colour: "#8839ef",
       contents: [
         {
           kind: "block",
@@ -620,7 +428,7 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "category",
       name: "Classes",
-      colour: "13",
+      colour: "#40a02b",
       contents: [
         {
           kind: "block",
@@ -634,12 +442,16 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "class_init",
         },
+        {
+          kind: "block",
+          type: "init_statement",
+        },
       ],
     },
     {
       kind: "category",
       name: "Imports",
-      colour: "200",
+      colour: "#fe640b",
       contents: [
         {
           kind: "block",
@@ -662,7 +474,7 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "category",
       name: "ROS",
-      colour: "420",
+      colour: "#1e66f5",
       contents: [
         {
           kind: "block",
@@ -672,10 +484,7 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "start_node",
         },
-        {
-          kind: "block",
-          type: "init_statement",
-        },
+
         {
           kind: "block",
           type: "add_interface",
@@ -717,7 +526,7 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "category",
       name: "Variáveis",
-      colour: "410",
+      colour: "#e64553",
       contents: [
         {
           kind: "block",
@@ -728,7 +537,7 @@ export const toolbox: ToolboxDefinition = {
     {
       kind: "category",
       name: "Valores",
-      colour: "214",
+      colour: "#df8e1d",
       contents: [
         {
           kind: "block",
