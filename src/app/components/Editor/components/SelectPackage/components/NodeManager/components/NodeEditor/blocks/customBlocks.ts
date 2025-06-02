@@ -249,12 +249,17 @@ export async function defineCustomBlocks() {
     {
       type: "add_pub",
       message0:
-        "Adicionar publicador %1 com interface %2 e taxa de atualização %3 Hz",
+        "Adicionar publicador %1 no tópico %2 com interface %3 e taxa de atualização %4 Hz",
       args0: [
         {
           type: "field_input",
           name: "PUB_NAME",
           text: "Defina o nome do publicador",
+        },
+        {
+          type: "field_input",
+          name: "TOPIC_NAME",
+          text: "Defina o nome do tópico",
         },
         {
           type: "field_dropdown",
@@ -584,6 +589,36 @@ export async function defineCustomBlocks() {
       nextStatement: null,
       colour: "#1e66f5",
       tooltip: "Adiciona um texto de log",
+      helpUrl: "",
+    },
+    {
+      type: "add_velocity",
+      message0: "Adicione uma mensagem de velocidade %1 com o valor %2",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "PROPERTY",
+          options: [
+            ["linear.x", "linear.x"],
+            ["linear.y", "linear.y"],
+            ["linear.z", "linear.z"],
+            ["angular.x", "angular.x"],
+            ["angular.y", "angular.y"],
+            ["angular.z", "angular.z"],
+          ],
+        },
+        {
+          type: "field_number",
+          name: "VELOCITY_VALUE",
+          value: 0,
+          min: 0,
+          precision: 1,
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: "#1e66f5",
+      tooltip: "Adiciona um valor de velocidade",
       helpUrl: "",
     },
     {

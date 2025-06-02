@@ -213,6 +213,8 @@ function NodeEditor(props: Props) {
 
   const handleExecuteCode = async () => {
     if (selectedNode && pkgLocation && pkgName) {
+      await handleSaveCode();
+
       try {
         const result = await window.electronAPI.executeNode(
           pkgName,

@@ -521,6 +521,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_counter",
         },
+        {
+          kind: "block",
+          type: "add_velocity",
+        },
       ],
     },
     {

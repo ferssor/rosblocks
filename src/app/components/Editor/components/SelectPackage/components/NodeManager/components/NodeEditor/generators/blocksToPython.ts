@@ -132,6 +132,7 @@ export function registerCustomBlocksToPython() {
 
   pythonGenerator.forBlock["add_pub"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
+    const topicName: string = block.getFieldValue("TOPIC_NAME");
     const publisherName: string = block
       .getFieldValue("PUB_NAME")
       .replace(/\s+/g, "_");
@@ -141,7 +142,7 @@ export function registerCustomBlocksToPython() {
       interfaceName && publisherName && refreshRate
         ? `self.${publisherName} = self.create_publisher(${interfaceName
             .split(" ")
-            .slice(-1)}, "${publisherName}", ${refreshRate})\n`
+            .slice(-1)}, "${topicName}", ${refreshRate})\n`
         : "";
     return code;
   };
@@ -316,3 +317,15 @@ msg.data = self.${functionName}\n`
     return code;
   };
 }
+
+pythonGenerator.forBlock["add_velocity"] = function (block: Blockly.Block) {
+  const propertyName: string = block.getFieldValue("PROPERTY");
+  const velocityValue: number = block.getFieldValue("VELOCITY_VALUE");
+
+  const code =
+    propertyName && velocityValue
+      ? `msg = Twist()
+msg.${propertyName.split(" ").slice(-1)} = float(${velocityValue.toFixed(1)})\n`
+      : "";
+  return code;
+};
