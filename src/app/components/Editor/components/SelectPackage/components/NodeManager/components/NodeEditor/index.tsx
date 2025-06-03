@@ -418,7 +418,11 @@ function NodeEditor(props: Props) {
                   defaultLanguage="python"
                   language="python"
                   value={generatedCode ?? selectedNode.content}
-                  options={{ readOnly: true, minimap: { enabled: false } }}
+                  options={{
+                    readOnly: true,
+                    minimap: { enabled: false },
+                    mouseWheelZoom: true,
+                  }}
                 />
               </Sider>
             </>

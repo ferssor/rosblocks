@@ -329,3 +329,35 @@ msg.${propertyName.split(" ").slice(-1)} = float(${velocityValue.toFixed(1)})\n`
       : "";
   return code;
 };
+
+pythonGenerator.forBlock["init_node_template"] = function (
+  block: Blockly.Block,
+  generator: PythonGenerator
+) {
+  const className: string = block.getFieldValue("CLASS_NAME") || "class_name";
+  const nodeClassName: string =
+    block.getFieldValue("NODE_CLASS_NAME") || "node_class_name";
+  const importPackagesBody =
+    generator.statementToCode(block, "IMPORT_PACKAGES") || "";
+  const templateBody = generator.statementToCode(block, "TEMPLATE_BODY") || "";
+
+  const code = `#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+${importPackagesBody.trim()}
+
+class ${className}(Node):
+${indentCode(templateBody)}
+  
+def main(args=None):
+  rclpy.init(args=args)
+  node = ${nodeClassName}()
+  rclpy.spin(node)
+  rclpy.shutdown()
+
+if __name__ == '__main__':
+  main()  
+`;
+
+  return code;
+};

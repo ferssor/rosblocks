@@ -664,6 +664,43 @@ export async function defineCustomBlocks() {
         "Define um subscriber ROS2 com nome, interface e taxa de atualização.",
       helpUrl: "",
     },
+    {
+      type: "init_node_template",
+      message0: `Adicione o(s) pacote(s): %1`,
+      args0: [
+        {
+          type: "input_statement",
+          name: "IMPORT_PACKAGES",
+        },
+      ],
+      message1: `Defina a classe %1`,
+      args1: [
+        {
+          type: "field_input",
+          name: "CLASS_NAME",
+          text: "Digite o nome da classe",
+        },
+      ],
+      message2: "%1",
+      args2: [
+        {
+          type: "input_statement",
+          name: "TEMPLATE_BODY",
+        },
+      ],
+      message3: "inicialize o nó da classe %1",
+      args3: [
+        {
+          type: "field_input",
+          name: "NODE_CLASS_NAME",
+          text: "Digite o nome da classe",
+        },
+      ],
+      colour: "#5c5f77",
+      tooltip:
+        "Define um modelo de nó ROS2 com importações, classe e inicialização do nó.",
+      helpUrl: "",
+    },
   ];
 
   // Register the blocks using createBlockDefinitionsFromJsonArray

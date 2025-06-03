@@ -561,5 +561,19 @@ export const toolbox: ToolboxDefinition = {
         },
       ],
     },
+    {
+      kind: "sep",
+    },
+    {
+      kind: "category",
+      name: "Modelos",
+      colour: "#5c5f77",
+      contents: [
+        {
+          kind: "block",
+          type: "init_node_template",
+        },
+      ],
+    },
   ],
 };
