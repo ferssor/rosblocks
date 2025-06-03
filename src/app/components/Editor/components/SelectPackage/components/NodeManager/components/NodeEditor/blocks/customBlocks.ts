@@ -449,8 +449,8 @@ export async function defineCustomBlocks() {
         },
         {
           type: "field_input",
-          name: "FUNCTION_NAME",
-          text: "Defina o nome da função",
+          name: "VARIABLE_NAME",
+          text: "Defina o nome da variável",
         },
       ],
       previousStatement: null,
