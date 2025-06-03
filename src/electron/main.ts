@@ -844,3 +844,31 @@ ipcMain.handle(
     }
   }
 );
+
+ipcMain.handle("get-message-properties", async (_, interfaceName: string) => {
+  try {
+    console.log(`Fetching properties for interface: ${interfaceName}`);
+    const interfaces = await new Promise<string[]>((resolve, reject) => {
+      exec(
+        `ros2 interface show ${interfaceName.trim()}`,
+        (error: Error | null, stdout: string, stderr: string) => {
+          if (error) {
+            console.error(
+              "Failed to fetch ROS2 interfaces properties:",
+              stderr
+            );
+            reject(stderr);
+          } else {
+            resolve(stdout.split("\n").filter((line) => line.trim() !== ""));
+          }
+        }
+      );
+    });
+
+    console.log(interfaces);
+    return [];
+  } catch (error) {
+    console.error("Error while fetching ROS2 interfaces:", error);
+    return [];
+  }
+});

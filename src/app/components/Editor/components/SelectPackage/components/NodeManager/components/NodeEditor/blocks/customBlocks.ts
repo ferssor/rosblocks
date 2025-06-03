@@ -477,8 +477,19 @@ export async function defineCustomBlocks() {
     },
     {
       type: "subscribe_message",
-      message0: "Inscreva a mensagem na %1",
+      message0: `Atribua o valor da mensagem com a interface %1
+         e a propriedade %2 na variável %3`,
       args0: [
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+        {
+          type: "field_dropdown",
+          name: "PROPERTY",
+          options: [["Selecione interface primeiro", ""]],
+        },
         {
           type: "field_input",
           name: "VARIABLE_NAME",
@@ -624,7 +635,7 @@ export async function defineCustomBlocks() {
     {
       type: "add_sub",
       message0: `Adicionar assinante %1 
-      no publicador %2 
+      no tópico %2 
       com interface %3, 
       taxa de atualização %4 Hz 
       e armazene os dados na %5`,
@@ -636,8 +647,8 @@ export async function defineCustomBlocks() {
         },
         {
           type: "field_input",
-          name: "PUB_NAME",
-          text: "Defina o nome do publicador",
+          name: "TOPIC_NAME",
+          text: "Defina o nome do tópico",
         },
         {
           type: "field_dropdown",

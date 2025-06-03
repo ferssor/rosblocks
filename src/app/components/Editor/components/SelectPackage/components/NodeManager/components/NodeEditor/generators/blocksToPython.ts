@@ -238,10 +238,13 @@ msg.data = self.${variableName}\n`
   pythonGenerator.forBlock["subscribe_message"] = function (
     block: Blockly.Block
   ) {
+    const property: string = block.getFieldValue("PROPERTY");
     const variableName: string = block
       .getFieldValue("VARIABLE_NAME")
       .replace(/\s+/g, "_");
-    const code = variableName ? `self.${variableName} += msg.data\n` : "";
+    const code = variableName
+      ? `self.${variableName} += msg.${property}\n`
+      : "";
     return code;
   };
 
@@ -302,16 +305,16 @@ msg.data = self.${variableName}\n`
   pythonGenerator.forBlock["add_sub"] = function (block: Blockly.Block) {
     const subscriberName: string = block.getFieldValue("SUB_NAME");
     const interfaceName: string = block.getFieldValue("INTERFACE");
-    const publisherName: string = block.getFieldValue("PUB_NAME");
+    const topicName: string = block.getFieldValue("TOPIC_NAME");
     const refreshRate = block.getFieldValue("REFRESH_RATE");
     const functionName = block.getFieldValue("FUNCTION_NAME");
     const code =
-      interfaceName && publisherName && refreshRate
+      interfaceName && topicName && refreshRate
         ? `self.${subscriberName} = self.create_subscription(${interfaceName
             .split(" ")
             .slice(
               -1
-            )}, "${publisherName}", self.${functionName}, ${refreshRate})\n`
+            )}, "${topicName}", self.${functionName}, ${refreshRate})\n`
         : "";
 
     return code;

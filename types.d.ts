@@ -20,6 +20,11 @@ type ROSInterface = {
   location: string;
 };
 
+type MessageProperty = {
+  name: string;
+  property: string;
+};
+
 interface Window {
   electronAPI: {
     openWorkspaceLocation: () => Promise<{
@@ -89,5 +94,8 @@ interface Window {
       nodePath: string,
       scriptName: string
     ) => Promise<{ wasAdded: boolean; error?: string }>;
+    getMessageProperties: (
+      interfaceName: string
+    ) => Promise<Array<MessageProperty>>;
   };
 }
