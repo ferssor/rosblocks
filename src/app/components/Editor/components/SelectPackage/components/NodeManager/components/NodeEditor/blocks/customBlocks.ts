@@ -482,7 +482,7 @@ export async function defineCustomBlocks() {
       args0: [
         {
           type: "field_dropdown",
-          name: "INTERFACE",
+          name: "MESSAGE_INTERFACE",
           options: interfaceOptions,
         },
         {
@@ -716,4 +716,38 @@ export async function defineCustomBlocks() {
 
   // Register the blocks using createBlockDefinitionsFromJsonArray
   Blockly.defineBlocksWithJsonArray(blocks);
+  // After Blockly.defineBlocksWithJsonArray(blocks);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Blockly.Blocks["subscribe_message"].onchange = async function (event: any) {
+    if (!this.workspace || this.isInFlyout) return;
+    if (
+      event &&
+      event.type === Blockly.Events.BLOCK_CHANGE &&
+      event.blockId === this.id &&
+      event.name === "MESSAGE_INTERFACE"
+    ) {
+      const interfaceLocation = this.getFieldValue("MESSAGE_INTERFACE");
+      const propertyField = this.getField("PROPERTY");
+      if (!propertyField) return;
+
+      // Fetch properties for the selected interface (replace with your real fetch)
+      let options = [["Selecione a interface", ""]];
+      if (interfaceLocation) {
+        // Example: replace with your async fetch
+        const properties: MessageProperty[] =
+          await window.electronAPI.getMessageProperties(interfaceLocation);
+        options =
+          properties && properties.length > 0
+            ? properties.map((prop: MessageProperty) => [
+                prop.name,
+                prop.property,
+              ])
+            : [["Sem propriedades", ""]];
+      }
+      propertyField.menuGenerator_ = options;
+      propertyField.setValue(options[0][1]);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      propertyField.forceRerender && propertyField.forceRerender();
+    }
+  };
 }

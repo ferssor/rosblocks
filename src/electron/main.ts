@@ -845,30 +845,113 @@ ipcMain.handle(
   }
 );
 
+function formatInterfaceName(interfaceName: string): string {
+  const fromImportMatch = interfaceName.match(
+    /from\s+([\w.]+)\s+import\s+([\w]+)/
+  );
+  if (fromImportMatch) {
+    const packagePath = fromImportMatch[1].replace(/\./g, "/");
+    const messageName = fromImportMatch[2];
+    return `${packagePath}/${messageName}`;
+  }
+
+  if (interfaceName.includes("/")) {
+    return interfaceName.trim();
+  }
+
+  if (interfaceName.includes(".")) {
+    return interfaceName.replace(/\./g, "/").trim();
+  }
+
+  return interfaceName.trim();
+}
+
 ipcMain.handle("get-message-properties", async (_, interfaceName: string) => {
   try {
-    console.log(`Fetching properties for interface: ${interfaceName}`);
-    const interfaces = await new Promise<string[]>((resolve, reject) => {
+    const formattedInterface = formatInterfaceName(interfaceName);
+    console.log(`Fetching properties for interface: ${formattedInterface}`);
+
+    const output = await new Promise<string>((resolve, reject) => {
       exec(
-        `ros2 interface show ${interfaceName.trim()}`,
+        `ros2 interface show ${formattedInterface.trim()}`,
         (error: Error | null, stdout: string, stderr: string) => {
           if (error) {
-            console.error(
-              "Failed to fetch ROS2 interfaces properties:",
-              stderr
-            );
+            console.error("Failed to fetch ROS2 interface properties:", stderr);
             reject(stderr);
           } else {
-            resolve(stdout.split("\n").filter((line) => line.trim() !== ""));
+            resolve(stdout);
           }
         }
       );
     });
 
-    console.log(interfaces);
-    return [];
+    // Parse the interface output
+    const properties: { name: string; property: string }[] = [];
+    let currentParent = "";
+    let hasNestedStructure = false;
+    const lines = output.split("\n").filter((line) => {
+      const trimmed = line.trim();
+      return trimmed && !trimmed.startsWith("#");
+    });
+
+    // First check if the message has any indentation (nested structure)
+    hasNestedStructure = lines.some((line) => line.search(/\S|$/) > 0);
+
+    // Process each line based on whether the interface has nested structure
+    lines.forEach((line) => {
+      const indentation = line.search(/\S|$/);
+      const parts = line.trim().split(/\s+/);
+      const propertyName = parts[parts.length - 1];
+
+      if (hasNestedStructure) {
+        // Handle as nested structure
+        if (indentation === 0) {
+          currentParent = propertyName;
+        } else if (currentParent) {
+          properties.push({
+            name: `${currentParent}.${propertyName}`,
+            property: `${currentParent}.${propertyName}`,
+          });
+        }
+      } else {
+        // Handle as flat structure - every property is at root level
+        // Check if it's a primitive type (not a message type definition)
+        const dataTypes = [
+          "bool",
+          "int8",
+          "uint8",
+          "int16",
+          "uint16",
+          "int32",
+          "uint32",
+          "int64",
+          "uint64",
+          "float32",
+          "float64",
+          "string",
+          "time",
+          "duration",
+        ];
+        const typePrefix = parts[0];
+
+        // Handle array types by extracting the base type
+        const baseType = typePrefix.split("[")[0];
+
+        if (
+          dataTypes.includes(baseType) ||
+          baseType.includes("string") ||
+          typePrefix.includes("string")
+        ) {
+          properties.push({
+            name: propertyName,
+            property: propertyName,
+          });
+        }
+      }
+    });
+    return properties;
   } catch (error) {
-    console.error("Error while fetching ROS2 interfaces:", error);
+    console.error("Error while fetching ROS2 interface properties:", error);
     return [];
   }
 });

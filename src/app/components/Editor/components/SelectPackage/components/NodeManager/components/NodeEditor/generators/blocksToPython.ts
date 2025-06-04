@@ -238,13 +238,16 @@ msg.data = self.${variableName}\n`
   pythonGenerator.forBlock["subscribe_message"] = function (
     block: Blockly.Block
   ) {
+    const interfaceName: string = block.getFieldValue("MESSAGE_INTERFACE");
     const property: string = block.getFieldValue("PROPERTY");
     const variableName: string = block
       .getFieldValue("VARIABLE_NAME")
       .replace(/\s+/g, "_");
-    const code = variableName
-      ? `self.${variableName} += msg.${property}\n`
-      : "";
+    const code =
+      variableName && property && interfaceName
+        ? `msg = ${interfaceName.split(" ").slice(-1)}()
+self.${variableName} += msg.${property}\n`
+        : "";
     return code;
   };
 
