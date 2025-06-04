@@ -342,11 +342,16 @@ pythonGenerator.forBlock["init_node_template"] = function (
   const importPackagesBody =
     generator.statementToCode(block, "IMPORT_PACKAGES") || "";
   const templateBody = generator.statementToCode(block, "TEMPLATE_BODY") || "";
+  const dedentedImports = importPackagesBody
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
 
   const code = `#!/usr/bin/env python3
 import rclpy
 from rclpy.node import Node
-${importPackagesBody.trim()}
+${dedentedImports}
 
 class ${className}(Node):
 ${indentCode(templateBody)}
