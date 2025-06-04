@@ -363,3 +363,11 @@ if __name__ == '__main__':
 
   return code;
 };
+
+pythonGenerator.forBlock["add_casting"] = function (block: Blockly.Block) {
+  const value: string = pythonGenerator.valueToCode(block, "VALUE", 0);
+  const dataType: string = block.getFieldValue("DATA_TYPE");
+
+  const code = value && dataType ? `${dataType}(${value})` : "";
+  return [code, 0];
+};
