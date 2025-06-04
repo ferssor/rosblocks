@@ -186,6 +186,12 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
+  pythonGenerator.forBlock["add_literal"] = function (block: Blockly.Block) {
+    const value: string = block.getFieldValue("LITERAL");
+    const code = `${value}`;
+    return [code, 0];
+  };
+
   pythonGenerator.forBlock["add_counter"] = function (block: Blockly.Block) {
     const functionName: string = block.getFieldValue("FUNCTION_NAME");
     const interval: number = block.getFieldValue("INTERVAL");

@@ -315,6 +315,7 @@ export async function defineCustomBlocks() {
       ],
       colour: "#df8e1d",
       output: null,
+      precision: 0.01,
       tooltip: "Adicione uma variável ao script",
       helpUrl: "",
     },
@@ -391,6 +392,21 @@ export async function defineCustomBlocks() {
       colour: "#df8e1d",
       output: null,
       tooltip: "Descreve uma variável literal",
+      helpUrl: "",
+    },
+    {
+      type: "add_literal",
+      message0: `%1`,
+      args0: [
+        {
+          type: "field_input",
+          name: "LITERAL",
+          text: "Defina o literal",
+        },
+      ],
+      colour: "#df8e1d",
+      output: null,
+      tooltip: "Descreve um literal",
       helpUrl: "",
     },
     {

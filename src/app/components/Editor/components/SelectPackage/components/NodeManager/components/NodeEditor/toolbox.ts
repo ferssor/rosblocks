@@ -563,6 +563,10 @@ export const toolbox: ToolboxDefinition = {
           kind: "block",
           type: "add_casting",
         },
+        {
+          kind: "block",
+          type: "add_literal",
+        },
       ],
     },
     {
