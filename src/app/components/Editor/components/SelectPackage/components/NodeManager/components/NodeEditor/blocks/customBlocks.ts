@@ -440,7 +440,7 @@ export async function defineCustomBlocks() {
     {
       type: "add_message",
       message0:
-        "Adicione a mensagem com a interface %1 e os dados da variável %2",
+        "Atribua à mensagem com interface %1, propriedade %2 o valor %3",
       args0: [
         {
           type: "field_dropdown",
@@ -448,8 +448,13 @@ export async function defineCustomBlocks() {
           options: interfaceOptions,
         },
         {
-          type: "field_input",
-          name: "VARIABLE_NAME",
+          type: "field_dropdown",
+          name: "PROPERTY",
+          options: [["Selecione interface primeiro", ""]],
+        },
+        {
+          type: "input_value",
+          name: "VALUE",
           text: "Defina o nome da variável",
         },
       ],
@@ -461,7 +466,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "publish_message",
-      message0: "Publique a mensagem no %1",
+      message0: "Publique à mensagem no %1",
       args0: [
         {
           type: "field_input",
@@ -727,6 +732,40 @@ export async function defineCustomBlocks() {
       event.name === "MESSAGE_INTERFACE"
     ) {
       const interfaceLocation = this.getFieldValue("MESSAGE_INTERFACE");
+      const propertyField = this.getField("PROPERTY");
+      if (!propertyField) return;
+
+      // Fetch properties for the selected interface (replace with your real fetch)
+      let options = [["Selecione a interface", ""]];
+      if (interfaceLocation) {
+        // Example: replace with your async fetch
+        const properties: MessageProperty[] =
+          await window.electronAPI.getMessageProperties(interfaceLocation);
+        options =
+          properties && properties.length > 0
+            ? properties.map((prop: MessageProperty) => [
+                prop.name,
+                prop.property,
+              ])
+            : [["Sem propriedades", ""]];
+      }
+      propertyField.menuGenerator_ = options;
+      propertyField.setValue(options[0][1]);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      propertyField.forceRerender && propertyField.forceRerender();
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Blockly.Blocks["add_message"].onchange = async function (event: any) {
+    if (!this.workspace || this.isInFlyout) return;
+    if (
+      event &&
+      event.type === Blockly.Events.BLOCK_CHANGE &&
+      event.blockId === this.id &&
+      event.name === "INTERFACE"
+    ) {
+      const interfaceLocation = this.getFieldValue("INTERFACE");
       const propertyField = this.getField("PROPERTY");
       if (!propertyField) return;
 

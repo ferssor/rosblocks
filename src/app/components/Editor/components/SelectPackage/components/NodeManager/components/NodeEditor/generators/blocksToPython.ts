@@ -212,15 +212,11 @@ export function registerCustomBlocksToPython() {
 
   pythonGenerator.forBlock["add_message"] = function (block: Blockly.Block) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
-    const variableName: string = block
-      .getFieldValue("VARIABLE_NAME")
-      .replace(/\s+/g, "_");
+    const property: string = block.getFieldValue("PROPERTY");
+    const value = pythonGenerator.valueToCode(block, "VALUE", 0);
 
-    const code =
-      interfaceName && variableName
-        ? `msg = ${interfaceName.split(" ").slice(-1)}()
-msg.data = self.${variableName}\n`
-        : "";
+    const code = `msg = ${interfaceName.split(" ").slice(-1)}()
+msg.${property} = ${value}\n`;
     return code;
   };
 
