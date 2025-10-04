@@ -50,7 +50,7 @@ app.on("window-all-closed", () => {
 
 ipcMain.handle("open-dialog", async () => {
   const result = await dialog.showOpenDialog({
-    properties: ["openDirectory"],
+    properties: ["openDirectory", "createDirectory"],
   });
   return {
     workspaceLocation: result.filePaths[0] || "",
