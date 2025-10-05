@@ -31,9 +31,12 @@ interface Window {
       workspaceLocation: string;
       canceled: boolean;
     }>;
-    createWorkspace: (
-      path: string
-    ) => Promise<{ created: boolean; workspacePath: string; error?: boolean }>;
+    createWorkspace: (path: string) => Promise<{
+      wasCreated: boolean;
+      wasCanceled: boolean;
+      error?: boolean;
+      workspacePath: string;
+    }>;
     validateWorkspace: (path: string) => Promise<{ valid: boolean }>;
     getPackages: (path: string) => Promise<Array<Package>>;
     createPackage: (

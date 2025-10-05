@@ -1,11 +1,57 @@
-import { app, BrowserWindow, dialog, ipcMain } from "electron";
-import path from "path";
-import { isDev } from "./util.js";
-import { getPreloadPath } from "./pathResolve.js";
-import { exec } from "child_process";
+import { exec, spawn } from "child_process";
 import fs from "fs";
+import path from "path";
+
+import { BrowserWindow, app, dialog, ipcMain } from "electron";
+
+import { getPreloadPath } from "./pathResolve.js";
+import { isDev } from "./util.js";
+
+import type { createWorkspaceResult } from "./types.js";
 
 const URL = "http://localhost:1337";
+
+function runShellCommand(
+  cmd: string,
+  args: string[],
+  cwd: string,
+  env: NodeJS.ProcessEnv = process.env
+): Promise<{ code: number; stdout: string; stderr: string }> {
+  return new Promise((resolve) => {
+    const child = spawn(cmd, args, { cwd, env, windowsHide: true });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (d) => (stdout += d.toString()));
+    child.stderr.on("data", (d) => (stderr += d.toString()));
+    child.on("close", (code) => resolve({ code: code ?? -1, stdout, stderr }));
+  });
+}
+
+function getPlatformBuildCommand() {
+  if (process.platform === "win32") {
+    const rosSetup = "C:\\opt\\ros\\jazzy\\setup.bat"; // EXEMPLO — ajuste!
+    const overlaySetup = "install\\setup.bat";
+    const cmd = "cmd.exe";
+    const args = [
+      "/d",
+      "/s",
+      "/c",
+      `call "${rosSetup}" && if exist "${overlaySetup}" call "${overlaySetup}" && colcon build`,
+    ];
+    return { cmd, args };
+  }
+
+  const rosSetup = "/opt/ros/jazzy/setup.bash";
+  const overlaySetup = "install/setup.bash";
+  const cmd = "bash";
+  const args = [
+    "-lc",
+    `if [ -f "${rosSetup}" ]; then source "${rosSetup}"; fi; ` +
+      `if [ -f "${overlaySetup}" ]; then source "${overlaySetup}"; fi; ` +
+      `colcon build`,
+  ];
+  return { cmd, args };
+}
 
 function getShellType() {
   const shellPath = process.env.SHELL || process.env.ComSpec || "";
@@ -58,66 +104,65 @@ ipcMain.handle("open-dialog", async () => {
   };
 });
 
-ipcMain.handle("create-workspace", async (_, workspacePath) => {
-  try {
-    if (fs.existsSync(workspacePath)) {
-      console.error(`Workspace already exists: ${workspacePath}`);
-      return { created: false, error: "Workspace name already exists." };
-    }
+ipcMain.handle(
+  "create-workspace",
+  async (_evt, workspacePath: string): Promise<createWorkspaceResult> => {
+    console.log(workspacePath);
+    try {
+      if (!workspacePath || typeof workspacePath !== "string") {
+        return {
+          wasCreated: false,
+          wasCanceled: false,
+          error: "Invalid workspace path.",
+        };
+      }
 
-    const srcPath = path.join(workspacePath, "src");
-    fs.mkdirSync(workspacePath, { recursive: true });
-    fs.mkdirSync(srcPath, { recursive: true });
+      if (fs.existsSync(workspacePath)) {
+        return {
+          wasCreated: false,
+          wasCanceled: false,
+          error: "Workspace name already exists.",
+        };
+      }
 
-    return new Promise((resolve, reject) => {
-      exec(`cd ${workspacePath} && colcon build`, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Erro ao rodar colcon build: ${stderr}`);
-          reject({ created: false, error: stderr });
-        } else {
-          console.log(`[BUILD]: Build concluído: ${stdout}`);
-          const setupFile = `${workspacePath}/install/setup.${getShellType()}`;
-          if (fs.existsSync(setupFile) && fs.statSync(setupFile).size > 0) {
-            exec(
-              `${getShellType()} -c "source ${setupFile}"`,
-              (error, stdout, stderr) => {
-                if (error) {
-                  console.error(
-                    `Erro ao rodar setup do ${workspacePath}: ${stderr}`
-                  );
-                } else {
-                  console.log(`Build do ${workspacePath} concluído: ${stdout}`);
-                }
-              }
-            );
-          } else {
-            console.log(
-              "[ERROR]: The setup file on install folder doens't exists!"
-            );
-          }
+      const srcPath = path.join(workspacePath, "src");
+      fs.mkdirSync(srcPath, { recursive: true });
 
-          exec(
-            `${getShellType()} -c "source /opt/ros/jazzy/setup.${getShellType()}"`,
-            (error, stdout, stderr) => {
-              if (error) {
-                console.error(`Erro ao rodar build do ROS: ${stderr}`);
-              } else {
-                console.log(`Build do ROS concluído: ${stdout}`);
-              }
-            }
-          );
-          resolve({ created: true, workspacePath: workspacePath });
-        }
-      });
-    });
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error("Erro ao criar pasta:", error);
-      return { created: false, error: error.message };
+      const { cmd, args } = getPlatformBuildCommand();
+      const { code, stdout, stderr } = await runShellCommand(
+        cmd,
+        args,
+        workspacePath
+      );
+
+      if (code !== 0) {
+        console.error("[colcon build ERROR]", { code, stderr });
+        return {
+          wasCreated: false,
+          wasCanceled: false,
+          error: stderr || "colcon build failed.",
+        };
+      }
+
+      console.log("[colcon build OK]", stdout);
+      return { wasCreated: true, wasCanceled: false, workspacePath };
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : typeof err === "string"
+          ? err
+          : JSON.stringify(err);
+
+      console.error("create-workspace exception:", err);
+      return {
+        wasCreated: false,
+        wasCanceled: false,
+        error: msg || "Unknown error",
+      };
     }
   }
-  return { created: false, error: "An unknown error occurred." };
-});
+);
 
 ipcMain.handle("validate-workspace", (_, workspacePath) => {
   try {

@@ -1,3 +1,9 @@
 {
-  "title": "Componente WorkspaceManagement"
+  "title": "É necessário criar ou abrir um workspace para prosseguir com a programação!",
+  "subtitle": "Workspace é o local onde programas ROS ficam armazenados; por isso é necessário ter um workspace para armazená-los.",
+  "primaryButton": "Criar um novo workspace",
+  "secondaryButton": "Abrir um workspace existente",
+  "errors": {
+    "invalidWorkspace": "Ocorreu um erro ao selecionar o workspace, a pasta não é compatível!"
+  }
 }

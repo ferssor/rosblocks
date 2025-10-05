@@ -1,0 +1,26 @@
+{
+  "title": "Criar um novo workspace",
+  "labels": {
+    "location": "Localização da pasta",
+    "name": "Nome do workspace"
+  },
+  "placeholders": {
+    "location": "Escolha o local do Workspace",
+    "name": "Defina o nome do Workspace"
+  },
+  "actions": {
+    "create": "Criar",
+    "cancel": "Cancelar"
+  },
+  "messages": {
+    "createdAndBuilt": "Workspace criado e build concluído!"
+  },
+  "validation": {
+    "locationRequired": "Escolha o local da pasta",
+    "nameRequired": "Escolha o nome da pasta"
+  },
+  "errors": {
+    "createFailed": "Falha ao criar o workspace.",
+    "unexpected": "Ocorreu um erro ao criar o workspace! {{msg}}"
+  }
+}

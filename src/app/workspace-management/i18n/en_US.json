@@ -1,3 +1,9 @@
 {
-  "title": "WorkspaceManagement Component"
+  "title": "You need to create or open a workspace to continue!",
+  "subtitle": "A workspace is where ROS programs are stored. You need one to save your programs.",
+  "primaryButton": "Create a new workspace",
+  "secondaryButton": "Open an existing workspace",
+  "errors": {
+    "invalidWorkspace": "An error occurred while selecting the workspace. The folder is not compatible."
+  }
 }
