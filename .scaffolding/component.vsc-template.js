@@ -16,6 +16,11 @@
       return "-" + m.toLowerCase();
     });
   }
+  function toSnakeCase(str) {
+    return toCamelCase(str).replace(/([A-Z])/g, function (m) {
+      return "_" + m.toLowerCase();
+    });
+  }
 
   return {
     userInputs: [
@@ -83,7 +88,7 @@
             },
             content: function (inputs) {
               return (
-                "import React, { memo } from 'react';\n" +
+                "import { memo } from 'react';\n" +
                 "import { " +
                 toPascalCase(inputs.name) +
                 "Props } from './types';\n" +
@@ -122,8 +127,6 @@
               );
             },
           },
-
-          // hook padronizado (fixa o namespace do componente)
           {
             type: "file",
             name: function (inputs) {
@@ -138,7 +141,7 @@
                 toPascalCase(inputs.name) +
                 "Hook() {\n" +
                 "  const { t } = useTranslation('" +
-                toKebabCase(inputs.name) +
+                toSnakeCase(inputs.name) +
                 "');\n" +
                 "  const [showContent, setShowContent] = useState(true);\n" +
                 "  const handleClick = useCallback(function () { setShowContent(function (p) { return !p; }); }, []);\n" +
@@ -172,8 +175,6 @@
               );
             },
           },
-
-          // i18n (formato solicitado)
           {
             type: "folder",
             name: function () {
@@ -212,7 +213,7 @@
                   return "index.ts";
                 },
                 content: function (inputs) {
-                  var ns = toKebabCase(inputs.name);
+                  var ns = toSnakeCase(inputs.name);
                   return (
                     "import en_US from './en_US.json';\n" +
                     "import pt_BR from './pt_BR.json';\n\n" +

@@ -1,9 +1,11 @@
+import { RobotOutlined } from "@ant-design/icons";
+import { Layout } from "antd";
 import { memo } from "react";
-import { HeaderProps } from "./types";
+
 import useHeaderHook from "./header.hook";
 import styles from "./header.styles.module.css";
-import { Layout } from "antd";
-import { RobotOutlined } from "@ant-design/icons";
+
+import type { HeaderProps } from "./types";
 
 function Header(props: HeaderProps) {
   const { className = "", style } = props;
