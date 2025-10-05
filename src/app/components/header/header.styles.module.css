@@ -1,0 +1,21 @@
+.container {
+  --color-text-local: #fff;
+
+  width: 100%;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 8px;
+  height: 64px;
+}
+.title,
+.icon,
+.logo {
+  color: var(--color-text-local);
+}
+.icon svg {
+  height: 2em;
+  width: 2em;
+}
