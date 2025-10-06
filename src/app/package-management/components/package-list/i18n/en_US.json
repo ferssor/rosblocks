@@ -1,0 +1,24 @@
+{
+  "title": "Packages",
+  "columns": {
+    "name": "Package name",
+    "location": "Location",
+    "type": "Type",
+    "type.unknown": "unknown",
+    "updatedAt": {
+      "title": "Last updated",
+      "years": "{{count}} year ago",
+      "years_plural": "{{count}} years ago",
+      "months": "{{count}} month ago",
+      "months_plural": "{{count}} months ago",
+      "days": "{{count}} day ago",
+      "days_plural": "{{count}} days ago",
+      "today": "today"
+    },
+    "actions": "Actions"
+  },
+  "actions": {
+    "build": "Build",
+    "delete": "Delete"
+  }
+}

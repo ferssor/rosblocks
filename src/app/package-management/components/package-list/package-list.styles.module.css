@@ -1,0 +1,28 @@
+.packageListContainer {
+  width: 100%;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.packageListHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.packageName {
+  margin-bottom: 16px;
+}
+
+.table :global(.ant-table-row) .action-buttons {
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  transition: opacity 0.15s ease;
+}
+
+.table :global(.ant-table-row:hover) .action-buttons {
+  opacity: 1;
+}

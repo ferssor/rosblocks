@@ -1,0 +1,24 @@
+{
+  "title": "Pacotes",
+  "columns": {
+    "name": "Nome do pacote",
+    "location": "Localização",
+    "type": "Tipo",
+    "type.unknown": "desconhecido",
+    "updatedAt": {
+      "title": "Atualizado em",
+      "years": "há {{count}} ano",
+      "years_plural": "há {{count}} anos",
+      "months": "há {{count}} mês",
+      "months_plural": "há {{count}} meses",
+      "days": "há {{count}} dia",
+      "days_plural": "há {{count}} dias",
+      "today": "hoje"
+    },
+    "actions": "Ações"
+  },
+  "actions": {
+    "build": "Buildar",
+    "delete": "Deletar"
+  }
+}
