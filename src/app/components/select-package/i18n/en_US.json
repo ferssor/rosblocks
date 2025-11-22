@@ -1,0 +1,7 @@
+{
+  "empty": {
+    "title": "It looks like workspace {{workspace}} has no packages. Please create one to continue!",
+    "subtitle": "Packages are a set of ROS programs or nodes that work together to perform a specific task.",
+    "primaryButton": "Create a new package"
+  }
+}

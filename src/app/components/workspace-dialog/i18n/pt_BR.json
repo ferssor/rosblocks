@@ -1,0 +1,20 @@
+{
+  "modal": {
+    "title": "Criar um novo workspace",
+    "primaryButton": "Criar",
+    "secondaryButton": "Cancelar"
+  },
+  "form": {
+    "locationLabel": "Localização da pasta",
+    "locationPlaceholder": "Escolha o local do Workspace",
+    "locationRequired": "Escolha o local da pasta",
+    "nameLabel": "Nome do workspace",
+    "namePlaceholder": "Defina o nome do Workspace",
+    "nameRequired": "Escolha o nome da pasta"
+  },
+  "messages": {
+    "createSuccess": "Workspace criado e build concluído!",
+    "createError": "Ocorreu um erro ao criar o workspace! {{error}}",
+    "genericError": "{{error}}"
+  }
+}

@@ -1,0 +1,81 @@
+.layoutContainer {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.headerContainer {
+  height: 48px;
+  background-color: #fff;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+}
+
+.editorActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editorActionButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.activeButton {
+  color: #1677ff !important;
+  background-color: #e6f4ff !important;
+  border-color: #91d5ff !important;
+  transition: all 0.3s ease;
+}
+
+.editorContainer {
+  display: flex;
+  background-color: #fff;
+  height: 100%;
+}
+
+.contentContainer {
+  width: 50%;
+  background-color: #fff;
+  border-right: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.workspace {
+  width: 100%;
+  height: 100%;
+}
+
+.siderContainer {
+  width: 50%;
+  background-color: #fff;
+}
+
+.emptyContainer {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyNodeEditor {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.footerContainer {
+  background-color: #fff;
+  border-top: 1px solid rgba(5, 5, 5, 0.06);
+  padding: 0;
+  height: 128px;
+}
+
+.nodeTitle {
+  margin: 0;
+}

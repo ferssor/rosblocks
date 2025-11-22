@@ -1,0 +1,55 @@
+{
+  "manager": {
+    "emptyTitle": "It looks like package {{package}} has no ROS nodes",
+    "emptySubtitle": "Nodes are executable programs that allow the robot to act.",
+    "createNode": "Create a new node",
+    "createPackage": "Create a new package",
+    "selectPlaceholder": "No node has been selected. Choose one to open the editor!"
+  },
+  "dialog": {
+    "title": "Create a new node",
+    "primaryButton": "Create",
+    "secondaryButton": "Cancel",
+    "nameLabel": "Node name",
+    "namePlaceholder": "Choose the node name",
+    "nameRequired": "The node name is required",
+    "locationLabel": "Node location",
+    "locationPlaceholder": "Choose the node location",
+    "locationRequired": "The node location is required",
+    "typeLabel": "Node type",
+    "typePlaceholder": "Choose the node type",
+    "typeRequired": "The node type is required",
+    "messages": {
+      "createError": "An error occurred while creating the node! {{error}}"
+    }
+  },
+  "editor": {
+    "hideBlockEditor": "Hide block editor",
+    "showBlockEditor": "Show block editor",
+    "hideTerminal": "Hide terminal",
+    "showTerminal": "Show terminal",
+    "hideTextEditor": "Hide text editor",
+    "showTextEditor": "Show text editor",
+    "deleteButton": "Delete",
+    "executeButton": "Execute",
+    "saveButton": "Save",
+    "noEditorSelected": "No code editor is selected",
+    "terminalPlaceholder": "Terminal",
+    "messages": {
+      "dependencyAdded": "Dependencies added successfully!",
+      "dependencyError": "An error occurred while adding the dependency! {{error}}",
+      "scriptAdded": "Script added successfully!",
+      "scriptError": "An error occurred while adding the script! {{error}}",
+      "buildSuccess": "Package compiled successfully!",
+      "buildError": "An error occurred while compiling the package! {{error}}",
+      "blocksSuccess": "Blocks created successfully!",
+      "blocksError": "An error occurred while creating the block! {{error}}",
+      "deleteSuccess": "Node deleted successfully!",
+      "deleteError": "An error occurred while deleting the node! {{error}}",
+      "dependencyRemovedSuccess": "Dependency removed successfully!",
+      "dependencyRemovedError": "Error removing dependency: {{error}}",
+      "executeSuccess": "Code executed successfully!",
+      "executeError": "An error occurred while executing the code! {{error}}"
+    }
+  }
+}

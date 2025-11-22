@@ -1,0 +1,34 @@
+.container {
+  width: 100%;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.packageName {
+  margin: 0;
+}
+
+.actionButtons {
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+:global(.ant-table-row:hover) :local(.actionButtons) {
+  opacity: 1;
+}
+
+.tableWrapper :global(.ant-table-wrapper) {
+  width: 100%;
+}

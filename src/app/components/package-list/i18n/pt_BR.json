@@ -1,0 +1,24 @@
+{
+  "table": {
+    "packageName": "Nome do pacote",
+    "items": "Número de itens",
+    "storage": "Armazenamento (MB)",
+    "packageType": "Tipo do pacote",
+    "createdAt": "Criado em",
+    "lastUpdated": "Última modificação"
+  },
+  "actions": {
+    "edit": "Editar",
+    "build": "Buildar",
+    "delete": "Deletar",
+    "addPackage": "Adicionar um novo pacote"
+  },
+  "messages": {
+    "deleteSuccess": "Package deletado com sucesso!",
+    "deleteError": "Erro ao deletar o pacote: {{error}}",
+    "deleteGenericError": "Ocorreu um erro ao deletar o pacote! {{error}}",
+    "buildSuccess": "Package buildado com sucesso!",
+    "buildError": "Erro ao buildar o pacote: {{error}}",
+    "buildGenericError": "Ocorreu um erro ao buildar o pacote! {{error}}"
+  }
+}

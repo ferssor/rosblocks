@@ -1,0 +1,24 @@
+{
+  "table": {
+    "packageName": "Package name",
+    "items": "Number of items",
+    "storage": "Storage (MB)",
+    "packageType": "Package type",
+    "createdAt": "Created at",
+    "lastUpdated": "Last modified"
+  },
+  "actions": {
+    "edit": "Edit",
+    "build": "Build",
+    "delete": "Delete",
+    "addPackage": "Add a new package"
+  },
+  "messages": {
+    "deleteSuccess": "Package deleted successfully!",
+    "deleteError": "Error deleting the package: {{error}}",
+    "deleteGenericError": "An error occurred while deleting the package! {{error}}",
+    "buildSuccess": "Package built successfully!",
+    "buildError": "Error building the package: {{error}}",
+    "buildGenericError": "An error occurred while building the package! {{error}}"
+  }
+}

@@ -1,8 +1,9 @@
 import { Button, Result } from "antd";
 import { memo } from "react";
 
-import { PackageDialog } from "./components/package-dialog";
-import { PackageList } from "./components/package-list";
+import { PackageDialog } from "../components/package-dialog";
+import { PackageList } from "../components/package-list";
+
 import usePackageManagementHook from "./package-management.hook";
 import styles from "./package-management.styles.module.css";
 

@@ -1,0 +1,56 @@
+.container {
+  height: 100%;
+  background-color: #fff;
+}
+
+.sider {
+  border-right: 1px solid rgba(5, 5, 5, 0.06);
+  height: 100%;
+}
+
+.packageHeader {
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.packageHeader :global(.ant-select) {
+  width: 100%;
+}
+
+.menu {
+  border-top: 1px solid rgba(5, 5, 5, 0.06);
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+}
+
+.actionButtons button {
+  width: 100%;
+}
+
+.contentContainer {
+  height: 100%;
+}
+
+.emptyContent {
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.emptyMessage {
+  width: fit-content;
+  height: fit-content;
+  margin: auto;
+}
+
+.newNodeContainer {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}

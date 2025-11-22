@@ -1,0 +1,7 @@
+{
+  "empty": {
+    "title": "Parece que o workspace {{workspace}} não possui package, para prosseguir é necessário criar um!",
+    "subtitle": "Packages são um conjunto de programas ROS ou Nodes, que juntos exercem função específica.",
+    "primaryButton": "Criar um novo package"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "modal": {
+    "title": "Adicionar um novo package",
+    "subtitle": "Importar ou adicionar um novo pacote",
+    "description": "Você pode criar um novo pacote ou importar um pacote ROS2 via URL do GitHub",
+    "importButton": "Importar",
+    "createButton": "Criar",
+    "cancelButton": "Cancelar"
+  },
+  "form": {
+    "locationLabel": "Localização do pacote",
+    "locationPlaceholder": "Escolha a localização do pacote",
+    "locationRequired": "É obrigatório escolher a localização do pacote",
+    "nameLabel": "Nome do pacote",
+    "namePlaceholder": "Escolha o nome do pacote",
+    "nameRequired": "É obrigatório escolher o nome do pacote",
+    "typeLabel": "Tipo do pacote",
+    "typeRequired": "Escolha o tipo do pacote",
+    "dependencyLabel": "Dependência do pacote",
+    "dependencyPlaceholder": "Escolha a dependência do pacote",
+    "urlLabel": "URL do pacote",
+    "urlPlaceholder": "https://github/user/repository-name",
+    "urlRequired": "É obrigatório preencher a URL do pacote!"
+  },
+  "messages": {
+    "createSuccess": "Package criado com sucesso!",
+    "createError": "Erro ao criar o pacote: {{error}}",
+    "createGenericError": "Ocorreu um erro ao criar o pacote! {{error}}",
+    "importSuccess": "Package importado com sucesso!",
+    "importError": "Erro ao importar o pacote: {{error}}",
+    "importGenericError": "Ocorreu um erro ao importar o pacote! {{error}}"
+  }
+}

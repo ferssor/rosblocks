@@ -5,8 +5,6 @@ import { useWorkspace } from "../components/workspace-provider/workspace-provide
 
 import "./i18n";
 
-import type { PackageItem } from "./types";
-
 function getWorkspaceName(fullPath: string) {
   const match = fullPath.match(/([^/\\]+_ws)$/);
   return match ? match[1] : "";
@@ -16,7 +14,7 @@ function usePackageManagementHook() {
   const { workspacePath } = useWorkspace();
   const { t } = useTranslation("package_management");
 
-  const [packages, setPackages] = useState<PackageItem[]>([]);
+  const [packages, setPackages] = useState<Package[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedWorkspaceName = useMemo(
     () => getWorkspaceName(workspacePath || ""),
@@ -28,7 +26,7 @@ function usePackageManagementHook() {
     const result = await window.electronAPI.getPackages(workspacePath);
 
     if (Array.isArray(result)) {
-      setPackages(result as PackageItem[]);
+      setPackages(result as Package[]);
     } else if (result && typeof result === "object" && "error" in result) {
       console.error("[get-packages]");
       setPackages([]);

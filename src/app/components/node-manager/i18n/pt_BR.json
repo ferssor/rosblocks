@@ -1,0 +1,55 @@
+{
+  "manager": {
+    "emptyTitle": "Parece que o package {{package}} não possui nós ROS",
+    "emptySubtitle": "Nós são programas executáveis que permitem que o robô possa atuar.",
+    "createNode": "Criar um novo nó",
+    "createPackage": "Criar um novo pacote",
+    "selectPlaceholder": "Nenhum nó foi selecionado, para abrir o editor é necessário selecionar um!"
+  },
+  "dialog": {
+    "title": "Criar um novo nó",
+    "primaryButton": "Criar",
+    "secondaryButton": "Cancelar",
+    "nameLabel": "Nome do nó",
+    "namePlaceholder": "Escolha o nome do nó",
+    "nameRequired": "É obrigatório escolher o nome do nó",
+    "locationLabel": "Localização do nó",
+    "locationPlaceholder": "Escolha a localização do nó",
+    "locationRequired": "É obrigatório escolher a localização do nó",
+    "typeLabel": "Tipo do nó",
+    "typePlaceholder": "Escolha o tipo do nó",
+    "typeRequired": "É obrigatório escolher o tipo do nó",
+    "messages": {
+      "createError": "Ocorreu um erro ao criar o nó! {{error}}"
+    }
+  },
+  "editor": {
+    "hideBlockEditor": "Ocultar editor de blocos",
+    "showBlockEditor": "Mostrar editor de blocos",
+    "hideTerminal": "Ocultar terminal",
+    "showTerminal": "Mostrar terminal",
+    "hideTextEditor": "Ocultar editor de texto",
+    "showTextEditor": "Mostrar editor de texto",
+    "deleteButton": "Deletar",
+    "executeButton": "Executar",
+    "saveButton": "Salvar",
+    "noEditorSelected": "Não há editor de código selecionado",
+    "terminalPlaceholder": "Terminal",
+    "messages": {
+      "dependencyAdded": "Dependências adicionadas com sucesso!",
+      "dependencyError": "Ocorreu um erro ao adicionar a dependência! {{error}}",
+      "scriptAdded": "Script adicionado com sucesso!",
+      "scriptError": "Ocorreu um erro ao adicionar o script! {{error}}",
+      "buildSuccess": "Pacote compilado com sucesso!",
+      "buildError": "Ocorreu um erro ao compilar o pacote! {{error}}",
+      "blocksSuccess": "Blocos criados com sucesso!",
+      "blocksError": "Ocorreu um erro ao criar o bloco! {{error}}",
+      "deleteSuccess": "Nó deletado com sucesso!",
+      "deleteError": "Ocorreu um erro ao deletar o nó! {{error}}",
+      "dependencyRemovedSuccess": "Dependência removida com sucesso!",
+      "dependencyRemovedError": "Erro ao remover dependência: {{error}}",
+      "executeSuccess": "Código executado com sucesso!",
+      "executeError": "Ocorreu um erro ao executar o código! {{error}}"
+    }
+  }
+}

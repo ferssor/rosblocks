@@ -1,0 +1,9 @@
+{
+  "cta": {
+    "title": "You need to create or open a workspace to continue programming!",
+    "subtitle": "A workspace is where ROS programs are stored, so you must have one to save them.",
+    "primaryButton": "Create a new workspace",
+    "secondaryButton": "Open an existing workspace",
+    "invalidSelection": "An error occurred while selecting the workspace, the folder is not compatible!"
+  }
+}
