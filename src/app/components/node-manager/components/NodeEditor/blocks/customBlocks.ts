@@ -173,7 +173,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "node_init",
-      message0: "Configure o nó %1",
+      message0: "Adicione o nó %1",
       args0: [
         {
           type: "field_input",
@@ -726,15 +726,16 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
-      type: "init_node_template",
-      message0: `Adicione o(s) pacote(s): %1`,
+      type: "ros_node_template",
+      message0: "Importe a interface %1",
       args0: [
         {
-          type: "input_statement",
-          name: "IMPORT_PACKAGES",
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
         },
       ],
-      message1: `Defina a classe %1`,
+      message1: "Defina a classe %1",
       args1: [
         {
           type: "field_input",
@@ -746,20 +747,12 @@ export async function defineCustomBlocks() {
       args2: [
         {
           type: "input_statement",
-          name: "TEMPLATE_BODY",
-        },
-      ],
-      message3: "inicialize o nó da classe %1",
-      args3: [
-        {
-          type: "field_input",
-          name: "NODE_CLASS_NAME",
-          text: "Digite o nome da classe",
+          name: "NODE_BODY",
         },
       ],
       colour: "#5c5f77",
       tooltip:
-        "Define um modelo de nó ROS2 com importações, classe e inicialização do nó.",
+        "Cria um nó ROS2 completo com importação de interface, classe e corpo.",
       helpUrl: "",
     },
   ];

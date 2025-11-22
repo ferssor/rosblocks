@@ -340,38 +340,39 @@ msg.${propertyName.split(" ").slice(-1)} = float(${velocityValue.toFixed(1)})\n`
   return code;
 };
 
-pythonGenerator.forBlock["init_node_template"] = function (
+pythonGenerator.forBlock["ros_node_template"] = function (
   block: Blockly.Block,
   generator: PythonGenerator
 ) {
-  const className: string = block.getFieldValue("CLASS_NAME") || "class_name";
-  const nodeClassName: string =
-    block.getFieldValue("NODE_CLASS_NAME") || "node_class_name";
-  const importPackagesBody =
-    generator.statementToCode(block, "IMPORT_PACKAGES") || "";
-  const templateBody = generator.statementToCode(block, "TEMPLATE_BODY") || "";
-  const dedentedImports = importPackagesBody
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0)
-    .join("\n");
+  const className: string = block.getFieldValue("CLASS_NAME") || "RosNode";
+  const interfaceImport = block.getFieldValue("INTERFACE") || "";
+  const nodeBody = generator.statementToCode(block, "NODE_BODY") || "";
+  const normalizedBody = nodeBody.trim().length > 0 ? nodeBody : "pass\n";
+  const importLines = [
+    "#!/usr/bin/env python3",
+    "import rclpy",
+    "from rclpy.node import Node",
+  ];
 
-  const code = `#!/usr/bin/env python3
-import rclpy
-from rclpy.node import Node
-${dedentedImports}
+  if (interfaceImport) {
+    importLines.push(interfaceImport);
+  }
+
+  const importsSection = importLines.join("\n");
+
+  const code = `${importsSection}
 
 class ${className}(Node):
-${indentCode(templateBody)}
-  
+${indentCode(normalizedBody)}
+
 def main(args=None):
   rclpy.init(args=args)
-  node = ${nodeClassName}()
+  node = ${className}()
   rclpy.spin(node)
   rclpy.shutdown()
 
 if __name__ == '__main__':
-  main()  
+  main()
 `;
 
   return code;

@@ -579,7 +579,7 @@ export const toolbox: ToolboxDefinition = {
       contents: [
         {
           kind: "block",
-          type: "init_node_template",
+          type: "ros_node_template",
         },
       ],
     },
