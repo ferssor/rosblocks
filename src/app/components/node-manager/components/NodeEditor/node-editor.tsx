@@ -35,7 +35,9 @@ function NodeEditor(props: NodeEditorProps) {
         <div className={styles.editorActions}>
           <Tooltip
             title={
-              state.showBlockEditor ? text.hideBlockEditor : text.showBlockEditor
+              state.showBlockEditor
+                ? text.hideBlockEditor
+                : text.showBlockEditor
             }
           >
             <Button
@@ -48,12 +50,12 @@ function NodeEditor(props: NodeEditorProps) {
               aria-checked={state.showBlockEditor}
             />
           </Tooltip>
-          <Tooltip title={state.showTerminal ? text.hideTerminal : text.showTerminal}>
+          <Tooltip
+            title={state.showTerminal ? text.hideTerminal : text.showTerminal}
+          >
             <Button
               style={{ display: "none" }}
-              className={
-                state.showTerminal ? styles.activeButton : undefined
-              }
+              className={state.showTerminal ? styles.activeButton : undefined}
               type="default"
               icon={<CodeOutlined />}
               onClick={handlers.toggleTerminal}
@@ -68,9 +70,7 @@ function NodeEditor(props: NodeEditorProps) {
             <Button
               type="default"
               icon={<FileTextOutlined />}
-              className={
-                state.showTextEditor ? styles.activeButton : undefined
-              }
+              className={state.showTextEditor ? styles.activeButton : undefined}
               onClick={handlers.toggleTextEditor}
               aria-checked={state.showTextEditor}
             />
@@ -112,7 +112,11 @@ function NodeEditor(props: NodeEditorProps) {
                 key={props.selectedNode.fullPath}
                 className={styles.workspace}
                 initialJson={state.initialWorkspace}
-                onJsonChange={handlers.handleJsonChange}
+                onJsonChange={(worksapceJson: object) =>
+                  handlers.handleJsonChange(
+                    worksapceJson as Record<string, unknown>
+                  )
+                }
                 toolboxConfiguration={toolbox}
                 workspaceConfiguration={workspaceConfig}
                 onWorkspaceChange={handlers.handleWorkspaceChange}
@@ -127,7 +131,7 @@ function NodeEditor(props: NodeEditorProps) {
                 height="100%"
                 defaultLanguage="python"
                 language="python"
-                value={state.generatedCode || props.selectedNode.content}
+                value={state.generatedCode ?? props.selectedNode.content}
                 options={{
                   readOnly: true,
                   minimap: { enabled: false },

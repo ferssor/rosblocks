@@ -36,7 +36,9 @@ function useNodeEditorHook(props: NodeEditorProps) {
   const [showTerminal, setShowTerminal] = useState(false);
   const [json, setJson] = useState<Record<string, unknown>>({});
   const [dependency, setDependency] = useState("");
-  const [generatedCode, setGeneratedCode] = useState("");
+  const [generatedCode, setGeneratedCode] = useState<string | undefined>(
+    undefined
+  );
   const [wasEdited, setWasEdited] = useState(false);
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const { t } = useTranslation("node_manager");
@@ -60,8 +62,11 @@ function useNodeEditorHook(props: NodeEditorProps) {
   const handleGenerateCode = useCallback(() => {
     if (workspaceRef.current) {
       const code = pythonGenerator.workspaceToCode(workspaceRef.current);
-      setGeneratedCode(code);
+      setGeneratedCode(code.trim().length > 0 ? code : undefined);
+      return;
     }
+
+    setGeneratedCode(undefined);
   }, []);
 
   const findValueByKey = useCallback((obj: unknown, key: string): string | null => {
@@ -106,8 +111,13 @@ function useNodeEditorHook(props: NodeEditorProps) {
     [findValueByKey]
   );
 
-  const handleJsonChange = useCallback((value: Record<string, unknown>) => {
-    setJson(value);
+  const handleJsonChange = useCallback((value: object) => {
+    const parsedValue = value as Record<string, unknown>;
+    setJson(parsedValue);
+
+    if (!parsedValue || Object.keys(parsedValue).length === 0) {
+      setGeneratedCode(undefined);
+    }
   }, []);
 
   const handleAddDependency = useCallback(
