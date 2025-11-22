@@ -6,6 +6,7 @@ import "../i18n/config";
 import { registerBundles } from "../i18n/register";
 
 import { Header } from "./components/header";
+import hd from "./components/header/i18n";
 import nd from "./components/node-manager/i18n";
 import pd from "./components/package-dialog/i18n";
 import pl from "./components/package-list/i18n";
@@ -30,6 +31,7 @@ registerBundles(pd);
 registerBundles(nd);
 registerBundles(sw);
 registerBundles(wd);
+registerBundles(hd);
 registerBundles(nm);
 
 export function AppContent() {

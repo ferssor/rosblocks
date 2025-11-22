@@ -1,3 +1,6 @@
 {
-  "title": "Header Component"
+  "title": "Header Component",
+  "version": "Version",
+  "languageLabel": "Language",
+  "languageSwitch": "Switch language"
 }

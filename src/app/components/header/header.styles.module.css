@@ -1,7 +1,14 @@
 .container {
   --color-text-local: #fff;
+  background: #001529;
 
   width: 100%;
+}
+.headerBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: inherit;
 }
 .logo {
   display: flex;
@@ -18,4 +25,53 @@
 .icon svg {
   height: 2em;
   width: 2em;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-text-local);
+  font-weight: 500;
+}
+
+.version {
+  font-size: 0.9rem;
+}
+
+.languageToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.languageSwitch :global(.ant-switch) {
+  background-color: #13c2c2;
+  border: 1px solid #08979c;
+}
+
+.languageSwitch :global(.ant-switch:hover) {
+  background-color: #36cfc9;
+}
+
+.languageSwitch :global(.ant-switch .ant-switch-inner) {
+  color: #001529;
+  font-weight: 600;
+}
+
+.languageSwitch
+  :global(.ant-switch .ant-switch-inner .ant-switch-inner-checked),
+.languageSwitch
+  :global(.ant-switch .ant-switch-inner .ant-switch-inner-unchecked) {
+  background-color: transparent;
+}
+
+.languageSwitch :global(.ant-switch-checked) {
+  background-color: #52c41a;
+  border-color: #237804;
+}
+
+.languageSwitch :global(.ant-switch-checked .ant-switch-inner) {
+  color: #001529;
 }

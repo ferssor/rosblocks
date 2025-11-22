@@ -1,3 +1,6 @@
 {
-  "title": "Componente Header"
+  "title": "Componente Header",
+  "version": "Vers\u00e3o",
+  "languageLabel": "Idioma",
+  "languageSwitch": "Alterar idioma"
 }
