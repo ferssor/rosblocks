@@ -9,7 +9,7 @@
 .selectContainer {
   display: flex;
   flex-direction: column;
-  padding: 24px 16px;
+  height: 100%;
 }
 
 .packageContainer {
