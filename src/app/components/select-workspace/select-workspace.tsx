@@ -9,12 +9,11 @@ import styles from "./select-workspace.styles.module.css";
 import type { SelectWorkspaceProps } from "./types";
 
 function SelectWorkspace(props: SelectWorkspaceProps) {
-  const { className = "", style, id } = props;
+  const { className = "", style } = props;
   const { text, state, handlers } = useSelectWorkspaceHook(props);
 
   return (
     <Result
-      id={id}
       className={(styles.container + " " + (className || "")).trim()}
       style={style}
       status="info"

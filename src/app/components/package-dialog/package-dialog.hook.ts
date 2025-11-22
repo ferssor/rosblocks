@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import "./i18n";
 
 import type { PackageDialogProps } from "./types";
+import type { RadioChangeEvent } from "antd";
 import type { CheckboxGroupProps } from "antd/es/checkbox";
 
 export const PACKAGE_DEPENDENCY_OPTIONS: CheckboxGroupProps<string>["options"] =
@@ -128,11 +129,14 @@ function usePackageDialogHook(props: PackageDialogProps) {
     setIsInputChanged(urlValue.length > 0);
   }, [importForm]);
 
-  const handleDependencyChange = useCallback((event: {
-    target: { value: string };
-  }) => {
-    setPackageDependency(event.target.value);
-  }, []);
+  const handleDependencyChange = useCallback(
+    (event: RadioChangeEvent) => {
+      if (event.target?.value) {
+        setPackageDependency(String(event.target.value));
+      }
+    },
+    []
+  );
 
   const toggleCreateForm = useCallback(() => {
     setShowCreateForm((prev) => !prev);

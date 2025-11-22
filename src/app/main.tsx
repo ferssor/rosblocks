@@ -15,6 +15,7 @@ import wd from "./components/workspace-dialog/i18n";
 import { WorkspaceProvider } from "./components/workspace-provider";
 import { useWorkspace } from "./components/workspace-provider/workspace-provider";
 import "./index.css";
+import nm from "./node-management/i18n";
 import { PackageManagement } from "./package-management";
 import pm from "./package-management/i18n";
 import { WorkspaceManagement } from "./workspace-management";
@@ -29,6 +30,7 @@ registerBundles(pd);
 registerBundles(nd);
 registerBundles(sw);
 registerBundles(wd);
+registerBundles(nm);
 
 export function AppContent() {
   const { isValidWorkspace } = useWorkspace();

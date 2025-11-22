@@ -1,0 +1,7 @@
+{
+  "title": "Gerenciamento de nós",
+  "subtitle": "Crie ou selecione um package para começar a gerenciar nós ROS.",
+  "primaryButton": "Criar um novo package",
+  "emptyTitle": "O workspace {{workspace}} ainda não possui packages",
+  "emptySubtitle": "Você precisa de pelo menos um package para criar nós ROS."
+}

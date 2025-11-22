@@ -51,7 +51,7 @@ function useWorkspaceDialogHook(props: WorkspaceDialogProps) {
         workspacePath.toLowerCase()
       );
 
-      if (result.created) {
+      if (result.wasCreated) {
         const validation = await window.electronAPI.validateWorkspace(
           result.workspacePath
         );

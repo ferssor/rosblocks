@@ -1,0 +1,7 @@
+{
+  "title": "Node management",
+  "subtitle": "Create or select a package to start managing ROS nodes.",
+  "primaryButton": "Create a new package",
+  "emptyTitle": "Workspace {{workspace}} does not have any packages yet",
+  "emptySubtitle": "You need at least one package to create ROS nodes."
+}
