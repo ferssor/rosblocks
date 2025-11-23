@@ -515,6 +515,10 @@ export const toolbox: ToolboxDefinition = {
         },
         {
           kind: "block",
+          type: "launch_executable",
+        },
+        {
+          kind: "block",
           type: "add_sub",
         },
         {

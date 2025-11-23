@@ -2,6 +2,10 @@ import * as Blockly from "blockly/core";
 
 export async function defineCustomBlocks() {
   let interfaceOptions: string[][] = [["-", ""]];
+  const executableOptions: string[][] = [
+    ["Turtlesim (GUI)", "ros2 run turtlesim turtlesim_node"],
+    ["Turtlesim Teleop", "ros2 run turtlesim turtle_teleop_key"],
+  ];
 
   try {
     const result = await window.electronAPI.getInterfaces();
@@ -609,6 +613,23 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "launch_executable",
+      message0: "Execute o %1",
+      args0: [
+        {
+          type: "field_dropdown",
+          name: "EXECUTABLE_OPTION",
+          options: executableOptions,
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: "#1e66f5",
+      tooltip:
+        "Executa um comando externo (como o turtlesim) durante a execução do script.",
+      helpUrl: "",
+    },
+    {
       type: "subscribe_message",
       message0: `Atribua o valor da mensagem com a interface %1
          e a propriedade %2 na variável %3`,
@@ -877,6 +898,7 @@ export async function defineCustomBlocks() {
   };
 
   // After Blockly.defineBlocksWithJsonArray(blocks);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Blockly.Blocks["subscribe_message"].onchange = async function (event: any) {
     if (!this.workspace || this.isInFlyout) return;

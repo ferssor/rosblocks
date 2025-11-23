@@ -305,6 +305,33 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["launch_executable"] = function (
+    block: Blockly.Block
+  ) {
+    const command: string = (
+      block.getFieldValue("EXECUTABLE_OPTION") || ""
+    ).trim();
+
+    if (!command) {
+      return "";
+    }
+
+    const sanitizedCommand = JSON.stringify(command);
+    const helperName = pythonGenerator.provideFunction_(
+      "launch_executable_helper",
+      [
+        "import subprocess",
+        "",
+        "def " +
+          pythonGenerator.FUNCTION_NAME_PLACEHOLDER_ +
+          "(command: str):",
+        "  subprocess.Popen([\"/bin/bash\", \"-c\", command])",
+      ]
+    );
+
+    return `${helperName}(${sanitizedCommand})\n`;
+  };
+
   pythonGenerator.forBlock["subscribe_message"] = function (
     block: Blockly.Block
   ) {
