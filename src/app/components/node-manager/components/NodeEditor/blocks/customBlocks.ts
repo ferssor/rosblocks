@@ -173,7 +173,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "node_init",
-      message0: "Adicione o nó %1",
+      message0: "Inicialize o nó %1",
       args0: [
         {
           type: "field_input",
@@ -191,7 +191,7 @@ export async function defineCustomBlocks() {
       previousStatement: null,
       nextStatement: null,
       colour: "#1e66f5",
-      tooltip: "Adicione o nó",
+      tooltip: "Inicialize o nó",
       helpUrl: "",
     },
     {
@@ -461,8 +461,8 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
-      type: "add_counter",
-      message0: `Adicione o contador a função %1 com intervalo de %2`,
+      type: "execute_function_timer",
+      message0: `Execute a função %1 por %2 segundos`,
       args0: [
         {
           type: "field_input",
@@ -478,7 +478,8 @@ export async function defineCustomBlocks() {
         },
       ],
       colour: "#1e66f5",
-      output: null,
+      previousStatement: null,
+      nextStatement: null,
       tooltip: "Adiciona um contador com intervalo que chama uma função",
       helpUrl: "",
     },

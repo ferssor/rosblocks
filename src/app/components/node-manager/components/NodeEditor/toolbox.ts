@@ -523,7 +523,7 @@ export const toolbox: ToolboxDefinition = {
         },
         {
           kind: "block",
-          type: "add_counter",
+          type: "execute_function_timer",
         },
         {
           kind: "block",

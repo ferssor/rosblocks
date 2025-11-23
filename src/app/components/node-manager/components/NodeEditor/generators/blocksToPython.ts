@@ -99,8 +99,7 @@ export function registerCustomBlocksToPython() {
     const constructorBodyCode =
       generator.statementToCode(block, "CONSTRUCTOR_BODY") || "";
     const code = `def __init__(self):
-  super().__init__('${nodeName}')
-    \n${indentCode(constructorBodyCode)}\n`;
+  super().__init__('${nodeName}')\n${indentCode(constructorBodyCode)}\n`;
     return code;
   };
 
@@ -222,13 +221,15 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
-  pythonGenerator.forBlock["add_counter"] = function (block: Blockly.Block) {
+  pythonGenerator.forBlock["execute_function_timer"] = function (
+    block: Blockly.Block
+  ) {
     const functionName: string = block.getFieldValue("FUNCTION_NAME");
     const interval: number = block.getFieldValue("INTERVAL");
     const code = `self.create_timer(${interval.toFixed(
       1
-    )}, self.${functionName})`;
-    return [code, 0];
+    )}, self.${functionName})\n`;
+    return code;
   };
 
   pythonGenerator.forBlock["add_python_version"] = function (
