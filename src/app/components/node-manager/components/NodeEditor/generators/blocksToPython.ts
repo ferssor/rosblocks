@@ -174,11 +174,7 @@ export function registerCustomBlocksToPython() {
     )
       .replace(/\s+/g, "_")
       .trim();
-    const callbackBody = indentCode(
-      pythonGenerator.statementToCode(block, "CALLBACK_BODY") || "  pass\n"
-    );
-
-    return `\ndef ${callbackName}(self, msg:${interfaceClass}):\n${callbackBody}\nself.${commName} = self.create_subscription(${interfaceClass}, "${topicName}", self.${callbackName}, 10)\n`;
+    return `self.${commName} = self.create_subscription(${interfaceClass}, "${topicName}", self.${callbackName}, 10)\n`;
   };
 
   pythonGenerator.forBlock["add_variable"] = function (block: Blockly.Block) {

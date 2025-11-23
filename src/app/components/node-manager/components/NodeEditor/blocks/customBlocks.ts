@@ -283,7 +283,7 @@ export async function defineCustomBlocks() {
     },
     {
       type: "ros_communication",
-      message0: "Configurar comunicação %1 como %2",
+      message0: "Configure a variável %1 como %2",
       args0: [
         {
           type: "field_input",
@@ -299,7 +299,7 @@ export async function defineCustomBlocks() {
           ],
         },
       ],
-      message1: "Use a interface %1 no tópico %2",
+      message1: "Use a interface %1 para comunicar com o tópico %2",
       args1: [
         {
           type: "field_dropdown",
@@ -312,24 +312,22 @@ export async function defineCustomBlocks() {
           text: "/nome_do_topico",
         },
       ],
-      message2: "Callback %1",
+      message2: "%1 %2",
       args2: [
+        {
+          type: "field_label",
+          name: "CALLBACK_LABEL",
+          text: "Envie os dados para a função",
+        },
         {
           type: "field_input",
           name: "CALLBACK_NAME",
           text: "nome_da_funcao",
         },
       ],
-      message3: "Corpo do callback %1",
-      args3: [
-        {
-          type: "input_statement",
-          name: "CALLBACK_BODY",
-        },
-      ],
       previousStatement: null,
       nextStatement: null,
-      colour: "#209fb5",
+      colour: "#1e66f5",
       tooltip:
         "Cria um bloco único para publishers ou subscribers com base no tipo selecionado.",
       helpUrl: "",
@@ -812,6 +810,40 @@ export async function defineCustomBlocks() {
 
   // Register the blocks using createBlockDefinitionsFromJsonArray
   Blockly.defineBlocksWithJsonArray(blocks);
+
+  const toggleRosCommunicationCallbackVisibility = (
+    blockInstance: Blockly.Block
+  ) => {
+    const isSubscriber =
+      blockInstance.getFieldValue("COMM_TYPE") === "subscriber";
+    const callbackField = blockInstance.getField("CALLBACK_NAME");
+    const callbackLabel = blockInstance.getField("CALLBACK_LABEL");
+    callbackField?.setVisible(isSubscriber);
+    callbackLabel?.setVisible(isSubscriber);
+  };
+
+  const rosCommunicationBlock = Blockly.Blocks["ros_communication"];
+  const originalRosCommunicationInit = rosCommunicationBlock?.init;
+  if (rosCommunicationBlock && originalRosCommunicationInit) {
+    rosCommunicationBlock.init = function (...args: unknown[]) {
+      originalRosCommunicationInit.apply(this, args);
+      toggleRosCommunicationCallbackVisibility(this);
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Blockly.Blocks["ros_communication"].onchange = function (event: any) {
+    if (!this.workspace || this.isInFlyout) return;
+    if (
+      !event ||
+      (event.type === Blockly.Events.BLOCK_CHANGE &&
+        event.blockId === this.id &&
+        event.name === "COMM_TYPE")
+    ) {
+      toggleRosCommunicationCallbackVisibility(this);
+    }
+  };
+
   // After Blockly.defineBlocksWithJsonArray(blocks);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Blockly.Blocks["subscribe_message"].onchange = async function (event: any) {
