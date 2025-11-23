@@ -503,6 +503,10 @@ export const toolbox: ToolboxDefinition = {
         },
         {
           kind: "block",
+          type: "init_message_interface",
+        },
+        {
+          kind: "block",
           type: "add_message",
         },
         {

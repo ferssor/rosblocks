@@ -535,10 +535,36 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "init_message_interface",
+      message0: "Adicione à variável %1 os métodos da interface %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "MESSAGE_VARIABLE",
+          text: "msg",
+        },
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: "#1e66f5",
+      tooltip: "Instancia uma interface ROS2 em uma variável",
+      helpUrl: "",
+    },
+    {
       type: "add_message",
       message0:
-        "Atribua à mensagem com interface %1, propriedade %2 o valor %3",
+        "Atribua à variável %1 com interface %2, propriedade %3 o valor %4",
       args0: [
+        {
+          type: "field_input",
+          name: "MESSAGE_VARIABLE",
+          text: "msg",
+        },
         {
           type: "field_dropdown",
           name: "INTERFACE",
@@ -558,13 +584,18 @@ export async function defineCustomBlocks() {
       previousStatement: null,
       nextStatement: null,
       colour: "#1e66f5",
-      tooltip: "Adicione uma mensagem ROS2",
+      tooltip: "Atribui valores às propriedades de uma mensagem ROS2",
       helpUrl: "",
     },
     {
       type: "publish_message",
-      message0: "Publique à mensagem no %1",
+      message0: "Publique a variável %1 no %2",
       args0: [
+        {
+          type: "field_input",
+          name: "MESSAGE_VARIABLE",
+          text: "msg",
+        },
         {
           type: "field_input",
           name: "PUBLISHER_NAME",
@@ -574,7 +605,7 @@ export async function defineCustomBlocks() {
       previousStatement: null,
       nextStatement: null,
       colour: "#1e66f5",
-      tooltip: "Publica a mensagem no publicador",
+      tooltip: "Publica a variável instanciada utilizando um publicador",
       helpUrl: "",
     },
     {

@@ -247,24 +247,61 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
-  pythonGenerator.forBlock["add_message"] = function (block: Blockly.Block) {
+  pythonGenerator.forBlock["init_message_interface"] = function (
+    block: Blockly.Block
+  ) {
     const interfaceName: string = block.getFieldValue("INTERFACE");
+    const messageVariable: string = (
+      block.getFieldValue("MESSAGE_VARIABLE") || "msg"
+    )
+      .replace(/\s+/g, "_")
+      .trim();
+
+    if (!interfaceName || !messageVariable) {
+      return "";
+    }
+
+    const interfaceClass = interfaceName.split(" ").slice(-1);
+    const code = `${messageVariable} = ${interfaceClass}()\n`;
+    return code;
+  };
+
+  pythonGenerator.forBlock["add_message"] = function (block: Blockly.Block) {
     const property: string = block.getFieldValue("PROPERTY");
+    const messageVariable: string = (
+      block.getFieldValue("MESSAGE_VARIABLE") || "msg"
+    )
+      .replace(/\s+/g, "_")
+      .trim();
     const value = pythonGenerator.valueToCode(block, "VALUE", 0);
 
-    const code = `msg = ${interfaceName.split(" ").slice(-1)}()
-msg.${property} = ${value}\n`;
+    if (!property || !messageVariable || !value) {
+      return "";
+    }
+
+    const code = `${messageVariable}.${property} = ${value}\n`;
     return code;
   };
 
   pythonGenerator.forBlock["publish_message"] = function (
     block: Blockly.Block
   ) {
-    const publisherName: string = block
-      .getFieldValue("PUBLISHER_NAME")
-      .replace(/\s+/g, "_");
+    const publisherName: string = (
+      block.getFieldValue("PUBLISHER_NAME") || ""
+    )
+      .replace(/\s+/g, "_")
+      .trim();
+    const messageVariable: string = (
+      block.getFieldValue("MESSAGE_VARIABLE") || "msg"
+    )
+      .replace(/\s+/g, "_")
+      .trim();
 
-    const code = publisherName ? `self.${publisherName}.publish(msg)\n` : "";
+    if (!publisherName || !messageVariable) {
+      return "";
+    }
+
+    const code = `self.${publisherName}.publish(${messageVariable})\n`;
     return code;
   };
 
