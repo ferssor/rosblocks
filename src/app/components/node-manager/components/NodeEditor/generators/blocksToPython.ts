@@ -149,6 +149,38 @@ export function registerCustomBlocksToPython() {
     return code;
   };
 
+  pythonGenerator.forBlock["ros_communication"] = function (
+    block: Blockly.Block
+  ) {
+    const commType: string = block.getFieldValue("COMM_TYPE");
+    const interfaceName: string = block.getFieldValue("INTERFACE");
+    const topicName: string = block.getFieldValue("TARGET_NAME");
+    const commName: string = (block.getFieldValue("COMM_NAME") || "comm")
+      .replace(/\s+/g, "_")
+      .trim();
+
+    if (!interfaceName || !topicName || !commName) {
+      return "";
+    }
+
+    const interfaceClass = interfaceName.split(" ").slice(-1);
+
+    if (commType === "publisher") {
+      return `self.${commName} = self.create_publisher(${interfaceClass}, "${topicName}", 10)\n`;
+    }
+
+    const callbackName: string = (
+      block.getFieldValue("CALLBACK_NAME") || `${commName}_callback`
+    )
+      .replace(/\s+/g, "_")
+      .trim();
+    const callbackBody = indentCode(
+      pythonGenerator.statementToCode(block, "CALLBACK_BODY") || "  pass\n"
+    );
+
+    return `\ndef ${callbackName}(self, msg:${interfaceClass}):\n${callbackBody}\nself.${commName} = self.create_subscription(${interfaceClass}, "${topicName}", self.${callbackName}, 10)\n`;
+  };
+
   pythonGenerator.forBlock["add_variable"] = function (block: Blockly.Block) {
     const variableName: string = block.getFieldValue("VARIABLE");
     const value: string = pythonGenerator.valueToCode(block, "VALUE", 0);

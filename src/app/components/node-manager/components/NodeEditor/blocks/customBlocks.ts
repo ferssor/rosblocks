@@ -282,6 +282,59 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "ros_communication",
+      message0: "Configurar comunicação %1 como %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "COMM_NAME",
+          text: "identificador",
+        },
+        {
+          type: "field_dropdown",
+          name: "COMM_TYPE",
+          options: [
+            ["Publicador", "publisher"],
+            ["Assinante", "subscriber"],
+          ],
+        },
+      ],
+      message1: "Use a interface %1 no tópico %2",
+      args1: [
+        {
+          type: "field_dropdown",
+          name: "INTERFACE",
+          options: interfaceOptions,
+        },
+        {
+          type: "field_input",
+          name: "TARGET_NAME",
+          text: "/nome_do_topico",
+        },
+      ],
+      message2: "Callback %1",
+      args2: [
+        {
+          type: "field_input",
+          name: "CALLBACK_NAME",
+          text: "nome_da_funcao",
+        },
+      ],
+      message3: "Corpo do callback %1",
+      args3: [
+        {
+          type: "input_statement",
+          name: "CALLBACK_BODY",
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      colour: "#209fb5",
+      tooltip:
+        "Cria um bloco único para publishers ou subscribers com base no tipo selecionado.",
+      helpUrl: "",
+    },
+    {
       type: "add_variable",
       message0: "Adicione à variável %1 o valor %2",
       args0: [

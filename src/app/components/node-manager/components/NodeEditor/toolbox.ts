@@ -495,6 +495,10 @@ export const toolbox: ToolboxDefinition = {
         },
         {
           kind: "block",
+          type: "ros_communication",
+        },
+        {
+          kind: "block",
           type: "add_logger",
         },
         {
