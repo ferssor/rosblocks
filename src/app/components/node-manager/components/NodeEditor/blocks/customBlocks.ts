@@ -465,6 +465,21 @@ export async function defineCustomBlocks() {
       helpUrl: "",
     },
     {
+      type: "execute_literal",
+      message0: "Execute %1",
+      args0: [
+        {
+          type: "input_value",
+          name: "CODE",
+        },
+      ],
+      colour: "#df8e1d",
+      previousStatement: null,
+      nextStatement: null,
+      tooltip: "Executa o código fornecido (ex.: chamadas de função).",
+      helpUrl: "",
+    },
+    {
       type: "execute_function_timer",
       message0: `Execute a função %1 por %2 segundos`,
       args0: [

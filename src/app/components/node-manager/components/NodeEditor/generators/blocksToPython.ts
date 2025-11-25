@@ -221,6 +221,11 @@ export function registerCustomBlocksToPython() {
     return [code, 0];
   };
 
+  pythonGenerator.forBlock["execute_literal"] = function (block: Blockly.Block) {
+    const code = pythonGenerator.valueToCode(block, "CODE", 0);
+    return code ? `${code}\n` : "";
+  };
+
   pythonGenerator.forBlock["execute_function_timer"] = function (
     block: Blockly.Block
   ) {
