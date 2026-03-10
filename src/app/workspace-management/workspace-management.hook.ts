@@ -17,20 +17,47 @@ function useWorkspaceManagementHook() {
   );
 
   useEffect(() => {
-    const stored = localStorage.getItem("recentWorkspaces");
-    if (stored) {
-      try {
-        setRecentWorkspaces(JSON.parse(stored));
-      } catch (error) {
-        console.error("Failed to parse recent workspaces", error);
+    const fetchAndRefreshRecentWorkspaces = async () => {
+      const stored = localStorage.getItem("recentWorkspaces");
+      if (stored) {
+        try {
+          const parsed: RecentWorkspace[] = JSON.parse(stored);
+
+          const refreshedWorkspaces = await Promise.all(
+            parsed.map(async (ws) => {
+              try {
+                const details = await window.electronAPI.getWorkspaceDetails(
+                  ws.path,
+                );
+                return { ...ws, ...details };
+              } catch (e) {
+                console.error(`Failed to refresh details for ${ws.path}`, e);
+                return ws;
+              }
+            }),
+          );
+
+          setRecentWorkspaces(refreshedWorkspaces);
+        } catch (error) {
+          console.error("Failed to parse recent workspaces", error);
+          localStorage.removeItem("recentWorkspaces");
+        }
       }
-    }
+    };
+
+    fetchAndRefreshRecentWorkspaces();
   }, []);
 
-  const addToRecent = useCallback((path: string) => {
+  const addToRecent = useCallback(async (path: string) => {
+    const details = await window.electronAPI.getWorkspaceDetails(path);
+
     setRecentWorkspaces((prev) => {
       const name = path.split(/[/\\]/).pop() || path;
-      const newItem: RecentWorkspace = { name, path };
+      const newItem: RecentWorkspace = {
+        name,
+        path,
+        ...details,
+      };
       const filtered = prev.filter((item) => item.path !== path);
       const updated = [newItem, ...filtered].slice(0, 5);
       localStorage.setItem("recentWorkspaces", JSON.stringify(updated));
@@ -50,7 +77,7 @@ function useWorkspaceManagementHook() {
     if (!validateWorkspace.valid) {
       message.error(t("invalidWorkspace"));
     } else {
-      addToRecent(result.workspaceLocation);
+      await addToRecent(result.workspaceLocation);
     }
 
     setWorkspacePath(result.workspaceLocation || "");
@@ -65,7 +92,7 @@ function useWorkspaceManagementHook() {
       if (!validateWorkspace.valid) {
         message.error(t("invalidWorkspace"));
       } else {
-        addToRecent(path);
+        await addToRecent(path);
       }
 
       setWorkspacePath(path);

@@ -15,7 +15,7 @@ function runShellCommand(
   cmd: string,
   args: string[],
   cwd: string,
-  env: NodeJS.ProcessEnv = process.env
+  env: NodeJS.ProcessEnv = process.env,
 ): Promise<{ code: number; stdout: string; stderr: string }> {
   return new Promise((resolve) => {
     const child = spawn(cmd, args, { cwd, env, windowsHide: true });
@@ -132,7 +132,7 @@ ipcMain.handle(
       const { code, stdout, stderr } = await runShellCommand(
         cmd,
         args,
-        workspacePath
+        workspacePath,
       );
 
       if (code !== 0) {
@@ -151,8 +151,8 @@ ipcMain.handle(
         err instanceof Error
           ? err.message
           : typeof err === "string"
-          ? err
-          : JSON.stringify(err);
+            ? err
+            : JSON.stringify(err);
 
       console.error("create-workspace exception:", err);
       return {
@@ -161,14 +161,14 @@ ipcMain.handle(
         error: msg || "Unknown error",
       };
     }
-  }
+  },
 );
 
 ipcMain.handle("validate-workspace", (_, workspacePath) => {
   try {
     const requiredDirs = ["src", "install", "log", "build"];
     const missingDirs = requiredDirs.filter(
-      (dir) => !fs.existsSync(path.join(workspacePath, dir))
+      (dir) => !fs.existsSync(path.join(workspacePath, dir)),
     );
     const result = missingDirs.length > 0 ? false : true;
 
@@ -177,6 +177,80 @@ ipcMain.handle("validate-workspace", (_, workspacePath) => {
     if (error instanceof Error) {
       console.error("Erro ao validar o workspace", error);
     }
+  }
+});
+
+ipcMain.handle("get-workspace-details", async (_, workspacePath: string) => {
+  try {
+    const srcPath = path.join(workspacePath, "src");
+    if (!fs.existsSync(srcPath)) {
+      return {
+        packageCount: 0,
+        nodeCount: 0,
+        lastModified: new Date(0).toISOString(),
+      };
+    }
+
+    const packageDirs = fs
+      .readdirSync(srcPath, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && !entry.name.startsWith("."));
+
+    const packageCount = packageDirs.length;
+    let nodeCount = 0;
+    let latestMtime = fs.statSync(srcPath).mtime;
+
+    const findLatestMtime = (dir: string) => {
+      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
+        try {
+          const stats = fs.statSync(fullPath);
+          if (stats.mtime > latestMtime) {
+            latestMtime = stats.mtime;
+          }
+          if (entry.isDirectory()) {
+            findLatestMtime(fullPath); // Recurse
+          }
+        } catch (e) {
+          console.warn(`Could not stat ${fullPath}, error ${e}`);
+        }
+      }
+    };
+
+    findLatestMtime(srcPath); // Start recursion
+
+    for (const packageDir of packageDirs) {
+      const packagePath = path.join(srcPath, packageDir.name);
+      try {
+        const packageEntries = fs.readdirSync(packagePath, {
+          withFileTypes: true,
+        });
+        nodeCount += packageEntries.filter(
+          (entry) =>
+            entry.isFile() &&
+            entry.name.endsWith(".py") &&
+            entry.name !== "__init__.py",
+        ).length;
+      } catch (e) {
+        console.error(`Could not read package directory ${packagePath}`, e);
+      }
+    }
+
+    return {
+      packageCount,
+      nodeCount,
+      lastModified: latestMtime.toISOString(),
+    };
+  } catch (error) {
+    console.error(
+      `Error getting workspace details for ${workspacePath}:`,
+      error,
+    );
+    return {
+      packageCount: 0,
+      nodeCount: 0,
+      lastModified: new Date(0).toISOString(),
+    };
   }
 });
 
@@ -279,7 +353,7 @@ ipcMain.handle(
       }
       return { created: false, error: "An unknown error occurred." };
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -299,7 +373,7 @@ ipcMain.handle(
       const blockFile = path.join(
         packagePath,
         packageName,
-        node.replace(".py", ".blocks")
+        node.replace(".py", ".blocks"),
       );
       const fullPath = path.join(pkgPath, node);
       const relativePath = path.relative(packagePath, fullPath);
@@ -311,7 +385,7 @@ ipcMain.handle(
         content: fs.readFileSync(blockFile, "utf-8"),
       };
     });
-  }
+  },
 );
 
 ipcMain.handle(
@@ -321,7 +395,7 @@ ipcMain.handle(
     nodeName: string,
     nodeType: string,
     packagePath: string,
-    packageName: string
+    packageName: string,
   ) => {
     const pkgPath = path.join(packagePath, packageName);
     const extension = nodeType === "python" ? ".py" : ".cpp";
@@ -365,7 +439,7 @@ ipcMain.handle(
         return { created: false, error: "An unknown error occurred." };
       }
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -404,7 +478,7 @@ ipcMain.handle(
       }
       return { imported: false, error: "An unknown error occurred." };
     }
-  }
+  },
 );
 
 ipcMain.handle("delete-package", async (_, path: string) => {
@@ -443,7 +517,7 @@ ipcMain.handle("get-interfaces", async () => {
           } else {
             resolve(stdout.split("\n").filter((line) => line.trim() !== ""));
           }
-        }
+        },
       );
     });
 
@@ -488,7 +562,7 @@ ipcMain.handle(
       const workspacePath = packagePath.replace(`/src/${packageName}`, "");
 
       console.log(
-        `Building package at path: ${workspacePath} with name: ${packageName}`
+        `Building package at path: ${workspacePath} with name: ${packageName}`,
       );
 
       return new Promise((resolve, reject) => {
@@ -508,18 +582,18 @@ ipcMain.handle(
                   (error, stdout, stderr) => {
                     if (error) {
                       console.error(
-                        `Erro ao rodar setup do ${packagePath}: ${stderr}`
+                        `Erro ao rodar setup do ${packagePath}: ${stderr}`,
                       );
                     } else {
                       console.log(
-                        `Build do ${workspacePath} concluído: ${stdout}`
+                        `Build do ${workspacePath} concluído: ${stdout}`,
                       );
                     }
-                  }
+                  },
                 );
               } else {
                 console.log(
-                  "[ERROR]: The setup file on install folder doens't exists!"
+                  "[ERROR]: The setup file on install folder doens't exists!",
                 );
               }
 
@@ -531,11 +605,11 @@ ipcMain.handle(
                   } else {
                     console.log(`Build do ROS concluído: ${stdout}`);
                   }
-                }
+                },
               );
               resolve({ wasBuilded: true });
             }
-          }
+          },
         );
       });
     } catch (error) {
@@ -546,7 +620,7 @@ ipcMain.handle(
           error instanceof Error ? error.message : "An unknown error occurred.",
       };
     }
-  }
+  },
 );
 
 ipcMain.handle("create-blocks", async (_, nodePath: string, blocks, code) => {
@@ -596,7 +670,7 @@ ipcMain.handle(
   async (_, relativePath: string, nodePath: string, interfaceName: string) => {
     if (!relativePath && !nodePath && !interfaceName) {
       console.log(
-        "The package path, script name and interface name is required!"
+        "The package path, script name and interface name is required!",
       );
       return {
         wasAdded: false,
@@ -621,16 +695,16 @@ ipcMain.handle(
       if (!packageXmlContent.includes(`<depend>${interfaceName}</depend>`)) {
         const updatedPackageXmlContent = packageXmlContent.replace(
           /<\/license>/,
-          `</license>\n  <depend>${interfaceName}</depend>`
+          `</license>\n  <depend>${interfaceName}</depend>`,
         );
 
         fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
         console.log(
-          `Updated package.xml with <depend>${interfaceName}</depend>`
+          `Updated package.xml with <depend>${interfaceName}</depend>`,
         );
       } else {
         console.log(
-          `<depend>${interfaceName}</depend> already exists in package.xml`
+          `<depend>${interfaceName}</depend> already exists in package.xml`,
         );
       }
       return { wasAdded: true };
@@ -642,7 +716,7 @@ ipcMain.handle(
           error instanceof Error ? error.message : "An unknown error occurred.",
       };
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -689,14 +763,14 @@ ipcMain.handle(
                 : `      ${newScriptLine}`;
 
               return `${start}${updatedMiddle}\n  ${end}`;
-            }
+            },
           );
 
         fs.writeFileSync(setupPyPath, updatedSetupPyContent, "utf-8");
         console.log(`Updated setup.py with console script: ${newScriptLine}`);
       } else {
         console.log(
-          `The script line "${newScriptLine}" already exists in setup.py`
+          `The script line "${newScriptLine}" already exists in setup.py`,
         );
       }
       return { wasAdded: true };
@@ -708,7 +782,7 @@ ipcMain.handle(
           error instanceof Error ? error.message : "An unknown error occurred.",
       };
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -748,7 +822,7 @@ ipcMain.handle(
         return { wasDeleted: false, error: "An unknown error occurred." };
       }
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -758,11 +832,11 @@ ipcMain.handle(
     relativePath: string,
     nodePath: string,
     scriptName: string,
-    interfaceName: string
+    interfaceName: string,
   ) => {
     if (!relativePath && !nodePath && !scriptName && !interfaceName) {
       console.log(
-        "The package path, script name and interface name is required!"
+        "The package path, script name and interface name is required!",
       );
       return {
         wasRemoved: false,
@@ -791,11 +865,11 @@ ipcMain.handle(
 
         fs.writeFileSync(packageXmlPath, updatedPackageXmlContent, "utf-8");
         console.log(
-          `Removed <depend>${interfaceName}</depend> from package.xml`
+          `Removed <depend>${interfaceName}</depend> from package.xml`,
         );
       } else {
         console.log(
-          `<depend>${interfaceName}</depend> does not exist in package.xml`
+          `<depend>${interfaceName}</depend> does not exist in package.xml`,
         );
       }
 
@@ -826,7 +900,7 @@ ipcMain.handle(
         console.log(`Removed console script: ${scriptLine} from setup.py`);
       } else {
         console.log(
-          `The script line "${scriptLine}" does not exist in setup.py`
+          `The script line "${scriptLine}" does not exist in setup.py`,
         );
       }
 
@@ -839,7 +913,7 @@ ipcMain.handle(
           error instanceof Error ? error.message : "An unknown error occurred.",
       };
     }
-  }
+  },
 );
 
 ipcMain.handle(
@@ -855,7 +929,7 @@ ipcMain.handle(
     try {
       const workspacePath = path.join(
         packagePath.replace(`/src/${packageName}`, ""),
-        "install"
+        "install",
       );
       const setupScript = path.join(workspacePath, `setup.${getShellType()}`);
 
@@ -887,12 +961,12 @@ ipcMain.handle(
           error instanceof Error ? error.message : "An unknown error occurred.",
       };
     }
-  }
+  },
 );
 
 function formatInterfaceName(interfaceName: string): string {
   const fromImportMatch = interfaceName.match(
-    /from\s+([\w.]+)\s+import\s+([\w]+)/
+    /from\s+([\w.]+)\s+import\s+([\w]+)/,
   );
   if (fromImportMatch) {
     const packagePath = fromImportMatch[1].replace(/\./g, "/");
@@ -926,7 +1000,7 @@ ipcMain.handle("get-message-properties", async (_, interfaceName: string) => {
           } else {
             resolve(stdout);
           }
-        }
+        },
       );
     });
 

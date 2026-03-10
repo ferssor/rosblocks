@@ -6,6 +6,8 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.invoke("create-workspace", path),
   validateWorkspace: (path: string) =>
     ipcRenderer.invoke("validate-workspace", path),
+  getWorkspaceDetails: (path: string) =>
+    ipcRenderer.invoke("get-workspace-details", path),
   getPackages: (path: string) => ipcRenderer.invoke("get-packages", path),
   createPackage: (path: string, name: string, dependency: string) =>
     ipcRenderer.invoke("create-package", path, name, dependency),
@@ -15,14 +17,14 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     nodeName: string,
     nodeType: string,
     packagePath: string,
-    packageName: string
+    packageName: string,
   ) =>
     ipcRenderer.invoke(
       "create-node",
       nodeName,
       nodeType,
       packagePath,
-      packageName
+      packageName,
     ),
   importPackage: (url: string, workspacePath: string) =>
     ipcRenderer.invoke("import-package", url, workspacePath),
@@ -34,7 +36,7 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     relativePath: string,
     nodePath: string,
     blocks: string,
-    code: string
+    code: string,
   ) =>
     ipcRenderer.invoke(
       "create-blocks",
@@ -43,7 +45,7 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
       relativePath,
       nodePath,
       blocks,
-      code
+      code,
     ),
   buildPackage: (packagePath: string, packageName: string) =>
     ipcRenderer.invoke("build-package", packagePath, packageName),
@@ -51,14 +53,14 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     relativePath: string,
     nodePath: string,
     scriptName: string,
-    interfaceName: string
+    interfaceName: string,
   ) =>
     ipcRenderer.invoke(
       "add-dependency",
       relativePath,
       nodePath,
       scriptName,
-      interfaceName
+      interfaceName,
     ),
   deleteNode: (nodeName: string, nodePath: string, packageName: string) =>
     ipcRenderer.invoke("delete-node", nodeName, nodePath, packageName),
@@ -66,14 +68,14 @@ electron.contextBridge.exposeInMainWorld("electronAPI", {
     relativePath: string,
     nodePath: string,
     scriptName: string,
-    interfaceName: string
+    interfaceName: string,
   ) =>
     ipcRenderer.invoke(
       "remove-dependency",
       relativePath,
       nodePath,
       scriptName,
-      interfaceName
+      interfaceName,
     ),
   executeNode: (packageName: string, nodeName: string, packagePath: string) =>
     ipcRenderer.invoke("execute-node", packageName, nodeName, packagePath),

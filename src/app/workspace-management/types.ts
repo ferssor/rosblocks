@@ -10,6 +10,9 @@ export interface WorkspaceManagementProps extends BaseProps {
 export interface RecentWorkspace {
   name: string;
   path: string;
+  packageCount?: number;
+  nodeCount?: number;
+  lastModified?: string;
 }
 
 export interface WorkspaceManagementHookState {
