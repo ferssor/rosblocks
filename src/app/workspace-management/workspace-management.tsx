@@ -1,4 +1,4 @@
-import { Button, Card, List, Result, Typography } from "antd";
+import { Button, Result, Table, Typography } from "antd";
 import { memo } from "react";
 
 import { WorkspaceDialog } from "./components/workspace-dialog";
@@ -6,6 +6,7 @@ import useWorkspaceManagementHook from "./workspace-management.hook";
 import styles from "./workspace-management.styles.module.css";
 
 import type { RecentWorkspace, WorkspaceManagementProps } from "./types";
+import type { TableProps } from "antd";
 
 const { Title } = Typography;
 
@@ -16,16 +17,29 @@ function WorkspaceManagement(props: WorkspaceManagementProps) {
   const hasRecentWorkspaces =
     state.recentWorkspaces && state.recentWorkspaces.length > 0;
 
+  const columns: TableProps<RecentWorkspace>["columns"] = [
+    {
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: t("path"),
+      dataIndex: "path",
+      key: "path",
+    },
+  ];
+
   return (
     <>
-      <div className={styles.fullCenter}>
+      <div
+        className={hasRecentWorkspaces ? styles.container : styles.fullCenter}
+      >
         {hasRecentWorkspaces ? (
-          <Card
-            className={(
-              styles.welcomeContainer +
-              " " +
-              (className || "")
-            ).trim()}
+          <div
+            className={[styles.recentListContainer, className]
+              .filter(Boolean)
+              .join(" ")}
             style={style}
           >
             <div className={styles.header}>
@@ -39,26 +53,22 @@ function WorkspaceManagement(props: WorkspaceManagementProps) {
                 </Button>
               </div>
             </div>
-            <List
-              itemLayout="horizontal"
+            <Table
               dataSource={state.recentWorkspaces}
-              renderItem={(item: RecentWorkspace) => (
-                <List.Item
-                  className={styles.listItem}
-                  onClick={() => handlers.handleOpenRecentWorkspace(item.path)}
-                >
-                  <List.Item.Meta title={item.name} description={item.path} />
-                </List.Item>
-              )}
+              columns={columns}
+              rowKey="path"
+              onRow={(record) => ({
+                onClick: () => handlers.handleOpenRecentWorkspace(record.path),
+                style: { cursor: "pointer" },
+              })}
+              pagination={false}
             />
-          </Card>
+          </div>
         ) : (
           <Result
-            className={(
-              styles.welcomeContainer +
-              " " +
-              (className || "")
-            ).trim()}
+            className={[styles.welcomeScreenContainer, className]
+              .filter(Boolean)
+              .join(" ")}
             style={style}
             status="info"
             title={t("title")}
