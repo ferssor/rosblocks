@@ -96,6 +96,7 @@ function usePackageListHook(props: PackageListProps) {
   );
 
   return {
+    t,
     text,
     state: {
       packageName,

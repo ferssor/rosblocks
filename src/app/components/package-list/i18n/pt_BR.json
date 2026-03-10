@@ -20,5 +20,14 @@
     "buildSuccess": "Package buildado com sucesso!",
     "buildError": "Erro ao buildar o pacote: {{error}}",
     "buildGenericError": "Ocorreu um erro ao buildar o pacote! {{error}}"
+  },
+  "time": {
+    "justNow": "agora há pouco",
+    "minutesAgo": "há {{count}} minutos",
+    "hoursAgo": "há {{count}} horas",
+    "daysAgo": "há {{count}} dias",
+    "weeksAgo": "há {{count}} semanas",
+    "monthsAgo": "há {{count}} meses",
+    "yearsAgo": "há {{count}} anos"
   }
 }

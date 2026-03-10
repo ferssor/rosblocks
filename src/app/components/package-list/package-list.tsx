@@ -1,12 +1,15 @@
 import { Button, Table, Tag } from "antd";
 import {
   differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
   differenceInMonths,
   differenceInYears,
   format,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { memo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { NodeManager } from "../node-manager";
 import { PackageDialog } from "../package-dialog";
@@ -19,7 +22,8 @@ import type { TableProps } from "antd";
 
 function PackageList(props: PackageListProps) {
   const { className = "", style } = props;
-  const { state, handlers, text } = usePackageListHook(props);
+  const { state, handlers, text, t } = usePackageListHook(props);
+  const { i18n } = useTranslation();
 
   const columns: TableProps<Package>["columns"] = [
     {
@@ -69,24 +73,35 @@ function PackageList(props: PackageListProps) {
       render: (modifiedAt: string) => {
         const modifiedAtDate = new Date(modifiedAt);
         const now = new Date();
-        const diffInDays = differenceInDays(now, modifiedAtDate);
-        const diffInWeeks = Math.floor(diffInDays / 7);
-        const diffInMonths = differenceInMonths(now, modifiedAtDate);
-        const diffInYears = differenceInYears(now, modifiedAtDate);
 
-        if (diffInDays < 7) {
-          return format(modifiedAtDate, "EEEE, HH:mm", { locale: ptBR });
-        } else if (diffInDays < 30) {
-          return `${diffInWeeks} semanas atrás, ${format(
-            modifiedAtDate,
-            "HH:mm",
-            { locale: ptBR }
-          )}`;
-        } else if (diffInYears === 0) {
-          return `${diffInMonths} meses atrás`;
+        if (modifiedAtDate > now) {
+          return format(modifiedAtDate, "P p", {
+            locale: i18n.language === "pt" ? ptBR : undefined,
+          });
         }
 
-        return format(modifiedAtDate, "dd/MM/yyyy", { locale: ptBR });
+        const diffInMinutes = differenceInMinutes(now, modifiedAtDate);
+        if (diffInMinutes < 1) return t("time.justNow");
+        if (diffInMinutes < 60)
+          return t("time.minutesAgo", { count: diffInMinutes });
+
+        const diffInHours = differenceInHours(now, modifiedAtDate);
+        if (diffInHours < 24)
+          return t("time.hoursAgo", { count: diffInHours });
+
+        const diffInDays = differenceInDays(now, modifiedAtDate);
+        if (diffInDays < 7) return t("time.daysAgo", { count: diffInDays });
+
+        const diffInMonths = differenceInMonths(now, modifiedAtDate);
+        if (diffInMonths < 1) {
+          const diffInWeeks = Math.floor(diffInDays / 7);
+          return t("time.weeksAgo", { count: diffInWeeks });
+        }
+        if (diffInMonths < 12)
+          return t("time.monthsAgo", { count: diffInMonths });
+
+        const diffInYears = differenceInYears(now, modifiedAtDate);
+        return t("time.yearsAgo", { count: diffInYears });
       },
     },
     {

@@ -20,5 +20,14 @@
     "buildSuccess": "Package built successfully!",
     "buildError": "Error building the package: {{error}}",
     "buildGenericError": "An error occurred while building the package! {{error}}"
+  },
+  "time": {
+    "justNow": "just now",
+    "minutesAgo": "{{count}} minutes ago",
+    "hoursAgo": "{{count}} hours ago",
+    "daysAgo": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago",
+    "yearsAgo": "{{count}} years ago"
   }
 }
