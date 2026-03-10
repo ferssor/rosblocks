@@ -1,6 +1,6 @@
 .container {
   min-height: calc(100vh - 64px);
-  padding: 16px;
+  padding: 48px 16px;
 }
 
 .fullCenter {
@@ -8,7 +8,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
 }
 
 .recentListContainer {
@@ -33,6 +32,10 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
 }
 
 .listItem {

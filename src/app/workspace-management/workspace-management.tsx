@@ -1,4 +1,4 @@
-import { Button, Result, Table, Typography } from "antd";
+import { Button, Result, Table } from "antd";
 import { memo } from "react";
 
 import { WorkspaceDialog } from "./components/workspace-dialog";
@@ -7,8 +7,6 @@ import styles from "./workspace-management.styles.module.css";
 
 import type { RecentWorkspace, WorkspaceManagementProps } from "./types";
 import type { TableProps } from "antd";
-
-const { Title } = Typography;
 
 function WorkspaceManagement(props: WorkspaceManagementProps) {
   const { className = "", style } = props;
@@ -43,7 +41,7 @@ function WorkspaceManagement(props: WorkspaceManagementProps) {
             style={style}
           >
             <div className={styles.header}>
-              <Title level={4}>{t("recentWorkspacesTitle")}</Title>
+              <h1 className={styles.title}>{t("recentWorkspacesTitle")}</h1>
               <div className={styles.actions}>
                 <Button type="primary" onClick={handlers.openCreateModal}>
                   {t("primaryButton")}
