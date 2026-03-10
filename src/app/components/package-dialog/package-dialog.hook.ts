@@ -17,10 +17,7 @@ export const PACKAGE_DEPENDENCY_OPTIONS: CheckboxGroupProps<string>["options"] =
 function usePackageDialogHook(props: PackageDialogProps) {
   const { packageLocation, setPackages, setIsModalOpen } = props;
   const [createForm] = Form.useForm();
-  const [importForm] = Form.useForm();
   const [isInputChanged, setIsInputChanged] = useState(false);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showImportForm, setShowImportForm] = useState(false);
   const [packageDependency, setPackageDependency] = useState("rclpy");
   const [initialValues, setInitialValues] = useState({
     location: packageLocation,
@@ -33,7 +30,6 @@ function usePackageDialogHook(props: PackageDialogProps) {
   const closeDialog = useCallback(() => {
     setIsModalOpen(false);
     createForm.resetFields();
-    importForm.resetFields();
     createForm.setFieldsValue({
       location: packageLocation,
       name: undefined,
@@ -42,9 +38,7 @@ function usePackageDialogHook(props: PackageDialogProps) {
     });
     setPackageDependency("rclpy");
     setIsInputChanged(false);
-    setShowCreateForm(false);
-    setShowImportForm(false);
-  }, [createForm, importForm, packageLocation, setIsModalOpen]);
+  }, [createForm, packageLocation, setIsModalOpen]);
 
   const fetchPackages = useCallback(async () => {
     const result = await window.electronAPI.getPackages(packageLocation);
@@ -79,42 +73,12 @@ function usePackageDialogHook(props: PackageDialogProps) {
       }
     } catch (error) {
       if (error instanceof Error) {
-        message.error(t("messages.createGenericError", { error: error.message }));
+        message.error(
+          t("messages.createGenericError", { error: error.message })
+        );
       }
     }
   }, [closeDialog, createForm, fetchPackages, packageLocation, t]);
-
-  const handleImportPackage = useCallback(async () => {
-    try {
-      await importForm.validateFields();
-      const packageUrl: string = importForm.getFieldValue("url");
-      const result = await window.electronAPI.importPackage(
-        packageUrl,
-        packageLocation
-      );
-
-      if (result.imported) {
-        message.success(t("messages.importSuccess"));
-        closeDialog();
-        fetchPackages();
-      } else if (result.error) {
-        message.error(
-          t("messages.importError", {
-            error:
-              typeof result.error === "string"
-                ? result.error
-                : JSON.stringify(result.error),
-          })
-        );
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        message.error(
-          t("messages.importGenericError", { error: error.message })
-        );
-      }
-    }
-  }, [closeDialog, fetchPackages, importForm, packageLocation, t]);
 
   const handleFieldsChange = useCallback(() => {
     const currentValues = createForm.getFieldsValue();
@@ -124,11 +88,6 @@ function usePackageDialogHook(props: PackageDialogProps) {
     setIsInputChanged(isChanged && nameValue.length > 0);
   }, [createForm, initialValues]);
 
-  const handleFieldsChangeOnImport = useCallback(() => {
-    const urlValue = String(importForm.getFieldValue("url") ?? "");
-    setIsInputChanged(urlValue.length > 0);
-  }, [importForm]);
-
   const handleDependencyChange = useCallback(
     (event: RadioChangeEvent) => {
       if (event.target?.value) {
@@ -137,18 +96,6 @@ function usePackageDialogHook(props: PackageDialogProps) {
     },
     []
   );
-
-  const toggleCreateForm = useCallback(() => {
-    setShowCreateForm((prev) => !prev);
-    setShowImportForm(false);
-    setIsInputChanged(false);
-  }, []);
-
-  const toggleImportForm = useCallback(() => {
-    setShowImportForm((prev) => !prev);
-    setShowCreateForm(false);
-    setIsInputChanged(false);
-  }, []);
 
   useEffect(() => {
     if (props.isModalOpen) {
@@ -167,9 +114,6 @@ function usePackageDialogHook(props: PackageDialogProps) {
   const text = useMemo(
     () => ({
       title: t("modal.title"),
-      subtitle: t("modal.subtitle"),
-      description: t("modal.description"),
-      importButton: t("modal.importButton"),
       createButton: t("modal.createButton"),
       cancelButton: t("modal.cancelButton"),
       packageLocationLabel: t("form.locationLabel"),
@@ -182,9 +126,6 @@ function usePackageDialogHook(props: PackageDialogProps) {
       packageTypeRequiredMessage: t("form.typeRequired"),
       packageDependencyLabel: t("form.dependencyLabel"),
       packageDependencyPlaceholder: t("form.dependencyPlaceholder"),
-      packageUrlLabel: t("form.urlLabel"),
-      packageUrlPlaceholder: t("form.urlPlaceholder"),
-      packageUrlRequiredMessage: t("form.urlRequired"),
     }),
     [t]
   );
@@ -193,24 +134,18 @@ function usePackageDialogHook(props: PackageDialogProps) {
     text,
     state: {
       isInputChanged,
-      showCreateForm,
-      showImportForm,
       initialValues,
     },
     handlers: {
       createForm,
-      importForm,
       closeDialog,
       handleCreatePackage,
-      handleImportPackage,
       handleFieldsChange,
-      handleFieldsChangeOnImport,
       handleDependencyChange,
-      toggleCreateForm,
-      toggleImportForm,
       setModalOpen: setIsModalOpen,
     },
   };
 }
 
 export default usePackageDialogHook;
+

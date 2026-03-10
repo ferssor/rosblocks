@@ -1,9 +1,6 @@
 {
   "modal": {
-    "title": "Add a new package",
-    "subtitle": "Import or add a new package",
-    "description": "You can create a new package or import a ROS2 package from a GitHub URL",
-    "importButton": "Import",
+    "title": "Create a new package",
     "createButton": "Create",
     "cancelButton": "Cancel"
   },
@@ -17,17 +14,11 @@
     "typeLabel": "Package type",
     "typeRequired": "Choose the package type",
     "dependencyLabel": "Package dependency",
-    "dependencyPlaceholder": "Choose the package dependency",
-    "urlLabel": "Package URL",
-    "urlPlaceholder": "https://github/user/repository-name",
-    "urlRequired": "The package URL is required"
+    "dependencyPlaceholder": "Choose the package dependency"
   },
   "messages": {
     "createSuccess": "Package created successfully!",
     "createError": "Error creating the package: {{error}}",
-    "createGenericError": "An error occurred while creating the package! {{error}}",
-    "importSuccess": "Package imported successfully!",
-    "importError": "Error importing the package: {{error}}",
-    "importGenericError": "An error occurred while importing the package! {{error}}"
+    "createGenericError": "An error occurred while creating the package! {{error}}"
   }
 }

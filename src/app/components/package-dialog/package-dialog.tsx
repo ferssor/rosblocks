@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Radio, Result } from "antd";
+import { Button, Form, Input, Modal, Radio } from "antd";
 import { memo } from "react";
 
 import usePackageDialogHook, {
@@ -19,59 +19,28 @@ function PackageDialog(props: PackageDialogProps) {
       centered
       maskClosable={false}
       onCancel={handlers.closeDialog}
-      footer={
-        state.showCreateForm || state.showImportForm
-          ? [
-              <Button
-                key="save"
-                type="primary"
-                htmlType="submit"
-                form={state.showCreateForm ? "packageCreate" : "packageImport"}
-                disabled={!state.isInputChanged}
-                onClick={
-                  state.showCreateForm
-                    ? handlers.handleCreatePackage
-                    : handlers.handleImportPackage
-                }
-              >
-                {state.showCreateForm ? text.createButton : text.importButton}
-              </Button>,
-              <Button key="cancel" type="default" onClick={handlers.closeDialog}>
-                {text.cancelButton}
-              </Button>,
-            ]
-          : null
-      }
+      footer={[
+        <Button
+          key="save"
+          type="primary"
+          htmlType="submit"
+          form="packageCreate"
+          disabled={!state.isInputChanged}
+          onClick={handlers.handleCreatePackage}
+        >
+          {text.createButton}
+        </Button>,
+        <Button key="cancel" type="default" onClick={handlers.closeDialog}>
+          {text.cancelButton}
+        </Button>,
+      ]}
     >
-      {!state.showCreateForm && !state.showImportForm ? (
-        <Result
-          status="info"
-          title={text.subtitle}
-          subTitle={text.description}
-          extra={[
-            <div key="actions" className={styles.actions}>
-              <Button type="primary" onClick={handlers.toggleImportForm}>
-                {text.importButton}
-              </Button>
-              <Button
-                type="primary"
-                color="green"
-                variant="solid"
-                onClick={handlers.toggleCreateForm}
-              >
-                {text.createButton}
-              </Button>
-            </div>,
-          ]}
-        />
-      ) : null}
       <Form
         layout="vertical"
         form={handlers.createForm}
         id="packageCreate"
         onFieldsChange={handlers.handleFieldsChange}
         initialValues={state.initialValues}
-        hidden={!state.showCreateForm}
       >
         <Form.Item
           label={text.packageLocationLabel}
@@ -112,26 +81,6 @@ function PackageDialog(props: PackageDialogProps) {
         </Form.Item>
         <Form.Item label={text.packageDependencyLabel} name="dependency">
           <Input readOnly placeholder={text.packageDependencyPlaceholder} />
-        </Form.Item>
-      </Form>
-      <Form
-        layout="vertical"
-        form={handlers.importForm}
-        id="packageImport"
-        onFieldsChange={handlers.handleFieldsChangeOnImport}
-        hidden={!state.showImportForm}
-      >
-        <Form.Item
-          label={text.packageUrlLabel}
-          name="url"
-          rules={[
-            {
-              required: true,
-              message: text.packageUrlRequiredMessage,
-            },
-          ]}
-        >
-          <Input placeholder={text.packageUrlPlaceholder} />
         </Form.Item>
       </Form>
     </Modal>
