@@ -7,3 +7,12 @@ export interface BaseProps {
 export interface WorkspaceManagementProps extends BaseProps {
   children?: React.ReactNode;
 }
+export interface RecentWorkspace {
+  name: string;
+  path: string;
+}
+
+export interface WorkspaceManagementHookState {
+  recentWorkspaces: RecentWorkspace[];
+  openModal: boolean;
+}

@@ -19,3 +19,19 @@
   align-items: center;
   justify-content: center;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.listItem {
+  cursor: pointer;
+  padding: 12px !important;
+  border-radius: 6px;
+}
+.listItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
