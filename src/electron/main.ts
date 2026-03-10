@@ -219,18 +219,42 @@ ipcMain.handle("get-workspace-details", async (_, workspacePath: string) => {
 
     findLatestMtime(srcPath); // Start recursion
 
+    const getAllFiles = (dirPath: string, arrayOfFiles: string[] = []) => {
+      const files = fs.readdirSync(dirPath);
+
+      files.forEach(function (file) {
+        if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
+          arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles);
+        } else {
+          arrayOfFiles.push(path.join(dirPath, file));
+        }
+      });
+
+      return arrayOfFiles;
+    };
+
     for (const packageDir of packageDirs) {
       const packagePath = path.join(srcPath, packageDir.name);
       try {
-        const packageEntries = fs.readdirSync(packagePath, {
-          withFileTypes: true,
-        });
-        nodeCount += packageEntries.filter(
-          (entry) =>
-            entry.isFile() &&
-            entry.name.endsWith(".py") &&
-            entry.name !== "__init__.py",
-        ).length;
+        const allFiles = getAllFiles(packagePath);
+        nodeCount += allFiles.filter((file) => {
+          if (!file.endsWith(".py") || file.endsWith("__init__.py")) {
+            return false;
+          }
+          try {
+            const stats = fs.statSync(file);
+            return (
+              (stats.mode &
+                (fs.constants.S_IXUSR |
+                  fs.constants.S_IXGRP |
+                  fs.constants.S_IXOTH)) >
+              0
+            );
+          } catch (e) {
+            console.error(`Could not stat file ${file}`, e);
+            return false;
+          }
+        }).length;
       } catch (e) {
         console.error(`Could not read package directory ${packagePath}`, e);
       }
