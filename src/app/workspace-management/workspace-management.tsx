@@ -60,10 +60,12 @@ function WorkspaceManagement(props: WorkspaceManagementProps) {
 
         if (diffInDays < 7) {
           return format(modifiedAtDate, "EEEE, HH:mm", { locale: ptBR });
-        } else if (diffInDays < 30) {
-          return `${diffInWeeks} semanas atrás`;
-        } else if (diffInYears === 0) {
-          return `${diffInMonths} meses atrás`;
+        }
+        if (diffInDays < 30) {
+          return t("weeksAgo", { count: diffInWeeks });
+        }
+        if (diffInYears === 0) {
+          return t("monthsAgo", { count: diffInMonths });
         }
         return format(modifiedAtDate, "dd/MM/yyyy", { locale: ptBR });
       },

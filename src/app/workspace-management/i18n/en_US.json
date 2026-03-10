@@ -3,6 +3,14 @@
   "subtitle": "A workspace is where ROS programs are stored. You need one to save your programs.",
   "primaryButton": "Create a new workspace",
   "secondaryButton": "Open an existing workspace",
+  "name": "Name",
+  "path": "Path",
+  "packageCount": "Package Count",
+  "nodeCount": "Node Count",
+  "lastModified": "Last Modified",
+  "weeksAgo": "{{count}} weeks ago",
+  "monthsAgo": "{{count}} months ago",
+  "recentWorkspacesTitle": "Recent Workspaces",
   "errors": {
     "invalidWorkspace": "An error occurred while selecting the workspace. The folder is not compatible."
   }
