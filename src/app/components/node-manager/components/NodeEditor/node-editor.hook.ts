@@ -1,6 +1,6 @@
 import { message } from "antd";
 import { pythonGenerator } from "blockly/python";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import "../../i18n";
@@ -28,18 +28,79 @@ const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
   },
 };
 
+type NodeEditorState = {
+  showBlockEditor: boolean;
+  showTextEditor: boolean;
+  showTerminal: boolean;
+  json: Record<string, unknown>;
+  dependency: string;
+  generatedCode: string | undefined;
+  wasEdited: boolean;
+};
+
+type NodeEditorAction =
+  | { type: "TOGGLE_BLOCK_EDITOR" }
+  | { type: "TOGGLE_TEXT_EDITOR" }
+  | { type: "TOGGLE_TERMINAL" }
+  | { type: "SET_JSON"; payload: Record<string, unknown> }
+  | { type: "SET_DEPENDENCY"; payload: string }
+  | { type: "SET_GENERATED_CODE"; payload: string | undefined }
+  | { type: "SET_WAS_EDITED"; payload: boolean };
+
+const initialState: NodeEditorState = {
+  showBlockEditor: true,
+  showTextEditor: false,
+  showTerminal: false,
+  json: {},
+  dependency: "",
+  generatedCode: undefined,
+  wasEdited: false,
+};
+
+function nodeEditorReducer(
+  state: NodeEditorState,
+  action: NodeEditorAction,
+): NodeEditorState {
+  switch (action.type) {
+    case "TOGGLE_BLOCK_EDITOR":
+      return { ...state, showBlockEditor: !state.showBlockEditor };
+    case "TOGGLE_TEXT_EDITOR":
+      return { ...state, showTextEditor: !state.showTextEditor };
+    case "TOGGLE_TERMINAL":
+      return { ...state, showTerminal: !state.showTerminal };
+    case "SET_JSON": {
+      const newState = { ...state, json: action.payload };
+      if (!action.payload || Object.keys(action.payload).length === 0) {
+        newState.generatedCode = undefined;
+      }
+      return newState;
+    }
+    case "SET_DEPENDENCY":
+      return { ...state, dependency: action.payload };
+    case "SET_GENERATED_CODE":
+      return { ...state, generatedCode: action.payload };
+    case "SET_WAS_EDITED":
+      return { ...state, wasEdited: action.payload };
+    default:
+      return state;
+  }
+}
+
 function useNodeEditorHook(props: NodeEditorProps) {
   const { selectedNode, pkgLocation, pkgName, fetchNodes, setSelectedNode } =
     props;
-  const [showBlockEditor, setShowBlockEditor] = useState(true);
-  const [showTextEditor, setShowTextEditor] = useState(false);
-  const [showTerminal, setShowTerminal] = useState(false);
-  const [json, setJson] = useState<Record<string, unknown>>({});
-  const [dependency, setDependency] = useState("");
-  const [generatedCode, setGeneratedCode] = useState<string | undefined>(
-    undefined
-  );
-  const [wasEdited, setWasEdited] = useState(false);
+
+  const [state, dispatch] = useReducer(nodeEditorReducer, initialState);
+  const {
+    showBlockEditor,
+    showTextEditor,
+    showTerminal,
+    json,
+    dependency,
+    generatedCode,
+    wasEdited,
+  } = state;
+
   const workspaceRef = useRef<Blockly.WorkspaceSvg | null>(null);
   const { t } = useTranslation("node_manager");
 
@@ -55,44 +116,53 @@ function useNodeEditorHook(props: NodeEditorProps) {
     return {};
   }, [selectedNode.content]);
 
-  const handleWorkspaceChange = useCallback((workspace: Blockly.WorkspaceSvg) => {
-    workspaceRef.current = workspace;
-  }, []);
+  const handleWorkspaceChange = useCallback(
+    (workspace: Blockly.WorkspaceSvg) => {
+      workspaceRef.current = workspace;
+    },
+    [],
+  );
 
   const handleGenerateCode = useCallback(() => {
     if (workspaceRef.current) {
       const code = pythonGenerator.workspaceToCode(workspaceRef.current);
-      setGeneratedCode(code.trim().length > 0 ? code : undefined);
+      dispatch({
+        type: "SET_GENERATED_CODE",
+        payload: code.trim().length > 0 ? code : undefined,
+      });
       return;
     }
 
-    setGeneratedCode(undefined);
+    dispatch({ type: "SET_GENERATED_CODE", payload: undefined });
   }, []);
 
-  const findValueByKey = useCallback((obj: unknown, key: string): string | null => {
-    if (!obj || typeof obj !== "object") {
-      return null;
-    }
+  const findValueByKey = useCallback(
+    (obj: unknown, key: string): string | null => {
+      if (!obj || typeof obj !== "object") {
+        return null;
+      }
 
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      const value = (obj as Record<string, string>)[key];
-      return typeof value === "string" ? value : null;
-    }
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const value = (obj as Record<string, string>)[key];
+        return typeof value === "string" ? value : null;
+      }
 
-    for (const propKey in obj as Record<string, unknown>) {
-      if (Object.prototype.hasOwnProperty.call(obj, propKey)) {
-        const value = findValueByKey(
-          (obj as Record<string, unknown>)[propKey],
-          key
-        );
-        if (value !== null) {
-          return value;
+      for (const propKey in obj as Record<string, unknown>) {
+        if (Object.prototype.hasOwnProperty.call(obj, propKey)) {
+          const value = findValueByKey(
+            (obj as Record<string, unknown>)[propKey],
+            key,
+          );
+          if (value !== null) {
+            return value;
+          }
         }
       }
-    }
 
-    return null;
-  }, []);
+      return null;
+    },
+    [],
+  );
 
   const getInterfaceDependency = useCallback(
     (jsonValue: Record<string, unknown>) => {
@@ -100,24 +170,20 @@ function useNodeEditorHook(props: NodeEditorProps) {
       if (dependencyName) {
         const match = dependencyName.match(/from\s+(\w+)\./);
         if (match && match[1]) {
-          setDependency(match[1]);
+          dispatch({ type: "SET_DEPENDENCY", payload: match[1] });
         } else {
-          setDependency("");
+          dispatch({ type: "SET_DEPENDENCY", payload: "" });
         }
       } else {
-        setDependency("");
+        dispatch({ type: "SET_DEPENDENCY", payload: "" });
       }
     },
-    [findValueByKey]
+    [findValueByKey],
   );
 
   const handleJsonChange = useCallback((value: object) => {
     const parsedValue = value as Record<string, unknown>;
-    setJson(parsedValue);
-
-    if (!parsedValue || Object.keys(parsedValue).length === 0) {
-      setGeneratedCode(undefined);
-    }
+    dispatch({ type: "SET_JSON", payload: parsedValue });
   }, []);
 
   const handleAddDependency = useCallback(
@@ -127,26 +193,26 @@ function useNodeEditorHook(props: NodeEditorProps) {
           const result = await window.electronAPI.addDependency(
             relativePath,
             nodePath,
-            interfaceName
+            interfaceName,
           );
 
           if (result.wasAdded) {
             message.success(t("editor.messages.dependencyAdded"));
           } else if (result.error) {
             message.error(
-              t("editor.messages.dependencyError", { error: result.error })
+              t("editor.messages.dependencyError", { error: result.error }),
             );
           }
         } catch (error) {
           if (error instanceof Error) {
             message.error(
-              t("editor.messages.dependencyError", { error: error.message })
+              t("editor.messages.dependencyError", { error: error.message }),
             );
           }
         }
       }
     },
-    [t]
+    [t],
   );
 
   const handleAddScript = useCallback(
@@ -155,24 +221,24 @@ function useNodeEditorHook(props: NodeEditorProps) {
         const result = await window.electronAPI.addScript(
           relativePath,
           nodePath,
-          scriptName
+          scriptName,
         );
         if (result.wasAdded) {
           message.success(t("editor.messages.scriptAdded"));
         } else if (result.error) {
           message.error(
-            t("editor.messages.scriptError", { error: result.error })
+            t("editor.messages.scriptError", { error: result.error }),
           );
         }
       } catch (error) {
         if (error instanceof Error) {
           message.error(
-            t("editor.messages.scriptError", { error: error.message })
+            t("editor.messages.scriptError", { error: error.message }),
           );
         }
       }
     },
-    [t]
+    [t],
   );
 
   const handleBuildPackage = useCallback(
@@ -180,24 +246,24 @@ function useNodeEditorHook(props: NodeEditorProps) {
       try {
         const result = await window.electronAPI.buildPackage(
           packageLocation,
-          packageName
+          packageName,
         );
         if (result.wasBuilded) {
           message.success(t("editor.messages.buildSuccess"));
         } else if (result.error) {
           message.error(
-            t("editor.messages.buildError", { error: result.error })
+            t("editor.messages.buildError", { error: result.error }),
           );
         }
       } catch (error) {
         if (error instanceof Error) {
           message.error(
-            t("editor.messages.buildError", { error: error.message })
+            t("editor.messages.buildError", { error: error.message }),
           );
         }
       }
     },
-    [t]
+    [t],
   );
 
   const handleSaveCode = useCallback(async () => {
@@ -209,7 +275,7 @@ function useNodeEditorHook(props: NodeEditorProps) {
       const result = await window.electronAPI.createBlocks(
         selectedNode.fullPath,
         JSON.stringify(json),
-        generatedCode
+        generatedCode,
       );
 
       if (result.created) {
@@ -221,23 +287,25 @@ function useNodeEditorHook(props: NodeEditorProps) {
           await handleAddDependency(
             selectedNode.relativePath,
             selectedNode.fullPath,
-            dependency
+            dependency,
           );
         }
 
         await handleAddScript(
           selectedNode.relativePath,
           selectedNode.fullPath,
-          selectedNode.name
+          selectedNode.name,
         );
         await handleBuildPackage(pkgName, pkgLocation);
       } else if (result.error) {
-        message.error(t("editor.messages.blocksError", { error: result.error }));
+        message.error(
+          t("editor.messages.blocksError", { error: result.error }),
+        );
       }
     } catch (error) {
       if (error instanceof Error) {
         message.error(
-          t("editor.messages.blocksError", { error: error.message })
+          t("editor.messages.blocksError", { error: error.message }),
         );
       }
     }
@@ -265,7 +333,7 @@ function useNodeEditorHook(props: NodeEditorProps) {
       const result = await window.electronAPI.deleteNode(
         selectedNode.name,
         selectedNode.fullPath,
-        pkgName
+        pkgName,
       );
       if (result.wasDeleted) {
         message.success(t("editor.messages.deleteSuccess"));
@@ -278,7 +346,7 @@ function useNodeEditorHook(props: NodeEditorProps) {
               selectedNode.relativePath,
               selectedNode.fullPath,
               selectedNode.name,
-              dependency
+              dependency,
             );
           if (removeDependencyResult.wasRemoved) {
             message.success(t("editor.messages.dependencyRemovedSuccess"));
@@ -286,17 +354,19 @@ function useNodeEditorHook(props: NodeEditorProps) {
             message.error(
               t("editor.messages.dependencyRemovedError", {
                 error: removeDependencyResult.error,
-              })
+              }),
             );
           }
         }
       } else if (result.error) {
-        message.error(t("editor.messages.deleteError", { error: result.error }));
+        message.error(
+          t("editor.messages.deleteError", { error: result.error }),
+        );
       }
     } catch (error) {
       if (error instanceof Error) {
         message.error(
-          t("editor.messages.deleteError", { error: error.message })
+          t("editor.messages.deleteError", { error: error.message }),
         );
       }
     }
@@ -321,17 +391,19 @@ function useNodeEditorHook(props: NodeEditorProps) {
       const result = await window.electronAPI.executeNode(
         pkgName,
         selectedNode.name,
-        pkgLocation
+        pkgLocation,
       );
       if (result.executed) {
         message.success(t("editor.messages.executeSuccess"));
       } else if (result.error) {
-        message.error(t("editor.messages.executeError", { error: result.error }));
+        message.error(
+          t("editor.messages.executeError", { error: result.error }),
+        );
       }
     } catch (error) {
       if (error instanceof Error) {
         message.error(
-          t("editor.messages.executeError", { error: error.message })
+          t("editor.messages.executeError", { error: error.message }),
         );
       }
     }
@@ -353,19 +425,17 @@ function useNodeEditorHook(props: NodeEditorProps) {
         })()
       : {};
 
-    setWasEdited(JSON.stringify(json) !== JSON.stringify(parsedContent));
-  }, [
-    getInterfaceDependency,
-    handleGenerateCode,
-    json,
-    selectedNode.content,
-  ]);
+    dispatch({
+      type: "SET_WAS_EDITED",
+      payload: JSON.stringify(json) !== JSON.stringify(parsedContent),
+    });
+  }, [getInterfaceDependency, handleGenerateCode, json, selectedNode.content]);
 
   useEffect(() => {
     if (workspaceRef.current) {
       workspaceRef.current.clear();
     }
-    setJson(initialWorkspace);
+    dispatch({ type: "SET_JSON", payload: initialWorkspace });
   }, [initialWorkspace]);
 
   const text = useMemo(
@@ -382,7 +452,7 @@ function useNodeEditorHook(props: NodeEditorProps) {
       noEditorSelected: t("editor.noEditorSelected"),
       terminalPlaceholder: t("editor.terminalPlaceholder"),
     }),
-    [t]
+    [t],
   );
 
   return {
@@ -395,9 +465,9 @@ function useNodeEditorHook(props: NodeEditorProps) {
       initialWorkspace,
     },
     handlers: {
-      toggleBlockEditor: () => setShowBlockEditor((prev) => !prev),
-      toggleTextEditor: () => setShowTextEditor((prev) => !prev),
-      toggleTerminal: () => setShowTerminal((prev) => !prev),
+      toggleBlockEditor: () => dispatch({ type: "TOGGLE_BLOCK_EDITOR" }),
+      toggleTextEditor: () => dispatch({ type: "TOGGLE_TEXT_EDITOR" }),
+      toggleTerminal: () => dispatch({ type: "TOGGLE_TERMINAL" }),
       handleWorkspaceChange,
       handleJsonChange,
       handleSaveCode,
