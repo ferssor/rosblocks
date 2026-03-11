@@ -1,3 +1,10 @@
+declare module "*.hbs" {
+  const content: string;
+  export default content;
+}
+
+declare module "vite-plugin-raw";
+
 type Package = {
   name: string;
   fullPath: string;

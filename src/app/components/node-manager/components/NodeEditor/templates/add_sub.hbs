@@ -1,0 +1,7 @@
+{{#if interfaceName}}
+{{#if topicName}}
+{{#if refreshRate}}
+self.{{subscriberName}} = self.create_subscription({{interfaceClass}}, "{{topicName}}", self.{{functionName}}, {{refreshRate}})
+{{/if}}
+{{/if}}
+{{/if}}

@@ -1,0 +1,7 @@
+{{#if interfaceName}}
+{{#if publisherName}}
+{{#if refreshRate}}
+self.{{publisherName}} = self.create_publisher({{interfaceClass}}, "{{topicName}}", {{refreshRate}})
+{{/if}}
+{{/if}}
+{{/if}}

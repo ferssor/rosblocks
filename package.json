@@ -23,6 +23,7 @@
     "antd": "^5.24.3",
     "blockly": "^11.2.2",
     "date-fns": "^4.1.0",
+    "handlebars": "^4.7.8",
     "i18next": "^25.5.3",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
@@ -53,6 +54,7 @@
     "npm-run-all": "^4.1.5",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-raw": "^1.0.3"
   }
 }

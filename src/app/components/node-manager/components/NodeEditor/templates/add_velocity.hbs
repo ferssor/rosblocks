@@ -1,0 +1,6 @@
+{{#if propertyName}}
+{{#if velocityValue}}
+msg = Twist()
+msg.{{property}} = float({{velocityValue}})
+{{/if}}
+{{/if}}

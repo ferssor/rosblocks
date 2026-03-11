@@ -1,0 +1,11 @@
+{{#if interfaceName}}
+{{#if topicName}}
+{{#if commName}}
+{{#if (eq commType "publisher")}}
+self.{{commName}} = self.create_publisher({{interfaceClass}}, "{{topicName}}", 10)
+{{else}}
+self.{{commName}} = self.create_subscription({{interfaceClass}}, "{{topicName}}", self.{{callbackName}}, 10)
+{{/if}}
+{{/if}}
+{{/if}}
+{{/if}}

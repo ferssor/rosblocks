@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import rclpy
+from rclpy.node import Node
+{{#if interfaceImport}}
+{{interfaceImport}}
+{{/if}}
+
+class {{className}}(Node):
+{{#if normalizedBody}}
+{{{normalizedBody}}}
+{{else}}
+  pass
+{{/if}}
+
+def main(args=None):
+  rclpy.init(args=args)
+  node = {{className}}()
+  rclpy.spin(node)
+  rclpy.shutdown()
+
+if __name__ == '__main__':
+  main()

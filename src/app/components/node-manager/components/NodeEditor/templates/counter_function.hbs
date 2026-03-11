@@ -1,0 +1,10 @@
+{{#if msgInterface}}
+{{#if duration}}
+{{#if publisher}}
+def publish_number(self):
+    msg = {{interfaceClass}}
+    msg.data = {{duration}}
+    self.{{publisher}}.publish(msg)
+{{/if}}
+{{/if}}
+{{/if}}
