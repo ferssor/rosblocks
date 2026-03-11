@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 
 import "../../i18n";
 
+import { toolbox } from "./toolbox";
+
 import type { NodeEditorProps } from "./types";
 import type Blockly from "blockly";
 
@@ -26,6 +28,7 @@ const WORKSPACE_CONFIG: Blockly.BlocklyOptions = {
     drag: true,
     wheel: true,
   },
+  toolbox,
 };
 
 type NodeEditorState = {

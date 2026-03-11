@@ -1,601 +1,127 @@
-import type { ToolboxDefinition } from "react-blockly";
+import type { BlocklyOptions } from "blockly";
 
-export const toolbox: ToolboxDefinition = {
+export const toolbox: BlocklyOptions["toolbox"] = {
   kind: "categoryToolbox",
-
   contents: [
     {
       kind: "category",
-      name: "Lógica",
-      categorystyle: "logic_category",
+      name: "Lógica e Controle",
+      colour: "210",
+      // Subcategorias
       contents: [
         {
-          kind: "block",
-          type: "controls_if",
+          kind: "category",
+          name: "Condicionais",
+          contents: [
+            { kind: "block", type: "controls_if" },
+            { kind: "block", type: "logic_compare" },
+            { kind: "block", type: "logic_operation" },
+            { kind: "block", type: "logic_negate" },
+            { kind: "block", type: "logic_boolean" },
+          ],
         },
         {
-          kind: "block",
-          type: "logic_compare",
-        },
-        {
-          kind: "block",
-          type: "logic_operation",
-        },
-        {
-          kind: "block",
-          type: "logic_negate",
-        },
-        {
-          kind: "block",
-          type: "logic_boolean",
-        },
-        {
-          kind: "block",
-          type: "logic_null",
-        },
-        {
-          kind: "block",
-          type: "logic_ternary",
+          kind: "category",
+          name: "Repetição",
+          contents: [
+            { kind: "block", type: "controls_repeat_ext" },
+            { kind: "block", type: "controls_whileUntil" },
+            { kind: "block", type: "controls_for" },
+            { kind: "block", type: "controls_flow_statements" },
+          ],
         },
       ],
     },
     {
       kind: "category",
-      name: "Repetição",
-      categorystyle: "loop_category",
+      name: "Dados",
+      colour: "230",
       contents: [
         {
-          kind: "block",
-          type: "controls_repeat_ext",
-          inputs: {
-            TIMES: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-          },
+          kind: "category",
+          name: "Matemática",
+          contents: [
+            { kind: "block", type: "math_number" },
+            { kind: "block", type: "math_arithmetic" },
+            { kind: "block", type: "math_single" },
+          ],
         },
         {
-          kind: "block",
-          type: "controls_whileUntil",
+          kind: "category",
+          name: "Texto",
+          contents: [
+            { kind: "block", type: "text" },
+            { kind: "block", type: "text_join" },
+            { kind: "block", type: "text_print" },
+          ],
         },
         {
-          kind: "block",
-          type: "controls_for",
-          inputs: {
-            FROM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            TO: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-            BY: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "controls_forEach",
-        },
-        {
-          kind: "block",
-          type: "controls_flow_statements",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Matemática",
-      categorystyle: "math_category",
-      contents: [
-        {
-          kind: "block",
-          type: "math_number",
-          fields: {
-            NUM: 123,
-          },
-        },
-        {
-          kind: "block",
-          type: "math_arithmetic",
-          inputs: {
-            A: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            B: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_single",
-          inputs: {
-            NUM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 9,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_trig",
-          inputs: {
-            NUM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 45,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_constant",
-        },
-        {
-          kind: "block",
-          type: "math_number_property",
-          inputs: {
-            NUMBER_TO_CHECK: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 0,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_round",
-          fields: {
-            OP: "ROUND",
-          },
-          inputs: {
-            NUM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 3.1,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_on_list",
-          fields: {
-            OP: "SUM",
-          },
-        },
-        {
-          kind: "block",
-          type: "math_modulo",
-          inputs: {
-            DIVIDEND: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 64,
-                },
-              },
-            },
-            DIVISOR: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 10,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_constrain",
-          inputs: {
-            VALUE: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 50,
-                },
-              },
-            },
-            LOW: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            HIGH: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 100,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_random_int",
-          inputs: {
-            FROM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            TO: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 100,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "math_random_float",
-        },
-        {
-          kind: "block",
-          type: "math_atan2",
-          inputs: {
-            X: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-            Y: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 1,
-                },
-              },
-            },
-          },
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Listas",
-      categorystyle: "list_category",
-      contents: [
-        {
-          kind: "block",
-          type: "lists_create_with",
-        },
-        {
-          kind: "block",
-          type: "lists_create_with",
-        },
-        {
-          kind: "block",
-          type: "lists_repeat",
-          inputs: {
-            NUM: {
-              shadow: {
-                type: "math_number",
-                fields: {
-                  NUM: 5,
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_length",
-        },
-        {
-          kind: "block",
-          type: "lists_isEmpty",
-        },
-        {
-          kind: "block",
-          type: "lists_indexOf",
-          inputs: {
-            VALUE: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_getIndex",
-          inputs: {
-            VALUE: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_setIndex",
-          inputs: {
-            LIST: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_getSublist",
-          inputs: {
-            LIST: {
-              block: {
-                type: "variables_get",
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_split",
-          inputs: {
-            DELIM: {
-              shadow: {
-                type: "text",
-                fields: {
-                  TEXT: ",",
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: "block",
-          type: "lists_sort",
-        },
-        {
-          kind: "block",
-          type: "lists_reverse",
-        },
-      ],
-    },
-    {
-      kind: "sep",
-    },
-    {
-      kind: "category",
-      name: "Funções",
-      colour: "#8839ef",
-      contents: [
-        {
-          kind: "block",
-          type: "add_function",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Classes",
-      colour: "#40a02b",
-      contents: [
-        {
-          kind: "block",
-          type: "add_class",
-        },
-        {
-          kind: "block",
-          type: "add_class_inheritance",
-        },
-        {
-          kind: "block",
-          type: "class_init",
-        },
-        {
-          kind: "block",
-          type: "init_statement",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Imports",
-      colour: "#fe640b",
-      contents: [
-        {
-          kind: "block",
-          type: "add_import",
-        },
-        {
-          kind: "block",
-          type: "add_import_as",
-        },
-        {
-          kind: "block",
-          type: "add_from_import",
-        },
-        {
-          kind: "block",
-          type: "add_python_version",
+          kind: "category",
+          name: "Variáveis",
+          custom: "VARIABLE", // Categoria dinâmica especial do Blockly
         },
       ],
     },
     {
       kind: "category",
       name: "ROS",
-      colour: "#1e66f5",
+      colour: "20",
       contents: [
         {
-          kind: "block",
-          type: "node_init",
+          kind: "category",
+          name: "Estrutura",
+          contents: [
+            { kind: "block", type: "ros_node_template" },
+            { kind: "block", type: "add_python_version" },
+            { kind: "block", type: "add_import" },
+            { kind: "block", type: "add_import_as" },
+            { kind: "block", type: "add_from_import" },
+            { kind: "block", type: "init_statement" },
+          ],
         },
         {
-          kind: "block",
-          type: "start_node",
-        },
-
-        {
-          kind: "block",
-          type: "add_interface",
-        },
-        {
-          kind: "block",
-          type: "add_pub",
-        },
-        {
-          kind: "block",
-          type: "ros_communication",
+          kind: "category",
+          name: "Definição do Nó",
+          contents: [
+            { kind: "block", type: "add_class" },
+            { kind: "block", type: "add_class_inheritance" },
+            { kind: "block", type: "class_init" },
+            { kind: "block", type: "node_init" },
+            { kind: "block", type: "start_node" },
+            { kind: "block", type: "launch_executable" },
+          ],
         },
         {
-          kind: "block",
-          type: "add_logger",
+          kind: "category",
+          name: "Comunicação",
+          contents: [
+            { kind: "block", type: "ros_communication" },
+            { kind: "block", type: "add_pub" },
+            { kind: "block", type: "add_sub" },
+            { kind: "block", type: "add_interface" },
+            { kind: "block", type: "init_message_interface" },
+            { kind: "block", type: "add_message" },
+            { kind: "block", type: "publish_message" },
+            { kind: "block", type: "subscribe_message" },
+          ],
         },
         {
-          kind: "block",
-          type: "init_message_interface",
-        },
-        {
-          kind: "block",
-          type: "add_message",
-        },
-        {
-          kind: "block",
-          type: "publish_message",
-        },
-        {
-          kind: "block",
-          type: "launch_executable",
-        },
-        {
-          kind: "block",
-          type: "add_sub",
-        },
-        {
-          kind: "block",
-          type: "subscribe_message",
-        },
-        {
-          kind: "block",
-          type: "add_callback_function",
-        },
-        {
-          kind: "block",
-          type: "execute_function_timer",
-        },
-        {
-          kind: "block",
-          type: "add_velocity",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Variáveis",
-      colour: "#e64553",
-      contents: [
-        {
-          kind: "block",
-          type: "add_variable",
-        },
-      ],
-    },
-    {
-      kind: "category",
-      name: "Valores",
-      colour: "#df8e1d",
-      contents: [
-        {
-          kind: "block",
-          type: "add_numeric_value",
-        },
-        {
-          kind: "block",
-          type: "add_string_value",
-        },
-        {
-          kind: "block",
-          type: "add_boolean_value",
-        },
-        {
-          kind: "block",
-          type: "add_literal_value",
-        },
-        {
-          kind: "block",
-          type: "add_casting",
-        },
-        {
-          kind: "block",
-          type: "add_literal",
-        },
-        {
-          kind: "block",
-          type: "execute_literal",
-        },
-      ],
-    },
-    {
-      kind: "sep",
-    },
-    {
-      kind: "category",
-      name: "Modelos",
-      colour: "#5c5f77",
-      contents: [
-        {
-          kind: "block",
-          type: "ros_node_template",
+          kind: "category",
+          name: "Lógica e Funções",
+          contents: [
+            { kind: "block", type: "add_function" },
+            { kind: "block", type: "add_callback_function" },
+            { kind: "block", type: "create_timer" },
+            { kind: "block", type: "execute_function_timer" },
+            { kind: "block", type: "counter_function" },
+            { kind: "block", type: "add_variable" },
+            { kind: "block", type: "add_casting" },
+            { kind: "block", type: "add_logger" },
+            { kind: "block", type: "add_information" },
+            { kind: "block", type: "add_velocity" },
+            { kind: "block", type: "add_literal" },
+            { kind: "block", type: "execute_literal" },
+          ],
         },
       ],
     },
