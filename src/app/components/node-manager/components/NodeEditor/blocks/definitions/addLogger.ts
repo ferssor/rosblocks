@@ -19,7 +19,7 @@ export const addLogger = {
       text: "Defina o texto que será exibido",
     },
   ],
-  colour: "#1e66f5",
+  colour: "#9238a8",
   inputsInline: true,
   previousStatement: null,
   nextStatement: null,

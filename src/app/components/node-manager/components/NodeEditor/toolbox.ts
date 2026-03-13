@@ -58,7 +58,7 @@ export const toolbox: BlocklyOptions["toolbox"] = {
         {
           kind: "category",
           name: "Variáveis",
-          custom: "VARIABLE", // Categoria dinâmica especial do Blockly
+          contents: [{ kind: "block", type: "add_variable" }],
         },
       ],
     },
@@ -76,6 +76,11 @@ export const toolbox: BlocklyOptions["toolbox"] = {
           kind: "category",
           name: "Definição do Nó",
           contents: [{ kind: "block", type: "node_init" }],
+        },
+        {
+          kind: "category",
+          name: "Informação",
+          contents: [{ kind: "block", type: "add_logger" }],
         },
         {
           kind: "category",
