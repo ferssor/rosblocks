@@ -1,11 +1,13 @@
+const randomName = `node_${Math.random().toString(36).substring(2, 8)}`;
+
 export const nodeInit = {
   type: "node_init",
-  message0: "Inicialize o nó %1",
+  message0: "Adicione o nó %1",
   args0: [
     {
       type: "field_input",
       name: "NODE_NAME",
-      text: "Defina o nome do nó",
+      text: randomName,
     },
   ],
   message1: "%1",
@@ -17,7 +19,7 @@ export const nodeInit = {
   ],
   previousStatement: null,
   nextStatement: null,
-  colour: "#1e66f5",
+  colour: "#f89500",
   tooltip: "Inicialize o nó",
   helpUrl: "",
 };
