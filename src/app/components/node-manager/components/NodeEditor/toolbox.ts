@@ -70,26 +70,12 @@ export const toolbox: BlocklyOptions["toolbox"] = {
         {
           kind: "category",
           name: "Estrutura",
-          contents: [
-            { kind: "block", type: "ros_node_template" },
-            { kind: "block", type: "add_python_version" },
-            { kind: "block", type: "add_import" },
-            { kind: "block", type: "add_import_as" },
-            { kind: "block", type: "add_from_import" },
-            { kind: "block", type: "init_statement" },
-          ],
+          contents: [{ kind: "block", type: "ros_node_template" }],
         },
         {
           kind: "category",
           name: "Definição do Nó",
-          contents: [
-            { kind: "block", type: "add_class" },
-            { kind: "block", type: "add_class_inheritance" },
-            { kind: "block", type: "class_init" },
-            { kind: "block", type: "node_init" },
-            { kind: "block", type: "start_node" },
-            { kind: "block", type: "launch_executable" },
-          ],
+          contents: [{ kind: "block", type: "node_init" }],
         },
         {
           kind: "category",

@@ -2,7 +2,7 @@ export const rosNodeTemplate = () => {
   const randomName = `block_${Math.random().toString(36).substring(2, 8)}`;
   return {
     type: "ros_node_template",
-    message0: "ROSBLOCKS %1",
+    message0: "ROSBLOCKS %1:",
     args0: [
       {
         type: "field_input",
