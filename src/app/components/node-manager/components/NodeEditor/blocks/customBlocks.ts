@@ -94,7 +94,7 @@ export async function defineCustomBlocks() {
     addInformation,
     addVelocity,
     addSub(interfaceOptions),
-    rosNodeTemplate(interfaceOptions),
+    rosNodeTemplate(),
   ];
 
   // Register the blocks using createBlockDefinitionsFromJsonArray
@@ -200,6 +200,23 @@ export async function defineCustomBlocks() {
       propertyField.setValue(options[0][1]);
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       propertyField.forceRerender && propertyField.forceRerender();
+    }
+  };
+
+  // Handler para importações dinâmicas no ros_node_template
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Blockly.Blocks["ros_node_template"].onchange = function (event: any) {
+    if (!this.workspace || this.isInFlyout) return;
+
+    // Detecta mudanças ou movimentos que podem exigir atualização dos imports
+    if (
+      event.type === Blockly.Events.BLOCK_MOVE ||
+      event.type === Blockly.Events.BLOCK_CHANGE
+    ) {
+      // TODO: Implementar lógica para:
+      // 1. Varrer blocos conectados em 'NODE_BODY'
+      // 2. Coletar interfaces usadas (ex: std_msgs/msg/String)
+      // 3. Verificar/Adicionar blocos 'add_from_import' em 'IMPORTS'
     }
   };
 }
