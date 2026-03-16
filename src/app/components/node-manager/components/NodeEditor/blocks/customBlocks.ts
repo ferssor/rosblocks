@@ -89,7 +89,7 @@ export async function defineCustomBlocks() {
     launchExecutable(executableOptions),
     subscribeMessage(interfaceOptions),
     addCallbackFunction(interfaceOptions),
-    createTimer,
+    createTimer(),
     counterFunction(interfaceOptions),
     addInformation,
     addVelocity,

@@ -1,3 +1,5 @@
+import { BLOCK_COLOR } from "../../constants/colors";
+
 export const addLogger = {
   type: "add_logger",
   message0: "Registre %1: %2",
@@ -19,7 +21,7 @@ export const addLogger = {
       text: "Defina o texto que será exibido",
     },
   ],
-  colour: "#9238a8",
+  colour: BLOCK_COLOR.ros,
   inputsInline: true,
   previousStatement: null,
   nextStatement: null,

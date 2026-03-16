@@ -358,9 +358,12 @@ export function registerCustomBlocksToPython() {
   pythonGenerator.forBlock["create_timer"] = function (block: Blockly.Block) {
     const tempName: string = block.getFieldValue("TEMP_NAME");
     const duration = block.getFieldValue("DURATION");
+    const rawValue =
+      pythonGenerator.valueToCode(block, "PUBLISHER_COUNTER", 0) || "";
+    const value = rawValue.replace(/^self\./, "").trim();
 
     const template = getTemplate("create_timer");
-    return template({ tempName, duration });
+    return template({ tempName, duration, value });
   };
 
   pythonGenerator.forBlock["counter_function"] = function (

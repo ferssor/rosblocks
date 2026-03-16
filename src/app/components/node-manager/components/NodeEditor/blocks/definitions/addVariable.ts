@@ -1,3 +1,5 @@
+import { BLOCK_COLOR } from "../../constants/colors";
+
 const randomName = `var_${Math.random().toString(36).substring(2, 8)}`;
 
 export const addVariable = {
@@ -17,7 +19,7 @@ export const addVariable = {
   previousStatement: null,
   nextStatement: null,
   inputsInline: true,
-  colour: "#e64553",
+  colour: BLOCK_COLOR.variable,
   tooltip: "Adicione uma variável ao script",
   helpUrl: "",
 };

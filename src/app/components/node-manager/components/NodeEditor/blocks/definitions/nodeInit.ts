@@ -1,3 +1,5 @@
+import { BLOCK_COLOR } from "../../constants/colors";
+
 const randomName = `node_${Math.random().toString(36).substring(2, 8)}`;
 
 export const nodeInit = {
@@ -19,7 +21,7 @@ export const nodeInit = {
   ],
   previousStatement: null,
   nextStatement: null,
-  colour: "#f89500",
+  colour: BLOCK_COLOR.ros,
   tooltip: "Inicialize o nó",
   helpUrl: "",
 };
