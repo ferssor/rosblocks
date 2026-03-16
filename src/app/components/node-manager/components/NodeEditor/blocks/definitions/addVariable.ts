@@ -2,7 +2,7 @@ const randomName = `var_${Math.random().toString(36).substring(2, 8)}`;
 
 export const addVariable = {
   type: "add_variable",
-  message0: "Adicione a variável %1 com o valor: %2",
+  message0: "Adicione a variável %1 o valor: %2",
   args0: [
     {
       type: "field_input",
