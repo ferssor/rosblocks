@@ -1,3 +1,5 @@
+import { BLOCK_COLOR } from "../../constants/colors";
+
 export const rosNodeTemplate = () => {
   const randomName = `block_${Math.random().toString(36).substring(2, 8)}`;
   return {
@@ -17,7 +19,7 @@ export const rosNodeTemplate = () => {
         name: "NODE_BODY",
       },
     ],
-    colour: "#1677FF",
+    colour: BLOCK_COLOR.ros,
     tooltip: "Slot superior: Importações. Slot inferior: Lógica do Nó.",
     helpUrl: "",
   };

@@ -21,8 +21,9 @@ export const createTimer = () => {
         precision: 1.0,
       },
       {
-        type: "input_value",
-        name: "PUBLISHER_COUNTER",
+        type: "field_dropdown",
+        name: "FUNCTION_NAME",
+        options: [["None", ""]],
       },
     ],
     previousStatement: null,
