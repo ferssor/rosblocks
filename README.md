@@ -6,7 +6,10 @@ A visual desktop editor to create and manage programming blocks intuitively. ROS
 
 Watch the demo video to understand the main features:
 
-[![Editor Demo](public/editor.mp4)](public/editor.mp4)
+<video width="100%" controls>
+  <source src="public/editor.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 > See how to navigate the workspace, select packages, create blocks, and generate Python code automatically.
 
