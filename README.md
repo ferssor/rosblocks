@@ -221,3 +221,17 @@ Published at: SCITEPRESS - Science and Technology Publications
 DOI: [10.5220/0013714000003982](https://www.scitepress.org/Link.aspx?doi=10.5220/0013714000003982)
 
 If you use this project in your research, please cite the associated paper.
+```bibtex
+@conference{icinco25,
+  author={Fernando Costa Nogueira and Dieisson Martinelli and Lucas Alexandre Zick and André {Schneider de Oliveira} and Vivian Kalempa},
+  title={ROSBLOCKS: A Visual Programming Interface for ROS2 Robots},
+  booktitle={Proceedings of the 22nd International Conference on Informatics in Control, Automation and Robotics - Volume 2: ICINCO},
+  year={2025},
+  pages={267-274},
+  publisher={SciTePress},
+  organization={INSTICC},
+  doi={10.5220/0013714000003982},
+  isbn={978-989-758-770-2},
+  issn={2184-2809},
+}
+```
