@@ -211,3 +211,13 @@ All changes are saved automatically to the workspace.
 ### Python code is not generated
 - Verify that all blocks are correctly connected
 - Validate block structure in `blocksToPython.ts`
+
+## Published Paper
+
+This project is based on research and has been published in an academic paper. For more details about the design and implementation, please refer to:
+
+**Visual Programming Editor for Robotic Systems**  
+Published at: SCITEPRESS - Science and Technology Publications  
+DOI: [10.5220/0013714000003982](https://www.scitepress.org/Link.aspx?doi=10.5220/0013714000003982)
+
+If you use this project in your research, please cite the associated paper.
